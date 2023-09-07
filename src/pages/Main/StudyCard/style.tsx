@@ -27,10 +27,16 @@ export const Card = styled.div<CardProps>`
 export const Title = styled.div`
   display: flex;
   padding: 15px 15px 0 15px;
+  align-items: center;
   gap: 3px;
   & h2 {
     font-weight: bold;
     font-size: 1.1rem;
+  }
+  & div {
+    display: flex;
+    align-items: center;
+    color: var(--color-crown);
   }
 `;
 

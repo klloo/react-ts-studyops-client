@@ -11,6 +11,7 @@ import {
 } from './style';
 import { BsCalendar, BsCreditCard, BsPeopleFill } from 'react-icons/bs';
 import { AiOutlineClockCircle } from 'react-icons/ai';
+// import { BiSolidCrown } from 'react-icons/bi';
 
 /**
  * 참여중인 스터디 카드
@@ -20,6 +21,7 @@ function StudyCard({ isInvite }: { isInvite?: boolean }) {
     <Card isInvite={isInvite}>
       <Title>
         <h2>알고리즘 스터디</h2>
+        <div>{/* <BiSolidCrown /> */}</div>
       </Title>
       <Description>
         <div>

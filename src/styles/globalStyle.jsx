@@ -134,6 +134,7 @@ const baseStyle = css`
 
   :root {
     --color-primary: #8d4bf6;
+    --color-crown: #f5e03c;
     --color-border: rgb(221, 221, 221);
     --color-textgrey: rgb(112, 112, 112);
     --color-textlight: rgb(150, 150, 150);
