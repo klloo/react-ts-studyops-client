@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Header, Content } from './style';
+import { Header, Content, HeaderContent } from './style';
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,8 +12,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div>
       <Header>
-        <div>StudyOps</div>
-        <div>Profile</div>
+        <HeaderContent>
+          <div>StudyOps</div>
+          <div>Profile</div>
+        </HeaderContent>
       </Header>
       <Content>{children}</Content>
     </div>

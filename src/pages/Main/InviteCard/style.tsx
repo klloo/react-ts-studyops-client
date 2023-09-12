@@ -1,18 +1,14 @@
 import styled from '@emotion/styled';
 
-export const Card = styled.div`
-  width: 25%;
-  height: 350px;
-  /* border: 1px solid var(--color-border); */
-  border-radius: 8px;
+export const Content = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 25px;
   position: relative;
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.08);
-  background-color: white;
   font-size: 1.1rem;
   text-align: center;
   font-weight: bold;

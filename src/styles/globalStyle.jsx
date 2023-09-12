@@ -134,19 +134,22 @@ const baseStyle = css`
 
   :root {
     --color-primary: #8d4bf6;
+    --color-primarylight: #eee3ff;
     --color-crown: #f5e03c;
+    --color-red: rgb(235, 78, 62);
     --color-border: rgb(221, 221, 221);
-    --color-textgrey: rgb(112, 112, 112);
-    --color-textlight: rgb(150, 150, 150);
-    --width-maxwidth: 1440px;
-    --fontsize-title: 1.2rem;
+    --color-textgrey: rgb(151, 151, 151);
+    --color-textlight: rgb(194, 194, 194);
+    --color-background: rgb(245, 245, 247);
+    --width-maxwidth: 1240px;
+    --fontsize-title: 1.25rem;
   }
   body {
     margin: 0;
-    font-family: 'KoPubWorldDotum';
+    font-family: Inter;
     height: 100%;
     overflow: hidden;
-    background-color: rgb(245, 245, 247);
+    background-color: #f5f5f7;
   }
 
   textarea,

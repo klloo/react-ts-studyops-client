@@ -45,8 +45,8 @@
 
 /* 제목(몇년몇월) */
 .fc-toolbar-title {
-  font-size: 1.1rem !important;
-  font-weight: bold;
+  font-size: 1rem !important;
+  /* font-weight: bold; */
 }
 
 /* 달력 */
@@ -54,10 +54,10 @@
   font-size: 15px;
 }
 .fc .fc-scrollgrid {
-  border-collapse: collapse;
-  border-radius: 10px;
-  border-style: hidden;
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.08);
+  /* border-collapse: collapse;
+  border-radius: 20px;
+  border-style: hidden; */
+  overflow: hidden;
 }
 .fc .fc-view-harness {
   background-color: white;

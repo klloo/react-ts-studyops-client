@@ -13,7 +13,7 @@ const Calendar = () => {
     if (date.toDateString() === today.toDateString()) {
       return (
         <TodayCell>
-          <span>{date.getDate()}</span>
+          <div>{date.getDate()}</div>
         </TodayCell>
       );
     }
