@@ -18,8 +18,9 @@ import MainCard from 'components/MainCard';
  * 참여중인 스터디 카드
  */
 function StudyCard({ isInvite }: { isInvite?: boolean }) {
+  const link: string | null = isInvite ? null : '/study/1';
   return (
-    <MainCard isInvite={isInvite} link="/study/1">
+    <MainCard clickable={!isInvite} link={link}>
       <Title>
         <h2>알고리즘 스터디</h2>
         <div>{/* <BiSolidCrown /> */}</div>

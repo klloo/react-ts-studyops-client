@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Header, Content, HeaderContent } from './style';
+import { Header, Content, HeaderContent, Logo, Profile } from './style';
 
 interface LayoutProps {
   children: ReactNode;
@@ -13,8 +13,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div>
       <Header>
         <HeaderContent>
-          <div>StudyOps</div>
-          <div>Profile</div>
+          <Logo src="/logo.svg" alt="logo" />
+          <Profile />
         </HeaderContent>
       </Header>
       <Content>{children}</Content>

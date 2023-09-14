@@ -28,7 +28,22 @@ export const HeaderContent = styled.div`
   padding: 20px;
   box-sizing: border-box;
   justify-content: space-between;
+  align-items: center;
   max-width: var(--width-maxwidth);
   margin-left: auto;
   margin-right: auto;
+`;
+
+export const Logo = styled.img`
+  height: 28px;
+`;
+
+export const Profile = styled.div`
+  height: 35px;
+  width: 35px;
+  border-radius: 50px;
+  background-image: url('https://static.solved.ac/misc/360x360/default_profile.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 `;

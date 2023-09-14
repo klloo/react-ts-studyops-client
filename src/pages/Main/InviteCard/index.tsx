@@ -7,7 +7,7 @@ import MainCard from 'components/MainCard';
  */
 function InviteCard() {
   return (
-    <MainCard>
+    <MainCard clickable={false}>
       <Content>
         새로운 스터디를
         <br />

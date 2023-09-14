@@ -8,22 +8,15 @@ export const Title = styled.div`
   gap: 10px;
 `;
 
-export const CalendarWrapper = styled.div`
-  margin-bottom: 40px;
-  overflow: hidden;
-  /* width: 70%; */
-  width: 100%;
-`;
-
 export const ScheduleWrapper = styled.div`
-  display: flex;
-  gap: 10px;
+  margin-top: 15px;
+  margin-bottom: 40px;
 `;
 
 export const CardWrapper = styled.div`
   margin: 15px 0 50px 0;
   display: flex;
-  gap: 15px;
+  gap: 20px;
   flex-wrap: wrap;
   width: 100%;
 `;
@@ -35,4 +28,8 @@ export const NewTag = styled.div`
   font-weight: normal;
   font-size: 15px;
   padding: 2px 15px;
+`;
+
+export const CalendarWrapper = styled.div`
+  width: calc(45% - 10px);
 `;

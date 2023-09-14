@@ -138,6 +138,7 @@ const baseStyle = css`
     --color-crown: #f5e03c;
     --color-red: rgb(235, 78, 62);
     --color-border: rgb(221, 221, 221);
+    --color-textmoregrey: rgb(116, 116, 116);
     --color-textgrey: rgb(151, 151, 151);
     --color-textlight: rgb(194, 194, 194);
     --color-background: rgb(245, 245, 247);
