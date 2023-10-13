@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Header, Content, HeaderContent, Logo } from './style';
-import { CommonProfileImage } from 'styles/commonStyle';
 import { Link } from 'react-router-dom';
+import ProfileImage from 'components/ProfileImage';
 
 interface LayoutProps {
   children: ReactNode;
@@ -18,7 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <Link to="/">
             <Logo src="/logo.svg" alt="logo" />
           </Link>
-          <CommonProfileImage
+          <ProfileImage
             width="35"
             height="35"
             url="https://static.solved.ac/misc/360x360/default_profile.png"

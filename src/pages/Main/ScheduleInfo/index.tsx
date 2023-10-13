@@ -3,7 +3,7 @@ import { Title, Content, NoSchedule, Schedule } from './style';
 import dayjs from 'dayjs';
 import { StudySchedule } from 'types/study';
 import { isEmpty } from 'lodash';
-import { CommonScheduleDot as ScheduleDot } from 'styles/commonStyle';
+import ScheduleDot from 'components/ScheduleDot';
 import { getScheduleColor } from 'utils/schedule';
 
 /**
