@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { CommonProfileImage } from 'styles/commonStyle';
+import CommonProfileImage from 'components/ProfileImage';
 
 export const Container = styled.div`
   display: flex;
@@ -63,4 +63,13 @@ export const ProfileImage = styled(CommonProfileImage)`
     height: ${(props) => props.height}px;
     width: ${(props) => props.width}px;
   }
+`;
+
+export const FlexWrapper = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+export const BoldText = styled.div`
+  font-weight: bold;
 `;

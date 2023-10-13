@@ -124,3 +124,7 @@ export const TabContent = styled.div`
   /* height: 100vh; */
   margin-top: 10px;
 `;
+
+export const BoldText = styled.div`
+  font-weight: bold;
+`;

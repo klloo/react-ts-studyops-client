@@ -9,14 +9,12 @@ import {
   Schedule,
   Container,
   ProfileImage,
+  FlexWrapper,
+  BoldText,
 } from './style';
 import { isEmpty } from 'lodash';
 import { getDay, getScheduleColor } from 'utils/schedule';
-import {
-  CommonBoldText,
-  CommonScheduleDot as ScheduleDot,
-  CommonFlexWrapper,
-} from 'styles/commonStyle';
+import ScheduleDot from 'components/ScheduleDot';
 import Switch from 'react-switch';
 import { Profile, ProfileWrapper } from '../style';
 
@@ -89,8 +87,8 @@ function StudySchedule() {
                   </div>
                   <div className="title">{schedule.title}</div>
                 </Schedule>
-                <CommonFlexWrapper>
-                  <CommonBoldText>나의 참석 여부</CommonBoldText>
+                <FlexWrapper>
+                  <BoldText>나의 참석 여부</BoldText>
                   <Switch
                     onChange={onClickSwitch}
                     checked={schedule.attendance}
@@ -101,7 +99,7 @@ function StudySchedule() {
                     onColor="#8d4bf6"
                     offColor="#d2d2d2"
                   />
-                </CommonFlexWrapper>
+                </FlexWrapper>
                 <ProfileWrapper>
                   <Profile>
                     <ProfileImage

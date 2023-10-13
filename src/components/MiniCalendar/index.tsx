@@ -5,7 +5,7 @@ import isoWeek from 'dayjs/plugin/isoWeek';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import { isEmpty } from 'lodash';
 import { CalendarContent, CalendarHeader, ScheduleWrapper } from './style';
-import { CommonScheduleDot as ScheduleDot } from 'styles/commonStyle';
+import ScheduleDot from 'components/ScheduleDot';
 import { MdArrowBackIos } from 'react-icons/md';
 import { MdArrowForwardIos } from 'react-icons/md';
 import { StudySchedule } from 'types/study';
