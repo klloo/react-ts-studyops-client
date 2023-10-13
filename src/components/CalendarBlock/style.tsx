@@ -9,6 +9,10 @@ export const Container = styled.div`
 
 export const CalendarWrapper = styled.div`
   width: calc(45% - 10px);
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.08);
+  background-color: white;
 `;
 
 export const Card = styled.div`

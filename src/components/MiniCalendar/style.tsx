@@ -84,24 +84,10 @@ export const CalendarContent = styled.div`
   }
 `;
 
-export const Container = styled.div`
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.08);
-  background-color: white;
-`;
-
 export const ScheduleWrapper = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   width: 32px;
   gap: 2px;
-`;
-
-export const ScheduleDot = styled.div<{ color: string }>`
-  width: 7px;
-  height: 7px;
-  background-color: ${(props) => props.color};
-  border-radius: 50px;
 `;

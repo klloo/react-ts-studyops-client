@@ -17,7 +17,7 @@ export const Content = styled.div`
   height: 100vh;
   padding: 20px 20px 100px 20px;
   box-sizing: border-box;
-  overflow: scroll;
+  overflow: auto;
   ::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
   }
@@ -36,14 +36,4 @@ export const HeaderContent = styled.div`
 
 export const Logo = styled.img`
   height: 28px;
-`;
-
-export const Profile = styled.div`
-  height: 35px;
-  width: 35px;
-  border-radius: 50px;
-  background-image: url('https://static.solved.ac/misc/360x360/default_profile.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
 `;

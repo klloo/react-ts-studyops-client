@@ -1,5 +1,7 @@
 import React, { ReactNode } from 'react';
-import { Header, Content, HeaderContent, Logo, Profile } from './style';
+import { Header, Content, HeaderContent, Logo } from './style';
+import { CommonProfileImage } from 'styles/commonStyle';
+import { Link } from 'react-router-dom';
 
 interface LayoutProps {
   children: ReactNode;
@@ -13,8 +15,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div>
       <Header>
         <HeaderContent>
-          <Logo src="/logo.svg" alt="logo" />
-          <Profile />
+          <Link to="/">
+            <Logo src="/logo.svg" alt="logo" />
+          </Link>
+          <CommonProfileImage
+            width="35"
+            height="35"
+            url="https://static.solved.ac/misc/360x360/default_profile.png"
+          />
         </HeaderContent>
       </Header>
       <Content>{children}</Content>

@@ -4,13 +4,8 @@ import weekday from 'dayjs/plugin/weekday';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import { isEmpty } from 'lodash';
-import {
-  CalendarContent,
-  CalendarHeader,
-  Container,
-  ScheduleDot,
-  ScheduleWrapper,
-} from './style';
+import { CalendarContent, CalendarHeader, ScheduleWrapper } from './style';
+import { CommonScheduleDot as ScheduleDot } from 'styles/commonStyle';
 import { MdArrowBackIos } from 'react-icons/md';
 import { MdArrowForwardIos } from 'react-icons/md';
 import { StudySchedule } from 'types/study';
@@ -136,7 +131,7 @@ export const MiniCalendar: FC<MiniCalendarProps> = ({
   };
 
   return (
-    <Container>
+    <div>
       <CalendarHeader>
         <button onClick={() => changegeMonth(viewDate, 'subtract')}>
           <MdArrowBackIos />
@@ -172,7 +167,7 @@ export const MiniCalendar: FC<MiniCalendarProps> = ({
         </div>
         <div>{createCalendar()}</div>
       </CalendarContent>
-    </Container>
+    </div>
   );
 };
 

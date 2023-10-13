@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 const colors = [
   '#2c17eb',
   '#20b639',
@@ -11,4 +13,11 @@ const colors = [
 
 export const getScheduleColor = (studyId: number): string => {
   return colors[studyId % 8];
+};
+
+const days = ['일', '월', '화', '수', '목', '금', '토'];
+
+export const getDay = (date: dayjs.Dayjs): string => {
+  const index = parseInt(date.format('d'));
+  return days[index];
 };

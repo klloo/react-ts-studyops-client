@@ -142,6 +142,7 @@ const baseStyle = css`
     --color-textgrey: rgb(151, 151, 151);
     --color-textlight: rgb(194, 194, 194);
     --color-background: rgb(245, 245, 247);
+    --color-cancel: rgb(224, 229, 233);
     --width-maxwidth: 1240px;
     --fontsize-title: 1.25rem;
   }

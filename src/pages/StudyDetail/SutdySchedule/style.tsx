@@ -1,4 +1,11 @@
 import styled from '@emotion/styled';
+import { CommonProfileImage } from 'styles/commonStyle';
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+`;
 
 export const Title = styled.div`
   display: flex;
@@ -18,7 +25,7 @@ export const Title = styled.div`
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 35px;
 `;
 
 export const NoSchedule = styled.div`
@@ -41,5 +48,19 @@ export const Schedule = styled.div`
   }
   .title {
     font-weight: bold;
+  }
+`;
+
+export const ProfileImage = styled(CommonProfileImage)`
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & div {
+    font-size: 20px;
+    font-weight: bold;
+    z-index: 1000;
+    height: ${(props) => props.height}px;
+    width: ${(props) => props.width}px;
   }
 `;

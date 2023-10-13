@@ -3,4 +3,5 @@ export interface StudySchedule {
   time: string;
   title: string;
   studyId: number;
+  attendance: boolean;
 }
