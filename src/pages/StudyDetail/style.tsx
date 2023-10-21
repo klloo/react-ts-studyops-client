@@ -15,7 +15,7 @@ export const ExitButton = styled.div`
   align-items: center;
   font-size: 13px;
   font-weight: normal;
-  color: var(--color-textmoregrey);
+  color: var(--color-textdarkgrey);
 `;
 
 export const Tag = styled.div`
@@ -62,7 +62,7 @@ export const AddUserButton = styled.div`
   justify-content: center;
   background-color: var(--color-cancel);
   cursor: pointer;
-  color: var(--color-textmoregrey);
+  color: var(--color-textdarkgrey);
 `;
 
 export const AttendanceCard = styled.div<{ clickable?: boolean }>`

@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 
 const ScheduleDot = styled.div<{ color: string }>`
-  width: 7px;
-  height: 7px;
+  width: 0.4375rem;
+  height: 0.4375rem;
   background-color: ${(props) => props.color};
-  border-radius: 50px;
+  border-radius: 50%;
 `;
 
 export default ScheduleDot;

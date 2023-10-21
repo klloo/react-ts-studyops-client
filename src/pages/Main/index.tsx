@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Layout from 'components/Layout';
-import { Title, CardWrapper, ScheduleWrapper } from './style';
+import { Container, Title, CardWrapper, ContentItem } from './style';
 import StudyCard from './StudyCard';
 import InviteCard from './InviteCard';
 import dayjs from 'dayjs';
@@ -22,29 +22,37 @@ const Main = () => {
 
   return (
     <Layout>
-      <ScheduleWrapper>
-        <CalendarBlock
-          selectDate={selectDate}
-          setSelectDate={setSelectDate}
-          setSelectSchedules={setSchedules}
-          schedules={tmpSchedules}
-        >
-          <ScheduleInfo sheduleDate={selectDate} schedules={schedules} />
-        </CalendarBlock>
-      </ScheduleWrapper>
-      <Title>참여중인 스터디</Title>
-      <CardWrapper>
-        <StudyCard />
-        <StudyCard />
-        <InviteCard />
-      </CardWrapper>
-      <Title>
-        <div>초대받은 스터디가 있어요!</div>
-      </Title>
-      <CardWrapper>
-        <StudyCard isInvite={true} />
-        <StudyCard isInvite={true} />
-      </CardWrapper>
+      <Container>
+        <ContentItem>
+          <Title>11월 스터디 일정이에요 🗓️</Title>
+          <div>
+            <CalendarBlock
+              selectDate={selectDate}
+              setSelectDate={setSelectDate}
+              setSelectSchedules={setSchedules}
+              schedules={tmpSchedules}
+            >
+              <ScheduleInfo sheduleDate={selectDate} schedules={schedules} />
+            </CalendarBlock>
+          </div>
+        </ContentItem>
+        <ContentItem>
+          <Title>참여 중인 스터디에요 ✨</Title>
+          <CardWrapper>
+            <StudyCard />
+            <StudyCard />
+            <StudyCard />
+            <InviteCard />
+          </CardWrapper>
+        </ContentItem>
+        <ContentItem>
+          <Title>초대받은 스터디 목록이에요 💜</Title>
+          <CardWrapper>
+            <StudyCard isInvite={true} />
+            <StudyCard isInvite={true} />
+          </CardWrapper>
+        </ContentItem>
+      </Container>
     </Layout>
   );
 };

@@ -3,43 +3,44 @@ import styled from '@emotion/styled';
 export const Title = styled.div`
   display: flex;
   align-items: center;
-  gap: 3px;
-  & h2 {
-    font-weight: bold;
-    font-size: 20px;
-  }
   & div {
     display: flex;
     align-items: center;
-    color: var(--color-crown);
+    font-weight: bold;
   }
 `;
 
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  height: 100%;
+  gap: 0.7rem;
 `;
 
 export const NoSchedule = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
   color: var(--color-textgrey);
-  margin-top: 20%;
 `;
 
 export const Schedule = styled.div`
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 1.25rem;
+  font-size: 0.875rem;
   .time {
-    color: var(--color-textmoregrey);
+    color: var(--gray2, #8c8c8c);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 400;
   }
   .title {
-    font-weight: bold;
+    color: var(--gray1, #333);
+    font-size: 0.875rem;
+    font-weight: 500;
   }
 `;

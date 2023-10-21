@@ -19,7 +19,7 @@ function ScheduleInfo({
   return (
     <>
       <Title>
-        <h2>{dayjs(sheduleDate).format('M월 D일')} 스터디 일정</h2>
+        <div>{dayjs(sheduleDate).format('M월 D일')} 스터디 일정</div>
       </Title>
       <Content>
         {isEmpty(schedules) && (

@@ -5,18 +5,11 @@ export const Title = styled.div`
   font-size: var(--fontsize-title);
   display: flex;
   align-items: center;
-  gap: 10px;
-`;
-
-export const ScheduleWrapper = styled.div`
-  margin-top: 15px;
-  margin-bottom: 40px;
 `;
 
 export const CardWrapper = styled.div`
-  margin: 15px 0 50px 0;
   display: flex;
-  gap: 20px;
+  gap: 1.5rem;
   flex-wrap: wrap;
   width: 100%;
 `;
@@ -32,4 +25,16 @@ export const NewTag = styled.div`
 
 export const CalendarWrapper = styled.div`
   width: calc(45% - 10px);
+`;
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+`;
+
+export const ContentItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 `;

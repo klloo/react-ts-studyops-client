@@ -1,5 +1,5 @@
 import React from 'react';
-import { Content, Button } from './style';
+import { Content, PlusButton } from './style';
 import MainCard from 'components/MainCard';
 
 /**
@@ -11,8 +11,8 @@ function InviteCard() {
       <Content>
         새로운 스터디를
         <br />
-        직접 만들어보세요!
-        <Button>생성하기</Button>
+        추가해보세요!
+        <PlusButton size="60" />
       </Content>
     </MainCard>
   );

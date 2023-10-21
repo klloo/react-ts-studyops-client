@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Header, Content, HeaderContent, Logo } from './style';
+import { Header, Content, HeaderContent, Logo, Container } from './style';
 import { Link } from 'react-router-dom';
 import ProfileImage from 'components/ProfileImage';
 
@@ -12,7 +12,7 @@ interface LayoutProps {
  */
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div>
+    <Container>
       <Header>
         <HeaderContent>
           <Link to="/">
@@ -26,7 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </HeaderContent>
       </Header>
       <Content>{children}</Content>
-    </div>
+    </Container>
   );
 };
 

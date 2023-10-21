@@ -41,7 +41,7 @@ export const Schedule = styled.div`
   align-items: center;
   gap: 25px;
   .time {
-    color: var(--color-textmoregrey);
+    color: var(--color-textdarkgrey);
     display: flex;
     align-items: center;
     gap: 10px;

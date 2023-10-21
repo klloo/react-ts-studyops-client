@@ -4,20 +4,32 @@ import weekday from 'dayjs/plugin/weekday';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import { isEmpty } from 'lodash';
-import { CalendarContent, CalendarHeader, ScheduleWrapper } from './style';
+import {
+  Container,
+  CalendarHeaderDiv,
+  CalendarContentDiv,
+  WeekDiv,
+  ScheduleWrapper,
+  DateBoxDiv,
+  DayNumberDiv,
+} from './style';
 import ScheduleDot from 'components/ScheduleDot';
 import { MdArrowBackIos } from 'react-icons/md';
 import { MdArrowForwardIos } from 'react-icons/md';
 import { StudySchedule } from 'types/study';
 import { getScheduleColor } from 'utils/schedule';
-import { MiniCalendarProps } from 'types/calendar';
+import { StudyCalendarProps } from 'types/calendar';
 
-export const MiniCalendar: FC<MiniCalendarProps> = ({
-  selectDate,
-  setSelectDate,
-  setSelectSchedules,
-  schedules,
+/**
+ * 스터디 달력 컴포넌트
+ */
+export const StudyCalendar: FC<StudyCalendarProps> = ({
+  selectDate, // 선택된 날짜
+  setSelectDate, // 날짜 설정
+  setSelectSchedules, // 스케줄 목록 설정
+  schedules, // 선택된 날짜의 스케줄 목록
 }) => {
+  // 일정 정보 가공 {요일 : 스케줄 정보 } 형태의 객체로 가공
   const schedulesInfo = schedules.reduce(
     (result, item) => {
       if (isEmpty(result[item.day])) {
@@ -33,8 +45,9 @@ export const MiniCalendar: FC<MiniCalendarProps> = ({
   dayjs.extend(weekday);
   dayjs.extend(isoWeek);
   dayjs.extend(weekOfYear);
-
   const today = dayjs();
+
+  // 보여질 날짜
   const [viewDate, setViewDate] = useState(dayjs());
 
   const createCalendar = () => {
@@ -47,7 +60,7 @@ export const MiniCalendar: FC<MiniCalendarProps> = ({
 
     for (let week = startWeek; week <= endWeek; week++) {
       calender.push(
-        <div className="row" key={week}>
+        <WeekDiv key={week}>
           {Array(7)
             .fill(0)
             .map((n, i) => {
@@ -75,24 +88,21 @@ export const MiniCalendar: FC<MiniCalendarProps> = ({
               const currentDay = current.format('d');
               return (
                 <>
-                  <div
-                    className={`box ${currentDay == '0' ? 'sun' : ''}`}
+                  <DayNumberDiv
+                    sun={currentDay == '0'}
                     key={`${week}_${i}`}
+                    num
                   >
                     <div
-                      className={`text ${isSelected} ${isToday} ${isNone}`}
+                      className={`${isSelected} ${isToday} ${isNone}`}
                       onClick={() => {
                         setSelectDate(current);
                         if (setSelectSchedules)
                           setSelectSchedules(schedulesInfo[currentDay]);
                       }}
                     >
-                      <span className={`day`}>{current.format('D')}</span>
-                      <span
-                        className={
-                          isToday ? 'isToday' : isSelected ? 'isSelected' : ''
-                        }
-                      >
+                      <DateBoxDiv>
+                        {current.format('D')}
                         <ScheduleWrapper>
                           {!isEmpty(schedulesInfo[currentDay]) &&
                             schedulesInfo[currentDay].map(
@@ -107,13 +117,13 @@ export const MiniCalendar: FC<MiniCalendarProps> = ({
                               ),
                             )}
                         </ScheduleWrapper>
-                      </span>
+                      </DateBoxDiv>
                     </div>
-                  </div>
+                  </DayNumberDiv>
                 </>
               );
             })}
-        </div>,
+        </WeekDiv>,
       );
     }
     return calender;
@@ -131,44 +141,44 @@ export const MiniCalendar: FC<MiniCalendarProps> = ({
   };
 
   return (
-    <div>
-      <CalendarHeader>
+    <Container>
+      <CalendarHeaderDiv>
         <button onClick={() => changegeMonth(viewDate, 'subtract')}>
           <MdArrowBackIos />
         </button>
-        <span className="thisMonth">{viewDate.format('M')}월</span>
+        <span>{viewDate.format('M')}월</span>
         <button onClick={() => changegeMonth(viewDate, 'add')}>
           <MdArrowForwardIos />
         </button>
-      </CalendarHeader>
-      <CalendarContent>
-        <div className="row week">
-          <div className="box">
-            <span className="text sun">일</span>
+      </CalendarHeaderDiv>
+      <CalendarContentDiv>
+        <WeekDiv>
+          <div>
+            <DayNumberDiv sun>일</DayNumberDiv>
           </div>
-          <div className="box">
-            <span className="text">월</span>
+          <div>
+            <DayNumberDiv day>월</DayNumberDiv>
           </div>
-          <div className="box">
-            <span className="text">화</span>
+          <div>
+            <DayNumberDiv day>화</DayNumberDiv>
           </div>
-          <div className="box">
-            <span className="text">수</span>
+          <div>
+            <DayNumberDiv day>수</DayNumberDiv>
           </div>
-          <div className="box">
-            <span className="text">목</span>
+          <div>
+            <DayNumberDiv day>목</DayNumberDiv>
           </div>
-          <div className="box">
-            <span className="text">금</span>
+          <div>
+            <DayNumberDiv day>금</DayNumberDiv>
           </div>
-          <div className="box">
-            <span className="text">토</span>
+          <div>
+            <DayNumberDiv day>토</DayNumberDiv>
           </div>
-        </div>
-        <div>{createCalendar()}</div>
-      </CalendarContent>
-    </div>
+        </WeekDiv>
+        <CalendarContentDiv>{createCalendar()}</CalendarContentDiv>
+      </CalendarContentDiv>
+    </Container>
   );
 };
 
-export default MiniCalendar;
+export default StudyCalendar;
