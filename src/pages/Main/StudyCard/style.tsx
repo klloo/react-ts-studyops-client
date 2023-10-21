@@ -53,11 +53,13 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.31rem;
+  height: 100%;
 `;
 
 export const ContentDiv = styled.div`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   gap: 0.7rem;
 `;
 
@@ -125,6 +127,7 @@ export const Button = styled.button<{ yesButton?: boolean }>`
   display: inline-flex;
   padding: 0.5rem;
   justify-content: center;
+  font-size: 0.875rem;
   align-items: center;
   border: none;
   border-radius: 0.1875rem;

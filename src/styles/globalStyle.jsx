@@ -28,6 +28,7 @@ const baseStyle = css`
     font-family: 'Noto Sans KR', sans-serif;
     height: 100%;
     font-size: 16px;
+    word-break: keep-all;
   }
 
   textarea,

@@ -1,7 +1,7 @@
 import CalendarBlock from 'components/CalendarBlock';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
-import { StudySchedule as StudyScheduleType } from 'types/study';
+import { IStudySchedule } from 'types/calendar';
 import {
   Title,
   NoSchedule,
@@ -23,8 +23,8 @@ import { Profile, ProfileWrapper } from '../style';
  */
 function StudySchedule() {
   const [selectDate, setSelectDate] = useState(dayjs());
-  const [schedules, setSchedules] = useState<StudyScheduleType[]>([]);
-  const [schedule, setSchedule] = useState<StudyScheduleType | null>(null);
+  const [schedules, setSchedules] = useState<IStudySchedule[]>([]);
+  const [schedule, setSchedule] = useState<IStudySchedule | null>(null);
 
   useEffect(() => {
     if (!isEmpty(schedules) && schedules.length == 1) setSchedule(schedules[0]);

@@ -16,14 +16,13 @@ import {
 import ScheduleDot from 'components/ScheduleDot';
 import { MdArrowBackIos } from 'react-icons/md';
 import { MdArrowForwardIos } from 'react-icons/md';
-import { StudySchedule } from 'types/study';
 import { getScheduleColor } from 'utils/schedule';
-import { StudyCalendarProps } from 'types/calendar';
+import { IStudyCalendarProps, IStudySchedule } from 'types/calendar';
 
 /**
  * 스터디 달력 컴포넌트
  */
-export const StudyCalendar: FC<StudyCalendarProps> = ({
+export const StudyCalendar: FC<IStudyCalendarProps> = ({
   selectDate, // 선택된 날짜
   setSelectDate, // 날짜 설정
   setSelectSchedules, // 스케줄 목록 설정
@@ -38,7 +37,7 @@ export const StudyCalendar: FC<StudyCalendarProps> = ({
       result[item.day].push(item);
       return result;
     },
-    {} as Record<string, StudySchedule[]>,
+    {} as Record<string, IStudySchedule[]>,
   );
 
   // day extend
@@ -107,7 +106,7 @@ export const StudyCalendar: FC<StudyCalendarProps> = ({
                           {!isEmpty(schedulesInfo[currentDay]) &&
                             schedulesInfo[currentDay].map(
                               (
-                                item: StudySchedule,
+                                item: IStudySchedule,
                                 i: React.Key | null | undefined,
                               ) => (
                                 <ScheduleDot

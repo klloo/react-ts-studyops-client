@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 import { Card, Container, CalendarWrapper } from './style';
 import StudyCalendar from 'components/StudyCalendar';
-import { StudyCalendarProps } from 'types/calendar';
+import { IStudyCalendarProps } from 'types/calendar';
 
-interface CalendarBlockProps extends StudyCalendarProps {
+interface CalendarBlockProps extends IStudyCalendarProps {
   children: ReactNode;
 }
 

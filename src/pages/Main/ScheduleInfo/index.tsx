@@ -1,7 +1,7 @@
 import React from 'react';
 import { Title, Content, NoSchedule, Schedule } from './style';
 import dayjs from 'dayjs';
-import { StudySchedule } from 'types/study';
+import { IStudySchedule } from 'types/calendar';
 import { isEmpty } from 'lodash';
 import ScheduleDot from 'components/ScheduleDot';
 import { getScheduleColor } from 'utils/schedule';
@@ -14,7 +14,7 @@ function ScheduleInfo({
   schedules,
 }: {
   sheduleDate: dayjs.Dayjs;
-  schedules: StudySchedule[];
+  schedules: IStudySchedule[];
 }) {
   return (
     <>
