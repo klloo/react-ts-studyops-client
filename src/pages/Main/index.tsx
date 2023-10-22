@@ -39,7 +39,7 @@ const Main = () => {
   // 데이터 로드 (참여중인 스터디 목록, 초대받은 스터디 목록)
   const loadData = useCallback(() => {
     // 참여중인 스터디 목록 로드
-    requestStudyList(1).then((data) => {
+    requestStudyList(4).then((data) => {
       setStudyList(data as IStudy[]);
     });
     // 초대받은 스터디 목록 로드

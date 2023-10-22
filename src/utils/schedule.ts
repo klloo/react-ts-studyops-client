@@ -1,16 +1,19 @@
 import dayjs from 'dayjs';
 
 const colors = [
-  '#2c17eb',
-  '#20b639',
-  '#d9574b',
-  '#8EF9D5',
-  '#FEA0C7',
-  '#c7cf59',
-  '#a059cf',
-  '#a7a7a7',
+  '#F8D457',
+  '#F1A23E',
+  '#EE97A4',
+  '#D5D769',
+  '#81C7BA',
+  '#5DA7EF',
+  '#859FC1',
+  '#B282CC',
 ];
 
+/**
+ * TODO: 수정 필요
+ */
 export const getScheduleColor = (studyId: number): string => {
   return colors[studyId % 8];
 };
