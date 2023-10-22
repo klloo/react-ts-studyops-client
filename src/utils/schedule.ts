@@ -21,3 +21,17 @@ export const getDay = (date: dayjs.Dayjs): string => {
   const index = parseInt(date.format('d'));
   return days[index];
 };
+
+const dayStringNumMap: { [key: string]: number } = {
+  일요일: 0,
+  월요일: 1,
+  화요일: 2,
+  수요일: 3,
+  목요일: 4,
+  금요일: 5,
+  토요일: 6,
+};
+
+export const getDayNum = (dayString: string): number => {
+  return dayStringNumMap[dayString];
+};

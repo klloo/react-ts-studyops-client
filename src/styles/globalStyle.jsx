@@ -3,8 +3,8 @@ import { Global, css } from '@emotion/react';
 import emotionNormalize from 'emotion-normalize';
 
 const baseStyle = css`
-  ${emotionNormalize}
   @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+  ${emotionNormalize}
   /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)

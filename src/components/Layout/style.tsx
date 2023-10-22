@@ -12,6 +12,11 @@ export const Header = styled.div`
   border-bottom: 0.5px solid var(--gray2, #8c8c8c);
 `;
 
+export const HeaderSide = styled.div`
+  display: flex;
+  gap: 1.25rem;
+`;
+
 export const Content = styled.div`
   max-width: var(--width-maxwidth);
   margin-left: auto;

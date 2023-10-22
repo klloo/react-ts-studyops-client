@@ -78,7 +78,7 @@ export const HeaderDiv = styled.div`
     }
   }
   > div {
-    & :first-child {
+    & :first-of-type {
       padding-left: 0;
       border-right: 0.5px solid #8c8c8c;
     }
@@ -120,20 +120,4 @@ export const ButtonWrapper = styled.div`
   gap: 0.37rem;
   padding-top: 1.25rem;
   border-top: 1px solid #ddd;
-`;
-
-export const Button = styled.button<{ yesButton?: boolean }>`
-  width: 50%;
-  display: inline-flex;
-  padding: 0.5rem;
-  justify-content: center;
-  font-size: 0.875rem;
-  align-items: center;
-  border: none;
-  border-radius: 0.1875rem;
-  font-weight: ${(props) => (props.yesButton ? '700' : '500')};
-  cursor: pointer;
-  background-color: ${(props) =>
-    props.yesButton ? 'var(--color-primary)' : '#ddd'};
-  color: ${(props) => (props.yesButton ? 'white' : '#333')};
 `;

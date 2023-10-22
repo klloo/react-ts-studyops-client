@@ -1,4 +1,4 @@
-import React, { useState, FC } from 'react';
+import React, { useState, FC, useEffect, useMemo } from 'react';
 import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
 import isoWeek from 'dayjs/plugin/isoWeek';
@@ -29,16 +29,23 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
   schedules, // 선택된 날짜의 스케줄 목록
 }) => {
   // 일정 정보 가공 {요일 : 스케줄 정보 } 형태의 객체로 가공
-  const schedulesInfo = schedules.reduce(
-    (result, item) => {
-      if (isEmpty(result[item.day])) {
-        result[item.day] = [];
-      }
-      result[item.day].push(item);
-      return result;
-    },
-    {} as Record<string, IStudySchedule[]>,
-  );
+  const schedulesInfo = useMemo(() => {
+    return schedules.reduce(
+      (result, item) => {
+        if (isEmpty(result[item.day])) {
+          result[item.day] = [];
+        }
+        result[item.day].push(item);
+        return result;
+      },
+      {} as Record<string, IStudySchedule[]>,
+    );
+  }, [schedules]);
+
+  useEffect(() => {
+    const currentDay = dayjs().format('d');
+    setSelectSchedules?.(schedulesInfo[currentDay]);
+  }, [schedulesInfo]);
 
   // day extend
   dayjs.extend(weekday);
@@ -86,12 +93,8 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
                 current.format('MM') === viewDate.format('MM') ? '' : 'none';
               const currentDay = current.format('d');
               return (
-                <>
-                  <DayNumberDiv
-                    sun={currentDay == '0'}
-                    key={`${week}_${i}`}
-                    num
-                  >
+                <div key={`${week}_${i}`}>
+                  <DayNumberDiv sun={currentDay == '0'} num>
                     <div
                       className={`${isSelected} ${isToday} ${isNone}`}
                       onClick={() => {
@@ -119,7 +122,7 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
                       </DateBoxDiv>
                     </div>
                   </DayNumberDiv>
-                </>
+                </div>
               );
             })}
         </WeekDiv>,

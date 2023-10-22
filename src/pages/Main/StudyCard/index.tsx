@@ -8,7 +8,6 @@ import {
   InfoItem,
   Icon,
   ButtonWrapper,
-  Button,
   TagWrapper,
   Tag,
   ContentDiv,
@@ -19,11 +18,22 @@ import dayjs from 'dayjs';
 import { BiSolidCrown } from 'react-icons/bi';
 import { IStudy } from 'types/db';
 import { costFormatter } from 'utils/formatter';
+import useRequest from 'hooks/useRequest';
+import { acceptAsk, rejectAsk } from 'api/ask';
+import { Button } from 'components/Button';
 
 /**
  * 참여중인 스터디 카드
  */
-function StudyCard({ isInvite, study }: { isInvite?: boolean; study: IStudy }) {
+function StudyCard({
+  isInvite,
+  study,
+  loadData,
+}: {
+  isInvite?: boolean;
+  study: IStudy;
+  loadData?: () => void;
+}) {
   const link: string | null = isInvite ? null : '/study/1';
 
   // 시작일로부터 얼마나 지났는지 구하는 함수
@@ -38,6 +48,27 @@ function StudyCard({ isInvite, study }: { isInvite?: boolean; study: IStudy }) {
       return `+${differenceInDays}`;
     }
     return `${differenceInDays}`;
+  }, []);
+
+  // 초대 거절 함수
+  const requestReject = useRequest(rejectAsk);
+  const rejectProc = useCallback(() => {
+    requestReject(study.groupId, 4)
+      .then(() => {
+        console.log('초대를 거절');
+        if (loadData) loadData();
+      })
+      .catch(() => {});
+  }, []);
+  // 초대 수락 함수
+  const requestAccept = useRequest(acceptAsk);
+  const acceptProc = useCallback(() => {
+    requestAccept(study.groupId, 4)
+      .then(() => {
+        console.log('초대를 수락');
+        if (loadData) loadData();
+      })
+      .catch(() => {});
   }, []);
 
   return (
@@ -86,8 +117,12 @@ function StudyCard({ isInvite, study }: { isInvite?: boolean; study: IStudy }) {
         </InfoItem>
         {isInvite && (
           <ButtonWrapper>
-            <Button>거절</Button>
-            <Button yesButton>수락</Button>
+            <Button onClick={rejectProc} width="50%">
+              거절
+            </Button>
+            <Button yesButton width="50%" onClick={acceptProc}>
+              수락
+            </Button>
           </ButtonWrapper>
         )}
       </Container>
