@@ -38,6 +38,7 @@ function StudySchedule() {
       title: '알고리즘 스터디',
       studyId: 3,
       attendance: true,
+      startDate: '2023-09-11',
     },
     {
       day: '3',
@@ -45,6 +46,7 @@ function StudySchedule() {
       title: '알고리즘 스터디',
       studyId: 3,
       attendance: true,
+      startDate: '2023-09-11',
     },
   ];
 

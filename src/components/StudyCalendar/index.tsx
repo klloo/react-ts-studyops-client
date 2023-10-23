@@ -111,12 +111,17 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
                               (
                                 item: IStudySchedule,
                                 i: React.Key | null | undefined,
-                              ) => (
-                                <ScheduleDot
-                                  key={i}
-                                  color={getScheduleColor(item.studyId)}
-                                />
-                              ),
+                              ) => {
+                                // 시작일 이후의 일정만 표시
+                                if (dayjs(item.startDate) <= current) {
+                                  return (
+                                    <ScheduleDot
+                                      key={i}
+                                      color={getScheduleColor(item.studyId)}
+                                    />
+                                  );
+                                }
+                              },
                             )}
                         </ScheduleWrapper>
                       </DateBoxDiv>
