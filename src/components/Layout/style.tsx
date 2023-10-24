@@ -9,7 +9,7 @@ export const Header = styled.div`
   top: 0;
   z-index: 999;
   background-color: white;
-  border-bottom: 0.5px solid var(--gray2, #8c8c8c);
+  border-bottom: 0.5px solid var(--color-gray2);
 `;
 
 export const HeaderSide = styled.div`

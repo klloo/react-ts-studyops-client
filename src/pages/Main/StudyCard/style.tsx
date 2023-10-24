@@ -4,20 +4,18 @@ import { ImageProps } from 'types/styleProps';
 export const Title = styled.div`
   display: flex;
   align-items: center;
-  gap: 3px;
   font-weight: bold;
-  color: var(--gray1, #333);
+  color: var(--color-gray1);
   font-size: 1.125rem;
   font-weight: 700;
   & div {
     display: flex;
     align-items: center;
-    color: var(--color-crown);
   }
 `;
 
 export const StartDate = styled.div`
-  color: var(--color-textgrey);
+  color: var(--color-gray2);
   & span {
     font-weight: normal;
   }
@@ -29,7 +27,7 @@ export const Description = styled.div<ImageProps>`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  color: var(--gray2, #8c8c8c);
+  color: var(--color-gray2);
   font-size: 0.875rem;
   font-weight: 500;
 `;
@@ -42,7 +40,7 @@ export const TagWrapper = styled.div`
 
 export const Tag = styled.div`
   border-radius: 3.125rem;
-  background: var(--color-primarylight);
+  background: var(--color-primary-light);
   color: var(--color-primary);
   padding: 0.19rem 0.7rem;
   font-size: 0.875rem;
@@ -65,14 +63,14 @@ export const ContentDiv = styled.div`
 
 export const HeaderDiv = styled.div`
   padding-bottom: 1.25rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--color-gray3);
   display: flex;
   align-items: center;
   justify-content: space-between;
   > div {
     > span {
       padding: 0 0.38rem;
-      color: var(--gray2, #8c8c8c);
+      color: var(--color-gray2);
       font-size: 0.875rem;
       font-weight: 500;
     }
@@ -80,7 +78,7 @@ export const HeaderDiv = styled.div`
   > div {
     & :first-of-type {
       padding-left: 0;
-      border-right: 0.5px solid #8c8c8c;
+      border-right: 0.5px solid var(--color-gray2);
     }
   }
 `;
@@ -111,7 +109,7 @@ export const InfoItem = styled.div`
 `;
 
 export const Icon = styled.div`
-  color: var(--color-textlight);
+  color: var(--color-gray2);
   /* padding-top: 2px; */
 `;
 
@@ -119,5 +117,5 @@ export const ButtonWrapper = styled.div`
   display: flex;
   gap: 0.37rem;
   padding-top: 1.25rem;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--color-gray3);
 `;

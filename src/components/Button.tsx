@@ -12,6 +12,6 @@ export const Button = styled.button<{ yesButton?: boolean; width?: string }>`
   font-weight: ${(props) => (props.yesButton ? '700' : '500')};
   cursor: pointer;
   background-color: ${(props) =>
-    props.yesButton ? 'var(--color-primary)' : '#ddd'};
-  color: ${(props) => (props.yesButton ? 'white' : '#333')};
+    props.yesButton ? 'var(--color-primary)' : 'var(--color-gray3)'};
+  color: ${(props) => (props.yesButton ? 'white' : 'var(--color-gray1)')};
 `;

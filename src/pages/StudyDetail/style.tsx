@@ -21,7 +21,7 @@ export const ExitButton = styled.div`
 export const Tag = styled.div`
   font-size: 14px;
   border-radius: 50px;
-  background: var(--color-primarylight);
+  background: var(--color-primary-light);
   color: var(--color-primary);
   padding: 3px 8px;
   width: 125px;

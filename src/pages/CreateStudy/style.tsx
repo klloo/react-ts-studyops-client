@@ -37,7 +37,7 @@ export const FormItemDiv = styled.div<{
   }
   > label {
     width: 8rem;
-    color: var(--gray1, #333);
+    color: var(--color-gray1);
     font-size: 0.875rem;
     font-weight: 700;
     padding: 0.87rem 0;
@@ -48,22 +48,24 @@ export const FormItemDiv = styled.div<{
   > input {
     flex-grow: 1;
     background-color: #fff;
-    border: solid 1px ${(props) => (props.error ? '#d52d2d' : '#ddd')};
+    border: solid 1px
+      ${(props) => (props.error ? 'var(--color-red)' : 'var(--color-gray3)')};
     border-radius: 0.2rem;
     padding: 0.81rem 0.94rem;
     &::placeholder {
-      color: var(--gray2, #8c8c8c);
+      color: var(--color-gray2);
       font-size: 0.875rem;
     }
   }
   > textarea {
     flex-grow: 1;
     background-color: #fff;
-    border: solid 1px ${(props) => (props.error ? '#f33535' : '#ddd')};
+    border: solid 1px
+      ${(props) => (props.error ? '#f33535' : 'var(--color-gray3)')};
     border-radius: 0.2rem;
     padding: 0.81rem 0.94rem;
     &::placeholder {
-      color: var(--gray2, #8c8c8c);
+      color: var(--color-gray2);
       font-size: 0.875rem;
     }
     resize: none;
@@ -90,8 +92,8 @@ export const DayDiv = styled.div<{ selected?: boolean }>`
   font-size: 0.875rem;
   font-weight: ${(props) => (props.selected ? '500' : '400')};
   background: ${(props) =>
-    props.selected ? 'var(--color-primary)' : 'var(--gray4, #F4F4F4)'};
-  color: ${(props) => (props.selected ? '#FFFFFF' : 'var(--gray2, #8c8c8c)')};
+    props.selected ? 'var(--color-primary)' : 'var(--color-gray4)'};
+  color: ${(props) => (props.selected ? '#FFFFFF' : ' var(--color-gray2)')};
 `;
 
 export const CostWrapper = styled.div`
@@ -140,8 +142,8 @@ export const NameTagDiv = styled.div`
   text-align: center;
   font-size: 0.875rem;
   font-weight: 400;
-  background: var(--gray4, #f4f4f4);
-  color: var(--gray2, #8c8c8c);
+  background: var(--color-gray4);
+  color: var(--color-gray2);
   display: flex;
   padding: 0.2rem 0.5rem;
   border-radius: 0.2rem;
@@ -164,7 +166,7 @@ export const ScheduleTimeDiv = styled.div`
   align-items: center;
   gap: 1.5rem;
   flex-wrap: wrap;
-  color: var(--gray1, #333);
+  color: var(--color-gray1);
   font-size: 0.875rem;
   font-weight: 400;
   row-gap: 0.5rem;
@@ -181,7 +183,7 @@ export const ScheduleTimeDiv = styled.div`
 `;
 
 export const ErrorMsg = styled.div`
-  color: #d52d2d;
+  color: var(--color-red);
   font-size: 0.875rem;
   margin-top: 1rem;
 `;

@@ -3,17 +3,18 @@ import styled from '@emotion/styled';
 export const Container = styled.div<{ error?: boolean }>`
   .datePicker {
     background-color: #fff;
-    border: solid 1px ${(props) => (props.error ? '#d52d2d' : '#ddd')};
+    border: solid 1px
+      ${(props) => (props.error ? 'var(--color-red)' : 'var(--color-gray3)')};
     border-radius: 0.2rem;
     padding: 0.81rem 0.94rem;
     cursor: pointer;
     &::placeholder {
-      color: var(--gray2, #8c8c8c);
+      color: var(--color-gray2);
       font-size: 0.875rem;
     }
   }
   .react-datepicker {
-    border: solid 1px #ddd;
+    border: solid 1px var(--color-gray3);
     border-radius: 0.2rem;
     padding: 0.5rem;
     .react-datepicker__day--outside-month {
@@ -29,7 +30,7 @@ export const Container = styled.div<{ error?: boolean }>`
   }
   .react-datepicker__header {
     background-color: #fff;
-    border-bottom: solid 1px #ddd;
+    border-bottom: solid 1px var(--color-gray3);
   }
   .selectedDay,
   .unselectedDay {

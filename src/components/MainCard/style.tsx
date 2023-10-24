@@ -5,7 +5,7 @@ export const Card = styled.div<{ clickable?: boolean }>`
   padding: 2.3rem 1.6rem;
   border-radius: 0.625rem;
   box-sizing: border-box;
-  border: 1px solid var(--gray2, #8c8c8c);
+  border: 1px solid var(--color-gray2);
   background: #fff;
   display: flex;
   flex-direction: column;

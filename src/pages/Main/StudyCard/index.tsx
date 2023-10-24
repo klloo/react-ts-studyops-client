@@ -15,7 +15,6 @@ import {
 import { BsPeopleFill } from 'react-icons/bs';
 import MainCard from 'components/MainCard';
 import dayjs from 'dayjs';
-import { BiSolidCrown } from 'react-icons/bi';
 import { IStudy } from 'types/db';
 import { costFormatter } from 'utils/formatter';
 import useRequest from 'hooks/useRequest';
@@ -90,7 +89,7 @@ function StudyCard({
             {study.name}
             {study.hostStatus && (
               <div>
-                <BiSolidCrown />
+                <img src={`${process.env.PUBLIC_URL}/crown.svg`} alt="icon" />
               </div>
             )}
           </Title>

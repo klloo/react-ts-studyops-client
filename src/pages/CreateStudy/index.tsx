@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Layout from 'components/Layout';
 import React, { useCallback, useEffect, useState } from 'react';
 import {

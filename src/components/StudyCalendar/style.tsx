@@ -46,7 +46,7 @@ export const WeekDiv = styled.div`
     &::before {
       content: '';
       border-radius: 50%;
-      background: var(--color-primarylight);
+      background: var(--color-primary-light);
       position: absolute;
       top: -4px;
       width: 1.5rem;
@@ -89,7 +89,7 @@ export const DayNumberDiv = styled.div<{
   num?: boolean;
 }>`
   ${(props) => props.sun && 'color: #FF0926;'}
-  ${(props) => props.day && 'color: var(--gray2, #8C8C8C);'}
-  ${(props) => !props.sun && props.num && 'color: var(--gray1, #333);'}
+  ${(props) => props.day && 'color:  var(--color-gray2);'}
+  ${(props) => !props.sun && props.num && 'color: var(--color-gray1);'}
   font-size: 0.875rem;
 `;

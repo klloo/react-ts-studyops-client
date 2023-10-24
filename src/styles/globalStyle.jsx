@@ -11,15 +11,12 @@ const baseStyle = css`
 */
   :root {
     --color-primary: #8d4bf6;
-    --color-primarylight: #eee3ff;
-    --color-crown: #f5e03c;
-    --color-red: rgb(235, 78, 62);
-    --color-border: rgb(221, 221, 221);
-    --color-textdarkgrey: rgb(116, 116, 116);
-    --color-textgrey: rgb(151, 151, 151);
-    --color-textlight: rgb(194, 194, 194);
-    --color-background: rgb(245, 245, 247);
-    --color-cancel: rgb(224, 229, 233);
+    --color-primary-light: #eee3ff;
+    --color-red: #d52d2d;
+    --color-gray1: #333333;
+    --color-gray2: #8c8c8c;
+    --color-gray3: #dddddd;
+    --color-gray4: #f4f4f4;
     --width-maxwidth: 1200px;
     --fontsize-title: 1.25rem;
   }

@@ -15,15 +15,6 @@ export const CardWrapper = styled.div`
   width: 100%;
 `;
 
-export const NewTag = styled.div`
-  background-color: var(--color-red);
-  border-radius: 50px;
-  color: white;
-  font-weight: normal;
-  font-size: 15px;
-  padding: 2px 15px;
-`;
-
 export const CalendarWrapper = styled.div`
   width: calc(45% - 10px);
 `;

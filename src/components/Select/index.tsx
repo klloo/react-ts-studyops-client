@@ -6,7 +6,7 @@ import ReactSelect, { SingleValue } from 'react-select';
 const customStyles: any = {
   control: (provided: any) => ({
     ...provided,
-    border: '1px solid var(--gray3, #DDD)',
+    border: '1px solid var(--color-gray3)',
     color: '#FFF',
     borderRadius: '0.2rem',
     boxShadow: 'none',
@@ -20,10 +20,10 @@ const customStyles: any = {
     borderRadius: '0.1875rem',
     fontWeight: isSelected ? '500' : ' 400',
     background: isSelected ? 'var(--color-primary)' : ' #FFF',
-    color: isSelected ? '#FFF' : ' var(--gray1, #333)',
+    color: isSelected ? '#FFF' : 'var(--color-gray1)',
     ':hover': {
       ...provided[':hover'],
-      backgroundColor: !isSelected && '#F4F4F4',
+      backgroundColor: !isSelected && 'var(--color-gray4)',
     },
   }),
   indicatorSeparator: (provided: any) => ({
