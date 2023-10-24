@@ -1,7 +1,7 @@
 import CalendarBlock from 'components/CalendarBlock';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
-import { StudySchedule as StudyScheduleType } from 'types/study';
+import { IStudySchedule } from 'types/calendar';
 import {
   Title,
   NoSchedule,
@@ -9,14 +9,12 @@ import {
   Schedule,
   Container,
   ProfileImage,
+  FlexWrapper,
+  BoldText,
 } from './style';
 import { isEmpty } from 'lodash';
 import { getDay, getScheduleColor } from 'utils/schedule';
-import {
-  CommonBoldText,
-  CommonScheduleDot as ScheduleDot,
-  CommonFlexWrapper,
-} from 'styles/commonStyle';
+import ScheduleDot from 'components/ScheduleDot';
 import Switch from 'react-switch';
 import { Profile, ProfileWrapper } from '../style';
 
@@ -25,8 +23,8 @@ import { Profile, ProfileWrapper } from '../style';
  */
 function StudySchedule() {
   const [selectDate, setSelectDate] = useState(dayjs());
-  const [schedules, setSchedules] = useState<StudyScheduleType[]>([]);
-  const [schedule, setSchedule] = useState<StudyScheduleType | null>(null);
+  const [schedules, setSchedules] = useState<IStudySchedule[]>([]);
+  const [schedule, setSchedule] = useState<IStudySchedule | null>(null);
 
   useEffect(() => {
     if (!isEmpty(schedules) && schedules.length == 1) setSchedule(schedules[0]);
@@ -40,6 +38,7 @@ function StudySchedule() {
       title: '알고리즘 스터디',
       studyId: 3,
       attendance: true,
+      startDate: '2023-09-11',
     },
     {
       day: '3',
@@ -47,6 +46,7 @@ function StudySchedule() {
       title: '알고리즘 스터디',
       studyId: 3,
       attendance: true,
+      startDate: '2023-09-11',
     },
   ];
 
@@ -89,8 +89,8 @@ function StudySchedule() {
                   </div>
                   <div className="title">{schedule.title}</div>
                 </Schedule>
-                <CommonFlexWrapper>
-                  <CommonBoldText>나의 참석 여부</CommonBoldText>
+                <FlexWrapper>
+                  <BoldText>나의 참석 여부</BoldText>
                   <Switch
                     onChange={onClickSwitch}
                     checked={schedule.attendance}
@@ -101,7 +101,7 @@ function StudySchedule() {
                     onColor="#8d4bf6"
                     offColor="#d2d2d2"
                   />
-                </CommonFlexWrapper>
+                </FlexWrapper>
                 <ProfileWrapper>
                   <Profile>
                     <ProfileImage

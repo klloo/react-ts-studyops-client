@@ -1,12 +1,20 @@
 import styled from '@emotion/styled';
 
+export const Container = styled.div`
+  position: relative;
+`;
+
 export const Header = styled.div`
   position: sticky;
   top: 0;
   z-index: 999;
   background-color: white;
-  border-bottom: 1px solid var(--color-background);
-  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid var(--color-gray2);
+`;
+
+export const HeaderSide = styled.div`
+  display: flex;
+  gap: 1.25rem;
 `;
 
 export const Content = styled.div`
@@ -14,10 +22,8 @@ export const Content = styled.div`
   margin-left: auto;
   margin-right: auto;
   width: 100%;
-  height: 100vh;
-  padding: 20px 20px 100px 20px;
+  padding: 3rem 1rem 8rem 1rem;
   box-sizing: border-box;
-  overflow: auto;
   ::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
   }
@@ -25,7 +31,7 @@ export const Content = styled.div`
 
 export const HeaderContent = styled.div`
   display: flex;
-  padding: 20px;
+  padding: 1rem;
   box-sizing: border-box;
   justify-content: space-between;
   align-items: center;
@@ -35,5 +41,5 @@ export const HeaderContent = styled.div`
 `;
 
 export const Logo = styled.img`
-  height: 28px;
+  height: 1.5rem;
 `;

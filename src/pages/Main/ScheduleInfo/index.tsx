@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Title, Content, NoSchedule, Schedule } from './style';
 import dayjs from 'dayjs';
-import { StudySchedule } from 'types/study';
+import { IStudySchedule } from 'types/calendar';
 import { isEmpty } from 'lodash';
-import { CommonScheduleDot as ScheduleDot } from 'styles/commonStyle';
-import { getScheduleColor } from 'utils/schedule';
+import ScheduleDot from 'components/ScheduleDot';
+import { getScheduleColor, parseTime } from 'utils/schedule';
 
 /**
  * 선택한 날짜의 일정 컴포넌트
@@ -14,12 +14,22 @@ function ScheduleInfo({
   schedules,
 }: {
   sheduleDate: dayjs.Dayjs;
-  schedules: StudySchedule[];
+  schedules: IStudySchedule[];
 }) {
+  const [sortedSchedules, setSortedSchedules] = useState<IStudySchedule[]>([]);
+
+  useEffect(() => {
+    setSortedSchedules(
+      schedules?.sort(
+        (a, b) => parseTime(a.time).getTime() - parseTime(b.time).getTime(),
+      ),
+    );
+  }, [schedules]);
+
   return (
     <>
       <Title>
-        <h2>{dayjs(sheduleDate).format('M월 D일')} 스터디 일정</h2>
+        <div>{dayjs(sheduleDate).format('M월 D일')} 스터디 일정</div>
       </Title>
       <Content>
         {isEmpty(schedules) && (
@@ -27,8 +37,8 @@ function ScheduleInfo({
             <div>스터디 일정이 없습니다.</div>
           </NoSchedule>
         )}
-        {!isEmpty(schedules) &&
-          schedules.map((item) => (
+        {!isEmpty(sortedSchedules) &&
+          sortedSchedules.map((item) => (
             <Schedule key={item.studyId}>
               <div className="time">
                 <ScheduleDot color={getScheduleColor(item.studyId)} />

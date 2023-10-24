@@ -14,13 +14,14 @@ import {
   Tab,
   TabWrapper,
   TabContent,
+  BoldText,
 } from './style';
-import { CommonProfileImage, CommonBoldText } from 'styles/commonStyle';
 import Layout from 'components/Layout';
 import dayjs from 'dayjs';
 import { AiOutlinePlus } from 'react-icons/ai';
 import StudySchedule from './SutdySchedule';
 import { getDay } from 'utils/schedule';
+import ProfileImage from 'components/ProfileImage';
 
 /**
  * 탭 정보 타입
@@ -34,7 +35,7 @@ interface Tab {
  * 스터디 상세 페이지
  */
 function StudyDetail() {
-  // const { studyId } = useParams();
+  // const { groupId } = useParams();
   const today = dayjs();
   // 탭 정보 설정
   const tabs: Record<string, Tab> = {
@@ -67,7 +68,7 @@ function StudyDetail() {
         </div>
         <ProfileWrapper>
           <Profile>
-            <CommonProfileImage
+            <ProfileImage
               width="48"
               height="48"
               url="https://static.solved.ac/misc/360x360/default_profile.png"
@@ -75,7 +76,7 @@ function StudyDetail() {
             <div>이찬희</div>
           </Profile>
           <Profile>
-            <CommonProfileImage
+            <ProfileImage
               width="48"
               height="48"
               url="https://static.solved.ac/misc/360x360/default_profile.png"
@@ -83,7 +84,7 @@ function StudyDetail() {
             <div>이찬희</div>
           </Profile>
           <Profile>
-            <CommonProfileImage
+            <ProfileImage
               width="48"
               height="48"
               url="https://static.solved.ac/misc/360x360/default_profile.png"
@@ -94,9 +95,9 @@ function StudyDetail() {
             <AiOutlinePlus />
           </AddUserButton>
         </ProfileWrapper>
-        <CommonBoldText>
+        <BoldText>
           {today.format('YYYY년 M월 D일')} ({getDay(today)})
-        </CommonBoldText>
+        </BoldText>
         <AttendanceCard>
           <div>
             오늘의 스터디
