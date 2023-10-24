@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ResponseType } from 'types/common';
-import { IStudy } from 'types/db';
+import { IStudy, INewStudy } from 'types/db';
 
 const PREFIX_URL = '/groups';
 
@@ -11,4 +11,16 @@ export function getGroupList(id: number): Promise<{
   data: ResponseType<IStudy[]>;
 }> {
   return axios.get(`${PREFIX_URL}/${id}`);
+}
+
+/**
+ * 스터디 그룹을 생성한다.
+ */
+export function createGroup(
+  id: number,
+  group: INewStudy,
+): Promise<{
+  data: ResponseType<{ postId: number }>;
+}> {
+  return axios.post(`${PREFIX_URL}/${id}`, group);
 }

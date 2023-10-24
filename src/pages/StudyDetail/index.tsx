@@ -35,7 +35,7 @@ interface Tab {
  * 스터디 상세 페이지
  */
 function StudyDetail() {
-  // const { studyId } = useParams();
+  // const { groupId } = useParams();
   const today = dayjs();
   // 탭 정보 설정
   const tabs: Record<string, Tab> = {

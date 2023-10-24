@@ -34,7 +34,7 @@ function StudyCard({
   study: IStudy;
   loadData?: () => void;
 }) {
-  const link: string | null = isInvite ? null : '/study/1';
+  const link: string | null = isInvite ? null : '/group/1';
 
   // 시작일로부터 얼마나 지났는지 구하는 함수
   const calcDiffDays = useCallback((targetDate: string) => {
@@ -45,28 +45,32 @@ function StudyCard({
       return 'D-day';
     }
     if (differenceInDays > 0) {
-      return `+${differenceInDays}`;
+      return `D+${differenceInDays}`;
     }
-    return `${differenceInDays}`;
+    return `D${differenceInDays}`;
   }, []);
 
   // 초대 거절 함수
-  const requestReject = useRequest(rejectAsk);
+  const requestReject = useRequest<boolean>(rejectAsk);
   const rejectProc = useCallback(() => {
     requestReject(study.groupId, 4)
-      .then(() => {
-        console.log('초대를 거절');
-        if (loadData) loadData();
+      .then((res) => {
+        if (res) {
+          console.log('초대를 거절');
+          if (loadData) loadData();
+        }
       })
       .catch(() => {});
   }, []);
   // 초대 수락 함수
-  const requestAccept = useRequest(acceptAsk);
+  const requestAccept = useRequest<boolean>(acceptAsk);
   const acceptProc = useCallback(() => {
     requestAccept(study.groupId, 4)
-      .then(() => {
-        console.log('초대를 수락');
-        if (loadData) loadData();
+      .then((res) => {
+        if (res) {
+          console.log('초대를 수락');
+          if (loadData) loadData();
+        }
       })
       .catch(() => {});
   }, []);
@@ -79,7 +83,7 @@ function StudyCard({
             <span>시작일</span>
             <span>{dayjs(study.startDate).format('YYYY.MM.DD')}</span>
           </div>
-          <DdayTag>D{calcDiffDays(study.startDate)}</DdayTag>
+          <DdayTag>{calcDiffDays(study.startDate)}</DdayTag>
         </HeaderDiv>
         <ContentDiv>
           <Title>
@@ -93,12 +97,18 @@ function StudyCard({
           <Description>{study.intro}</Description>
           <TagWrapper>
             <Tag>주 {study.schedules.length}회 진행</Tag>
-            {study.absenceCost != 0 && (
-              <Tag>불참비 {costFormatter(study.absenceCost)}원</Tag>
-            )}
-            {study.lateCost != 0 && (
-              <Tag>지각비 {costFormatter(study.lateCost)}원</Tag>
-            )}
+            <Tag>
+              불참비{' '}
+              {study.absenceCost == 0
+                ? '없음'
+                : `${costFormatter(study.absenceCost)}원`}
+            </Tag>
+            <Tag>
+              지각비{' '}
+              {study.lateCost == 0
+                ? '없음'
+                : `${costFormatter(study.lateCost)}원`}
+            </Tag>
           </TagWrapper>
         </ContentDiv>
         <InfoItem>

@@ -1,16 +1,34 @@
+export interface ISchedule {
+  dayWeek: string;
+  startTime: string;
+  finishTime: string;
+}
+
 export interface IStudy {
   groupId: number;
-  name: string;
-  intro: string;
-  schedules: {
-    dayWeek: string;
-    startTime: string;
-    finishTime: string;
-  }[];
-  hostName: string;
   hostStatus: boolean;
   headCount: number;
+  name: string;
+  intro: string;
+  schedules: ISchedule[];
+  hostName: string;
   absenceCost: number;
   lateCost: number;
   startDate: string;
+  rule?: string;
+  allowedTime?: number;
+  members?: string[];
+}
+
+export interface INewStudy {
+  name: string;
+  intro: string;
+  schedules: ISchedule[];
+  hostName: string;
+  absenceCost: number;
+  lateCost: number;
+  startDate: string;
+  rule: string;
+  allowedTime: number;
+  invitees: string[];
 }

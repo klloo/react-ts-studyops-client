@@ -46,7 +46,7 @@ export const Tag = styled.div`
   color: var(--color-primary);
   padding: 0.19rem 0.7rem;
   font-size: 0.875rem;
-  font-weight: 700;
+  font-weight: 600;
 `;
 
 export const Container = styled.div`
@@ -60,7 +60,7 @@ export const ContentDiv = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  gap: 0.7rem;
+  gap: 1rem;
 `;
 
 export const HeaderDiv = styled.div`

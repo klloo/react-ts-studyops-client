@@ -44,7 +44,11 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
 
   useEffect(() => {
     const currentDay = dayjs().format('d');
-    setSelectSchedules?.(schedulesInfo[currentDay]);
+    let curSchedule = schedulesInfo[currentDay];
+    curSchedule = curSchedule?.filter(
+      (schedule) => dayjs(schedule.startDate) <= dayjs(),
+    );
+    setSelectSchedules?.(curSchedule);
   }, [schedulesInfo]);
 
   // day extend
@@ -99,8 +103,13 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
                       className={`${isSelected} ${isToday} ${isNone}`}
                       onClick={() => {
                         setSelectDate(current);
-                        if (setSelectSchedules)
-                          setSelectSchedules(schedulesInfo[currentDay]);
+                        if (setSelectSchedules) {
+                          let curSchedule = schedulesInfo[currentDay];
+                          curSchedule = curSchedule?.filter(
+                            (schedule) => dayjs(schedule.startDate) <= dayjs(),
+                          );
+                          setSelectSchedules(curSchedule);
+                        }
                       }}
                     >
                       <DateBoxDiv>

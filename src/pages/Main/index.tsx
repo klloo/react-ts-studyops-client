@@ -19,6 +19,7 @@ import { getGroupList } from 'api/group';
 import { getAskGroupList } from 'api/ask';
 import { getDayNum } from 'utils/schedule';
 import { isEmpty } from 'lodash';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * 메인 페이지
@@ -39,12 +40,12 @@ const Main = () => {
   // 데이터 로드 (참여중인 스터디 목록, 초대받은 스터디 목록)
   const loadData = useCallback(() => {
     // 참여중인 스터디 목록 로드
-    requestStudyList(4).then((data) => {
-      setStudyList(data as IStudy[]);
+    requestStudyList(1).then((data) => {
+      setStudyList(data);
     });
     // 초대받은 스터디 목록 로드
     requestAskStudyList(4).then((data) => {
-      setAskStudyList(data as IStudy[]);
+      setAskStudyList(data);
     });
   }, []);
   useEffect(() => {
@@ -63,6 +64,7 @@ const Main = () => {
           title: study.name,
           studyId: study.groupId,
           attendance: true,
+          startDate: study.startDate,
         }),
       );
       scheduleList.forEach((schedule) => {
@@ -71,6 +73,8 @@ const Main = () => {
     });
     setStudySchedules(totalSchedules);
   }, [studyList]);
+
+  const navigate = useNavigate();
 
   return (
     <Layout>
@@ -99,7 +103,12 @@ const Main = () => {
                 새로운 스터디를
                 <br />
                 추가해보세요!
-                <PlusButton size="60" />
+                <PlusButton
+                  onClick={() => {
+                    navigate('/create');
+                  }}
+                  size="60"
+                />
               </EmptyCard>
             )}
           </CardWrapper>
