@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 
-export const Container = styled.div`
+export const Container = styled.div<{ error?: boolean }>`
   .datePicker {
     background-color: #fff;
-    border: solid 1px #ddd;
+    border: solid 1px ${(props) => (props.error ? '#d52d2d' : '#ddd')};
     border-radius: 0.2rem;
     padding: 0.81rem 0.94rem;
     cursor: pointer;
@@ -35,6 +35,7 @@ export const Container = styled.div`
   .unselectedDay {
     border-radius: 50%;
     font-weight: 400;
+    background-color: transparent;
   }
   .selectedDay {
     background-color: var(--color-primary);

@@ -27,6 +27,7 @@ export const CreateForm = styled.div`
 export const FormItemDiv = styled.div<{
   emptyLabel?: boolean;
   error?: boolean;
+  textareaHeight?: string;
 }>`
   display: flex;
   gap: 0.5rem;
@@ -47,7 +48,7 @@ export const FormItemDiv = styled.div<{
   > input {
     flex-grow: 1;
     background-color: #fff;
-    border: solid 1px ${(props) => (props.error ? '#f33535' : '#ddd')};
+    border: solid 1px ${(props) => (props.error ? '#d52d2d' : '#ddd')};
     border-radius: 0.2rem;
     padding: 0.81rem 0.94rem;
     &::placeholder {
@@ -66,7 +67,8 @@ export const FormItemDiv = styled.div<{
       font-size: 0.875rem;
     }
     resize: none;
-    min-height: 6rem;
+    min-height: ${(props) =>
+      props.textareaHeight && `${props.textareaHeight}rem`};
   }
 `;
 
@@ -160,10 +162,26 @@ export const ScheduleTimeWrapper = styled.div`
 export const ScheduleTimeDiv = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  color: var(--gray1, #333);
+  font-size: 0.875rem;
+  font-weight: 400;
+  row-gap: 0.5rem;
   > div {
-    color: var(--gray1, #333);
-    font-size: 0.875rem;
-    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
+  > span {
+    @media ${theme.device.tablet}, ${theme.device.phone} {
+      width: 100%;
+    }
+  }
+`;
+
+export const ErrorMsg = styled.div`
+  color: #d52d2d;
+  font-size: 0.875rem;
+  margin-top: 1rem;
 `;

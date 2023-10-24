@@ -14,6 +14,7 @@ import {
   NameTagDiv,
   ScheduleTimeWrapper,
   ScheduleTimeDiv,
+  ErrorMsg,
 } from './style';
 import CustomSwitch from 'components/CustomSwitch';
 import { SingleValue } from 'react-select';
@@ -22,12 +23,13 @@ import { costFormatter } from 'utils/formatter';
 import useInput from 'hooks/useInput';
 import { isEmpty } from 'lodash';
 import DatePicker from 'components/DatePicker';
-import { getDayString } from 'utils/schedule';
+import { getDayString, parseTime } from 'utils/schedule';
 import { INewStudy, ISchedule } from 'types/db';
 import dayjs from 'dayjs';
 import useRequest from 'hooks/useRequest';
 import { createGroup } from 'api/group';
 import { useNavigate } from 'react-router-dom';
+import TextareaAutosize from 'react-textarea-autosize';
 
 interface IOption {
   label: string;
@@ -62,7 +64,7 @@ function CreateStudy() {
   const [intro, onChangeIntro] = useInput(''); // 스터디 소개
   const [rule, onChangeRule] = useInput(''); // 스터디 이름
   const [scheduleList, setScheduleList] = useState<IFormSchedule[]>([]); // 스터디 일정 목록
-  const [startDate, setStartDate] = useState<Date | null>(new Date()); // 시작일
+  const [startDate, setStartDate] = useState<Date | null>(null); // 시작일
   const [costFlag, setCostFlag] = useState(false); // 벌금 여부
   const [lateCost, setLateCost] = useState(1000); // 지각비
   const [absenceCost, setAbsenceCost] = useState(1000); // 결석비
@@ -75,8 +77,9 @@ function CreateStudy() {
   const [introErr, setIntroErr] = useState(false);
   const [inviteesErr, setInviteesErr] = useState(false);
   const [ruleErr, setRuleErr] = useState(false);
+  const [startDateErr, setStartDateErr] = useState(false);
   const [scheduleErr, setScheduleErr] = useState(false);
-  const [scheduleErrMsg, setScheduleErrMsg] = useState(false);
+  const [scheduleErrMsg, setScheduleErrMsg] = useState('');
 
   const navigate = useNavigate();
 
@@ -239,14 +242,37 @@ function CreateStudy() {
       setRuleErr(true);
       flag = false;
     } else setRuleErr(false);
+    // 시작일
+    if (!startDate) {
+      setStartDateErr(true);
+      flag = false;
+    } else setStartDateErr(false);
     // 인원
     if (isEmpty(invitees)) {
       setInviteesErr(true);
       flag = false;
     } else setInviteesErr(false);
     // 스터디 일정
-    // 시작시간 끝시간 같으면 안됨
-    // 시간 범위가 하루를 넘어갈 수 없음
+    if (isEmpty(scheduleList)) {
+      setScheduleErr(true);
+      setScheduleErrMsg('스터디 일정을 선택해주세요.');
+      flag = false;
+    } else setScheduleErr(false);
+    // 시작시간이 끝시간보다 크거나 같으면 안됨
+    if (!isEmpty(scheduleList)) {
+      scheduleList.forEach((schedule) => {
+        const startTime = parseTime(
+          `${schedule.startTimeHour}:${schedule.startTimeMinute}`,
+        );
+        const finishTime = parseTime(
+          `${schedule.finishTimeHour}:${schedule.finishTimeMinute}`,
+        );
+        if (startTime >= finishTime) {
+          setScheduleErr(true);
+          setScheduleErrMsg('유효하지 않은 시간 범위가 존재합니다.');
+        } else setScheduleErr(false);
+      });
+    }
     return flag;
   };
 
@@ -292,12 +318,13 @@ function CreateStudy() {
               onChange={onChangeName}
             />
           </FormItemDiv>
-          <FormItemDiv error={introErr}>
+          <FormItemDiv error={introErr} textareaHeight="3">
             <label>스터디 소개</label>
             <textarea
               placeholder="30자 내외로 작성해주세요"
               value={intro}
               onChange={onChangeIntro}
+              maxLength={30}
             />
           </FormItemDiv>
           <FormItemDiv error={inviteesErr}>
@@ -335,23 +362,27 @@ function CreateStudy() {
             <DatePicker
               selectedDate={startDate}
               setSelectedDate={setStartDate}
+              error={startDateErr}
             />
           </FormItemDiv>
           <FormItemDiv>
             <label>스터디 요일</label>
-            <DaysWrapper>
-              {days.map((day, i) => (
-                <DayDiv
-                  key={i}
-                  selected={selectedDaysMap[i]}
-                  onClick={() => {
-                    onClickDay(i);
-                  }}
-                >
-                  {day}
-                </DayDiv>
-              ))}
-            </DaysWrapper>
+            <div>
+              <DaysWrapper>
+                {days.map((day, i) => (
+                  <DayDiv
+                    key={i}
+                    selected={selectedDaysMap[i]}
+                    onClick={() => {
+                      onClickDay(i);
+                    }}
+                  >
+                    {day}
+                  </DayDiv>
+                ))}
+              </DaysWrapper>
+              {scheduleErr && <ErrorMsg>{scheduleErrMsg}</ErrorMsg>}
+            </div>
           </FormItemDiv>
           {!isEmpty(scheduleList) && (
             <FormItemDiv>
@@ -359,62 +390,66 @@ function CreateStudy() {
               <ScheduleTimeWrapper>
                 {scheduleList.map((schedule) => (
                   <ScheduleTimeDiv key={schedule.dayWeek}>
-                    <div>{getDayString(schedule.dayWeek)}</div>
-                    <Select
-                      onChange={(newValue) => {
-                        onChangeHour(
-                          newValue?.value as string,
-                          'start',
-                          schedule.dayWeek,
-                        );
-                      }}
-                      options={hourList}
-                      defaultValue={hourList[0]}
-                    />
-                    :
-                    <Select
-                      onChange={(newValue) => {
-                        onChangeMinute(
-                          newValue?.value as string,
-                          'start',
-                          schedule.dayWeek,
-                        );
-                      }}
-                      options={minuteList}
-                      defaultValue={minuteList[0]}
-                    />
+                    <span>{getDayString(schedule.dayWeek)}</span>
+                    <div>
+                      <Select
+                        onChange={(newValue) => {
+                          onChangeHour(
+                            newValue?.value as string,
+                            'start',
+                            schedule.dayWeek,
+                          );
+                        }}
+                        options={hourList}
+                        defaultValue={hourList[0]}
+                      />
+                      :
+                      <Select
+                        onChange={(newValue) => {
+                          onChangeMinute(
+                            newValue?.value as string,
+                            'start',
+                            schedule.dayWeek,
+                          );
+                        }}
+                        options={minuteList}
+                        defaultValue={minuteList[0]}
+                      />
+                    </div>
                     ~
-                    <Select
-                      onChange={(newValue) => {
-                        onChangeHour(
-                          newValue?.value as string,
-                          'finish',
-                          schedule.dayWeek,
-                        );
-                      }}
-                      options={hourList}
-                      defaultValue={hourList[0]}
-                    />
-                    :
-                    <Select
-                      onChange={(newValue) => {
-                        onChangeMinute(
-                          newValue?.value as string,
-                          'finish',
-                          schedule.dayWeek,
-                        );
-                      }}
-                      options={minuteList}
-                      defaultValue={minuteList[0]}
-                    />
+                    <div>
+                      <Select
+                        onChange={(newValue) => {
+                          onChangeHour(
+                            newValue?.value as string,
+                            'finish',
+                            schedule.dayWeek,
+                          );
+                        }}
+                        options={hourList}
+                        defaultValue={hourList[0]}
+                      />
+                      :
+                      <Select
+                        onChange={(newValue) => {
+                          onChangeMinute(
+                            newValue?.value as string,
+                            'finish',
+                            schedule.dayWeek,
+                          );
+                        }}
+                        options={minuteList}
+                        defaultValue={minuteList[0]}
+                      />
+                    </div>
                   </ScheduleTimeDiv>
                 ))}
               </ScheduleTimeWrapper>
             </FormItemDiv>
           )}
-          <FormItemDiv error={ruleErr}>
+          <FormItemDiv error={ruleErr} textareaHeight="8.5">
             <label>스터디 규칙</label>
-            <textarea
+            <TextareaAutosize
               placeholder="스터디 규칙을 작성해주세요"
               value={rule}
               onChange={onChangeRule}

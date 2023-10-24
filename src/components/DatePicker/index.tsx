@@ -9,9 +9,11 @@ import dayjs from 'dayjs';
 const DatePicker = ({
   selectedDate,
   setSelectedDate,
+  error,
 }: {
   selectedDate: Date | null;
   setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  error?: boolean;
 }) => {
   const dayMap: { [key: string]: string } = {
     Sunday: '일',
@@ -24,7 +26,7 @@ const DatePicker = ({
   };
 
   return (
-    <Container>
+    <Container error={error}>
       <ReactDatePicker
         formatWeekDay={(nameOfDay) => dayMap[nameOfDay]}
         dateFormat="yyyy/MM/dd"
@@ -33,11 +35,16 @@ const DatePicker = ({
         onChange={(date) => setSelectedDate(date)}
         className="datePicker"
         calendarClassName="calenderWrapper"
-        dayClassName={(d) =>
-          d.getDate() === selectedDate!.getDate()
-            ? 'selectedDay'
-            : 'unselectedDay'
-        }
+        placeholderText="YYYY / MM / DD"
+        dayClassName={(d) => {
+          if (selectedDate) {
+            return new Date(d).toDateString() ==
+              new Date(selectedDate).toDateString()
+              ? 'selectedDay'
+              : 'unselectedDay';
+          }
+          return 'unselectedDay';
+        }}
         renderCustomHeader={({
           date,
           decreaseMonth,

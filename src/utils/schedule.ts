@@ -55,3 +55,11 @@ export const getDayNum = (dayString: string): number => {
 export const getDayString = (dayString: number): string => {
   return dayNumStringMap[dayString];
 };
+
+export const parseTime = (timeStr: string): Date => {
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  const time = new Date();
+  time.setHours(hours);
+  time.setMinutes(minutes);
+  return time;
+};

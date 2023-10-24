@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { IStudySchedule } from 'types/calendar';
 import { isEmpty } from 'lodash';
 import ScheduleDot from 'components/ScheduleDot';
-import { getScheduleColor } from 'utils/schedule';
+import { getScheduleColor, parseTime } from 'utils/schedule';
 
 /**
  * 선택한 날짜의 일정 컴포넌트
@@ -19,13 +19,6 @@ function ScheduleInfo({
   const [sortedSchedules, setSortedSchedules] = useState<IStudySchedule[]>([]);
 
   useEffect(() => {
-    function parseTime(timeStr: string): Date {
-      const [hours, minutes] = timeStr.split(':').map(Number);
-      const time = new Date();
-      time.setHours(hours);
-      time.setMinutes(minutes);
-      return time;
-    }
     setSortedSchedules(
       schedules?.sort(
         (a, b) => parseTime(a.time).getTime() - parseTime(b.time).getTime(),
