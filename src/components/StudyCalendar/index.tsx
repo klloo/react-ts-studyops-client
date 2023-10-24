@@ -105,8 +105,9 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
                         setSelectDate(current);
                         if (setSelectSchedules) {
                           let curSchedule = schedulesInfo[currentDay];
+                          console.log(curSchedule);
                           curSchedule = curSchedule?.filter(
-                            (schedule) => dayjs(schedule.startDate) <= dayjs(),
+                            (schedule) => dayjs(schedule.startDate) <= current,
                           );
                           setSelectSchedules(curSchedule);
                         }
