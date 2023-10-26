@@ -56,10 +56,15 @@ export const getDayString = (dayString: number): string => {
   return dayNumStringMap[dayString];
 };
 
-export const parseTime = (timeStr: string): Date => {
-  const [hours, minutes] = timeStr.split(':').map(Number);
-  const time = new Date();
-  time.setHours(hours);
-  time.setMinutes(minutes);
-  return time;
+/**
+ * hh:mm 형태의 시간을 비교한다
+ * @param timeStr1
+ * @param timeStr2
+ * @returns 0: 같음, 양수: 1이 큼, 음수: 2가 큼
+ */
+export const compareTime = (timeStr1: string, timeStr2: string): number => {
+  const [hour1, minute1] = timeStr1.split(':').map(Number);
+  const [hour2, minute2] = timeStr2.split(':').map(Number);
+  if (hour1 - hour2 !== 0) return hour1 - hour2;
+  return minute1 - minute2;
 };
