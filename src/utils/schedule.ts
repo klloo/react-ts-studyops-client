@@ -68,3 +68,30 @@ export const compareTime = (timeStr1: string, timeStr2: string): number => {
   if (hour1 - hour2 !== 0) return hour1 - hour2;
   return minute1 - minute2;
 };
+
+// 시작일로부터 얼마나 지났는지 구하는 함수
+export const calcDiffDays = (targetDate: string) => {
+  const today = dayjs().startOf('day');
+  const target = dayjs(targetDate).startOf('day');
+  const differenceInDays = target.diff(today, 'day');
+  if (differenceInDays === 0) {
+    return 'D-day';
+  }
+  if (differenceInDays > 0) {
+    return `D-${differenceInDays}`;
+  }
+  return `D+${Math.abs(differenceInDays)}`;
+};
+
+// 시작시간으로부터 몇분 지났는지 구하는 함수
+export const calcDiffMinutes = (targetTime: string) => {
+  const [targetHour, targetMinute] = targetTime.split(':');
+  const start = dayjs()
+    .hour(parseInt(targetHour))
+    .minute(parseInt(targetMinute))
+    .second(0)
+    .millisecond(0);
+  const end = dayjs(); // 현재 시간
+  const differenceInMinutes = end.diff(start, 'minutes');
+  return Math.abs(differenceInMinutes);
+};

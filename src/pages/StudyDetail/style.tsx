@@ -1,41 +1,5 @@
 import styled from '@emotion/styled';
-
-export const Title = styled.div`
-  font-weight: bold;
-  font-size: var(--fontsize-title);
-  display: flex;
-  justify-content: space-between;
-`;
-
-export const ExitButton = styled.div`
-  background-color: var(--color-cancel);
-  border-radius: 50px;
-  padding: 1px 15px;
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  font-weight: normal;
-  color: var(--color-textdarkgrey);
-`;
-
-export const Tag = styled.div`
-  font-size: 14px;
-  border-radius: 50px;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  padding: 3px 8px;
-  width: 125px;
-  text-align: center;
-  & span {
-    font-weight: bold;
-  }
-`;
-
-export const StudySummary = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-`;
+import theme from 'styles/theme';
 
 export const ProfileWrapper = styled.div`
   display: flex;
@@ -53,78 +17,64 @@ export const Profile = styled.div`
   }
 `;
 
-export const AddUserButton = styled.div`
-  height: 48px;
-  width: 48px;
-  border-radius: 50px;
+export const Container = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-cancel);
-  cursor: pointer;
-  color: var(--color-textdarkgrey);
+  flex-direction: column;
+  gap: 5rem;
 `;
 
-export const AttendanceCard = styled.div<{ clickable?: boolean }>`
-  padding: 30px;
-  border-radius: 8px;
+export const StudyOutlineDiv = styled.div`
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
+export const DdayTag = styled.div`
+  display: inline-flex;
+  padding: 0.5rem 1.625rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3.125rem;
+  background: #eee3ff;
+  color: var(--color-primary);
+  font-size: 0.9375rem;
+  font-weight: 600;
+`;
+
+export const StudyTitle = styled.div`
+  color: var(--color-gray1);
+  font-size: 1.8rem;
+  font-weight: 700;
+  padding-right: 1.5rem;
+  border-right: 1px solid var(--color-gray1);
+  @media ${theme.device.phone} {
+    border-right: none;
+  }
+`;
+
+export const MemberInfoDiv = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.08);
-  background-color: white;
-  flex-wrap: wrap;
-  & div {
-    & span {
-      font-weight: bold;
-      margin: 0 10px 0 10px;
+  > span {
+    padding: 0 0.62rem;
+    font-weight: 400;
+    > span {
+      font-weight: 700;
     }
   }
 `;
 
-export const AttendanceButton = styled.div`
-  border-radius: 6px;
-  background-color: var(--color-primary);
-  padding: 5px 15px;
-  color: white;
-  cursor: pointer;
+export const DescriptionDiv = styled.div`
+  color: var(--color-gray2);
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-top: 1.44rem;
 `;
 
-export const StudyDetailContainer = styled.div`
-  margin-top: 30px;
-  position: relative;
-  scroll-margin-top: 80px;
-`;
-
-export const TabWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  position: sticky;
-  top: -20px;
-  background-color: var(--color-background);
-  padding-bottom: 20px;
-  padding-top: 20px;
-  flex-wrap: wrap;
-  z-index: 999;
-`;
-
-export const Tab = styled.div<{ selected: boolean }>`
-  background-color: ${(props) =>
-    props.selected ? 'var(--color-primary)' : 'var(--color-cancel)'};
-  color: ${(props) => (props.selected ? 'white' : 'black')};
-  border-radius: 50px;
-  padding: 10px 25px;
-  display: flex;
-  cursor: pointer;
-`;
-
-export const TabContent = styled.div`
-  /* height: 100vh; */
-  margin-top: 10px;
-`;
-
-export const BoldText = styled.div`
-  font-weight: bold;
+export const StartDateDiv = styled.div`
+  flex-grow: 1;
+  text-align: end;
+  color: var(--color-gray2);
+  font-weight: 500;
 `;

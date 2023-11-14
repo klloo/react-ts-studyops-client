@@ -38,21 +38,19 @@ const Main = () => {
   const requestAskStudyList = useRequest<IStudy[]>(getAskGroupList);
 
   // 데이터 로드 (참여중인 스터디 목록, 초대받은 스터디 목록)
-  const loadData = useCallback(() => {
+  const loadData = useCallback(async () => {
     // 참여중인 스터디 목록 로드
-    requestStudyList(1).then((data) => {
-      setStudyList(data);
-    });
+    const studyData = await requestStudyList(1);
+    setStudyList(studyData);
     // 초대받은 스터디 목록 로드
-    requestAskStudyList(4).then((data) => {
-      setAskStudyList(data);
-    });
+    const askData = await requestAskStudyList(4);
+    setAskStudyList(askData);
   }, []);
   useEffect(() => {
     loadData();
   }, []);
 
-  // 참여중인 스터디 일정
+  // 참여중인 스터디 일정 설정 (스터디 스케줄로 가공)
   const [studySchedules, setStudySchedules] = useState<IStudySchedule[]>([]);
   useEffect(() => {
     const totalSchedules: IStudySchedule[] = [];

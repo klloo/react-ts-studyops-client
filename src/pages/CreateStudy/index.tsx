@@ -29,6 +29,7 @@ import useRequest from 'hooks/useRequest';
 import { createGroup } from 'api/group';
 import { useNavigate } from 'react-router-dom';
 import TextareaAutosize from 'react-textarea-autosize';
+import { toast } from 'react-toastify';
 
 interface IOption {
   label: string;
@@ -275,7 +276,7 @@ function CreateStudy() {
   };
 
   // 스터디 생성 요청
-  const requestCreateStudy = useRequest<{ postId: number }>(createGroup);
+  const requestCreateStudy = useRequest<{ groupId: number }>(createGroup);
   // 생성 버튼 클릭
   const onClickCreateButton = () => {
     if (!validateForm()) return;
@@ -297,9 +298,9 @@ function CreateStudy() {
       schedules,
     };
     requestCreateStudy(1, newStudy).then((data) => {
-      const groupId = data.postId;
+      const { groupId } = data;
       navigate(`/group/${groupId}`);
-      console.log('스터디 생성');
+      toast.success('스터디를 생성하였습니다.');
     });
   };
 
@@ -319,10 +320,10 @@ function CreateStudy() {
           <FormItemDiv error={introErr} textareaHeight="3">
             <label>스터디 소개</label>
             <textarea
-              placeholder="30자 내외로 작성해주세요"
+              placeholder="50자 내외로 작성해주세요"
               value={intro}
               onChange={onChangeIntro}
-              maxLength={30}
+              maxLength={50}
             />
           </FormItemDiv>
           <FormItemDiv error={inviteesErr}>

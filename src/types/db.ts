@@ -32,3 +32,13 @@ export interface INewStudy {
   allowedTime: number;
   invitees: string[];
 }
+
+export interface ITodayStudy {
+  isStudyDay: boolean;
+  isAttendant?: boolean;
+  isLate?: boolean;
+  lateTime?: number;
+  startTime?: string;
+  finishTime?: string;
+  attendanceTime?: string;
+}

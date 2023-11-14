@@ -20,6 +20,8 @@ import { costFormatter } from 'utils/formatter';
 import useRequest from 'hooks/useRequest';
 import { acceptAsk, rejectAsk } from 'api/ask';
 import { Button } from 'components/Button';
+import { toast } from 'react-toastify';
+import { calcDiffDays } from 'utils/schedule';
 
 /**
  * 참여중인 스터디 카드
@@ -33,21 +35,7 @@ function StudyCard({
   study: IStudy;
   loadData?: () => void;
 }) {
-  const link: string | null = isInvite ? null : '/group/1';
-
-  // 시작일로부터 얼마나 지났는지 구하는 함수
-  const calcDiffDays = useCallback((targetDate: string) => {
-    const today = dayjs();
-    const target = dayjs(targetDate);
-    const differenceInDays = target.diff(today, 'day');
-    if (differenceInDays == 0) {
-      return 'D-day';
-    }
-    if (differenceInDays > 0) {
-      return `D+${differenceInDays}`;
-    }
-    return `D${differenceInDays}`;
-  }, []);
+  const link: string | null = isInvite ? null : `/group/${study.groupId}`;
 
   // 초대 거절 함수
   const requestReject = useRequest<boolean>(rejectAsk);
@@ -55,7 +43,7 @@ function StudyCard({
     requestReject(study.groupId, 4)
       .then((res) => {
         if (res) {
-          console.log('초대를 거절');
+          toast.success('초대를 거절하였습니다.');
           if (loadData) loadData();
         }
       })
@@ -67,7 +55,7 @@ function StudyCard({
     requestAccept(study.groupId, 4)
       .then((res) => {
         if (res) {
-          console.log('초대를 수락');
+          toast.success('초대를 수락하였습니다.');
           if (loadData) loadData();
         }
       })
