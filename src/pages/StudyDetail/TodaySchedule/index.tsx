@@ -5,10 +5,10 @@ import {
   TodayStudy,
   CancelIcon,
   CheckIcon,
+  LateIcon,
   AttendacneInfo,
 } from './style';
 import dayjs from 'dayjs';
-import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
 import { getDay, calcDiffMinutes } from 'utils/schedule';
@@ -16,12 +16,12 @@ import { ITodayStudy } from 'types/db';
 import useRequest from 'hooks/useRequest';
 import { attendanceGroup } from 'api/schedule';
 import { toast } from 'react-toastify';
+import { timeStringFormatter } from 'utils/formatter';
 
 /**
  * 스터디 상세 페이지 오늘의 스터디 일정 컴포넌트
  */
-function TodaySchedule() {
-  const { groupId } = useParams();
+function TodaySchedule({ groupId }: { groupId: number }) {
   // 오늘의 스터디 일정 정보
   const userId = 1; //임시
   const { data: todaySchedule, mutate: mutateTodaySchedule } =
@@ -103,13 +103,18 @@ function TodaySchedule() {
     }
     // 경과 시간을 보여줘야 하는 경우 타이머를 생성한다. 1분마다 경과시간을 1분씩 증가시킨다.
     const interval = setInterval(() => {
+      if (!todaySchedule.startTime) {
+        clearInterval(interval);
+        return;
+      }
       // overtime이 스터디 시간보다 길어지면 데이터 결석 처리하고 타이머 제거
-      if (studyTime <= overtime - 1) {
+      const curOvertime = calcDiffMinutes(todaySchedule.startTime);
+      if (studyTime <= curOvertime - 1) {
         setAbsent(true);
         clearInterval(interval);
       }
-      setOvertime((prev) => prev + 1);
-    }, 1000 * 60);
+      setOvertime(curOvertime);
+    }, 1000);
     return () => clearInterval(interval);
   }, [todaySchedule, overtime]);
 
@@ -141,8 +146,12 @@ function TodaySchedule() {
                 <span>
                   {!absent
                     ? todaySchedule.isLate
-                      ? `(${todaySchedule.lateTime}분 지각)`
-                      : `(${calcDiffMinutes(todaySchedule.startTime)}분 경과)`
+                      ? `(${timeStringFormatter(
+                          todaySchedule.lateTime || 0,
+                        )} 지각)`
+                      : `(${timeStringFormatter(
+                          calcDiffMinutes(todaySchedule.startTime),
+                        )} 경과)`
                     : '결석'}
                 </span>
               )}
@@ -159,7 +168,7 @@ function TodaySchedule() {
               <AttendacneInfo>
                 {todaySchedule.attendanceTime}
                 {todaySchedule.isLate ? (
-                  <CancelIcon size="38" />
+                  <LateIcon size="36" />
                 ) : (
                   <CheckIcon size="38" />
                 )}

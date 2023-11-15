@@ -68,7 +68,7 @@ function CreateStudy() {
   const [costFlag, setCostFlag] = useState(false); // 벌금 여부
   const [lateCost, setLateCost] = useState(1000); // 지각비
   const [absenceCost, setAbsenceCost] = useState(1000); // 결석비
-  const [allowedTime, setAllowedTime] = useState(5); // 지각 기준 시간
+  const [allowedTime, setAllowedTime] = useState(3); // 지각 기준 시간
   const [invitees, setInvitees] = useState<string[]>([]); // 초대할 닉네임 목록
   const [invitee, onChangeInvitee, setInvitee] = useInput<string>(''); // 입력한 초대자 이름
 

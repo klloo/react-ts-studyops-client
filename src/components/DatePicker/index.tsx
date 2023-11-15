@@ -41,6 +41,8 @@ const DatePicker = ({
             return new Date(d).toDateString() ==
               new Date(selectedDate).toDateString()
               ? 'selectedDay'
+              : new Date(d).toDateString() == new Date().toDateString()
+              ? 'today'
               : 'unselectedDay';
           }
           return 'unselectedDay';

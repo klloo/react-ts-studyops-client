@@ -40,8 +40,14 @@ export const Container = styled.div<{ error?: boolean }>`
   }
   .selectedDay {
     background-color: var(--color-primary);
+    font-weight: 500;
     color: #fff;
-    font-weight: 600;
+  }
+  .today {
+    border-radius: 50%;
+    background-color: var(--color-primary-light);
+    color: #000;
+    font-weight: 400;
   }
 `;
 

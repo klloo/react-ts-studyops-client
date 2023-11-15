@@ -28,6 +28,10 @@ export const StudyOutlineDiv = styled.div`
   gap: 1.5rem;
   align-items: center;
   flex-wrap: wrap;
+  @media ${theme.device.phone} {
+    gap: 0.5rem;
+    row-gap: 1.5rem;
+  }
 `;
 
 export const DdayTag = styled.div`
@@ -56,6 +60,7 @@ export const StudyTitle = styled.div`
 export const MemberInfoDiv = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
   > span {
     padding: 0 0.62rem;
     font-weight: 400;
@@ -67,7 +72,7 @@ export const MemberInfoDiv = styled.div`
 
 export const DescriptionDiv = styled.div`
   color: var(--color-gray2);
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 500;
   margin-top: 1.44rem;
 `;
@@ -78,3 +83,44 @@ export const StartDateDiv = styled.div`
   color: var(--color-gray2);
   font-weight: 500;
 `;
+
+export const TabWrapper = styled.div`
+  display: flex;
+  > div {
+    border-right: none;
+  }
+  > :last-child {
+    border-right: 0.5px solid #8c8c8c;
+  }
+  position: sticky;
+  top: 4.2rem;
+  z-index: 999;
+  @media ${theme.device.phone} {
+    margin: 0 -1rem;
+    > :last-child {
+      border-right: none;
+    }
+    > :first-of-type {
+      border-left: none;
+    }
+  }
+`;
+
+export const TabDiv = styled.div<{ selected?: boolean }>`
+  width: 25%;
+  border: 0.5px solid #8c8c8c;
+  background-color: var(--color-gray4);
+  display: inline-flex;
+  padding: 1.1875rem 0;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-gray2);
+  font-weight: 500;
+  cursor: pointer;
+  ${(props) => props.selected && 'border-bottom: none;'}
+  ${(props) => props.selected && 'background: #fff;'}
+  ${(props) => props.selected && 'color: var(--color-gray1);'}
+  ${(props) => props.selected && 'font-weight: 700;'}
+`;
+
+export const TabContentWrapper = styled.div``;

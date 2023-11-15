@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { MdCancel } from 'react-icons/md';
 import { IoMdCheckmarkCircle } from 'react-icons/io';
+import { IoWarning } from 'react-icons/io5';
 
 export const Container = styled.div`
   border: 1px solid var(--color-gray3);
@@ -11,7 +12,7 @@ export const Container = styled.div`
 
 export const TodayDate = styled.div`
   color: #000;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 500;
   margin-bottom: 0.75rem;
 `;
@@ -60,6 +61,10 @@ export const CancelIcon = styled(MdCancel)`
 
 export const CheckIcon = styled(IoMdCheckmarkCircle)`
   color: var(--color-primary);
+`;
+
+export const LateIcon = styled(IoWarning)`
+  color: #f2e200;
 `;
 
 export const AttendacneInfo = styled.div`

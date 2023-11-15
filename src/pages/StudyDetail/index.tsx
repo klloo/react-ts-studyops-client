@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   StudyOutlineDiv,
@@ -8,17 +8,21 @@ import {
   MemberInfoDiv,
   DescriptionDiv,
   StartDateDiv,
+  TabWrapper,
+  TabDiv,
+  TabContentWrapper,
 } from './style';
 import Layout from 'components/Layout';
 import dayjs from 'dayjs';
-import StudySchedule from './SutdySchedule';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
 import { calcDiffDays } from 'utils/schedule';
 import { IStudy } from 'types/db';
 import ProfileImage from 'components/ProfileImage';
 import TodaySchedule from './TodaySchedule';
+import StudyInfo from './StudyInfo';
+import StudySchedule from './SutdySchedule';
 
 /**
  * 탭 정보 타입
@@ -34,15 +38,25 @@ interface Tab {
 function StudyDetail() {
   const { groupId } = useParams();
   // 스터디 기본 정보
+  if (!groupId) {
+    return <Navigate to="/" />;
+  }
   const { data: studyInfo } = useSWR<IStudy>(`/info/${groupId}`, fetcher);
 
   // 탭 정보 설정
   const tabs: Record<string, Tab> = {
-    info: { label: '정보', component: null },
-    schedule: { label: '일정', component: <StudySchedule /> },
+    schedule: {
+      label: '일정',
+      component: <StudySchedule groupId={parseInt(groupId)} />,
+    },
     attendance: { label: '출결', component: null },
     document: { label: '자료', component: null },
+    info: {
+      label: '정보',
+      component: <StudyInfo groupId={parseInt(groupId)} />,
+    },
   };
+  const [curTab, setCurTab] = useState<Tab>(tabs.schedule);
 
   if (!studyInfo) {
     return null;
@@ -72,7 +86,21 @@ function StudyDetail() {
           </StudyOutlineDiv>
           <DescriptionDiv>{studyInfo.intro}</DescriptionDiv>
         </div>
-        <TodaySchedule />
+        <TodaySchedule groupId={parseInt(groupId)} />
+        <TabWrapper>
+          {Object.keys(tabs).map((key) => (
+            <TabDiv
+              key={key}
+              onClick={() => {
+                setCurTab(tabs[key]);
+              }}
+              selected={curTab.label === tabs[key].label}
+            >
+              {tabs[key].label}
+            </TabDiv>
+          ))}
+        </TabWrapper>
+        <TabContentWrapper>{curTab.component}</TabContentWrapper>
       </Container>
     </Layout>
   );

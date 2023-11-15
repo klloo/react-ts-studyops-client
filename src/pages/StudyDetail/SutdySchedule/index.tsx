@@ -3,61 +3,78 @@ import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
 import { IStudySchedule } from 'types/calendar';
 import {
-  Title,
-  NoSchedule,
-  Content,
-  Schedule,
   Container,
-  ProfileImage,
-  FlexWrapper,
-  BoldText,
+  TitleDiv,
+  NoSchedule,
+  VoteWrapper,
+  AttendanceList,
 } from './style';
+import fetcher from 'utils/fetcher';
+import useSWR from 'swr';
+import { IAttendance, IStudyScheduleInfo } from 'types/db';
+import { getDayNum } from 'utils/schedule';
 import { isEmpty } from 'lodash';
-import { getDay, getScheduleColor } from 'utils/schedule';
-import ScheduleDot from 'components/ScheduleDot';
-import Switch from 'react-switch';
-import { Profile, ProfileWrapper } from '../style';
+import Schedule from 'components/Schedule';
+import CustomSwitch from 'components/CustomSwitch';
+import useRequest from 'hooks/useRequest';
+import { attendanceVoteGroup } from 'api/schedule';
+import ProfileImage from 'components/ProfileImage';
 
 /**
  * 스터디 상세화면의 일정 탭 내용
  */
-function StudySchedule() {
+function StudySchedule({ groupId }: { groupId: number }) {
+  // 임시
+  const userId = 1;
   const [selectDate, setSelectDate] = useState(dayjs());
-  const [schedules, setSchedules] = useState<IStudySchedule[]>([]);
-  const [schedule, setSchedule] = useState<IStudySchedule | null>(null);
+  const [schedule, setSchedules] = useState<IStudySchedule[]>([]);
+  // 스터디 스케줄 로드
+  const { data: scheduleInfo } = useSWR<IStudyScheduleInfo>(
+    `/schedules/${groupId}`,
+    fetcher,
+  );
+  // 선택한 날짜의 스터디 참석 여부 조회
+  const { data: attendanceInfo, mutate: mutateAttendance } =
+    useSWR<IAttendance>(
+      `/schedules/attendances/${groupId}/${userId}?date=${dayjs(
+        selectDate,
+      ).format('YYYY-MM-DD')}`,
+      fetcher,
+    );
 
+  // 참여중인 스터디 일정 설정 (스터디 스케줄로 가공)
+  const [studySchedules, setStudySchedules] = useState<IStudySchedule[]>([]);
   useEffect(() => {
-    if (!isEmpty(schedules) && schedules.length == 1) setSchedule(schedules[0]);
-    else setSchedule(null);
-  }, [schedules]);
+    if (!scheduleInfo || !groupId) return;
+    const scheduleList: IStudySchedule[] = scheduleInfo.schedules.map(
+      (schedule) => ({
+        day: getDayNum(schedule.dayWeek).toString(),
+        time: schedule.startTime,
+        title: '시작',
+        studyId: groupId,
+        attendance: true,
+        startDate: scheduleInfo.startDate,
+      }),
+    );
+    setStudySchedules(scheduleList);
+  }, [scheduleInfo]);
 
-  const tmpSchedules = [
-    {
-      day: '0',
-      time: '14:00',
-      title: '알고리즘 스터디',
-      studyId: 3,
-      attendance: true,
-      startDate: '2023-09-11',
-    },
-    {
-      day: '3',
-      time: '14:00',
-      title: '알고리즘 스터디',
-      studyId: 3,
-      attendance: true,
-      startDate: '2023-09-11',
-    },
-  ];
-
-  const onClickSwitch = useCallback(() => {
-    setSchedule((prev) => {
-      if (prev) {
-        return { ...prev, attendance: !prev.attendance };
-      }
-      return prev;
-    });
-  }, []);
+  // 출석 여부 스위치 버튼 핸들러
+  const requestAttendanceVote = useRequest<boolean>(attendanceVoteGroup);
+  const toggleAttendance = useCallback(() => {
+    requestAttendanceVote(
+      groupId,
+      userId,
+      dayjs(selectDate).format('YYYY-MM-DD'),
+      !attendanceInfo?.isAttended,
+    )
+      .then(() => {
+        mutateAttendance();
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }, [attendanceInfo, groupId, userId]);
 
   return (
     <div>
@@ -65,84 +82,72 @@ function StudySchedule() {
         selectDate={selectDate}
         setSelectDate={setSelectDate}
         setSelectSchedules={setSchedules}
-        schedules={tmpSchedules}
+        schedules={studySchedules}
       >
         <Container>
-          <Title>
-            <h2>
-              {dayjs(selectDate).format('YYYY년 M월 D일')} ({getDay(selectDate)}
-              )
-            </h2>
-          </Title>
-          <Content>
-            {isEmpty(schedule) && (
-              <NoSchedule>
-                <div>스터디 일정이 없습니다.</div>
-              </NoSchedule>
-            )}
-            {!isEmpty(schedule) && (
-              <>
-                <Schedule>
-                  <div className="time">
-                    <ScheduleDot color={getScheduleColor(schedule.studyId)} />
-                    <div>{schedule.time}</div>
-                  </div>
-                  <div className="title">{schedule.title}</div>
-                </Schedule>
-                <FlexWrapper>
-                  <BoldText>나의 참석 여부</BoldText>
-                  <Switch
-                    onChange={onClickSwitch}
-                    checked={schedule.attendance}
-                    checkedIcon={false}
-                    uncheckedIcon={false}
-                    width={40}
-                    height={20}
-                    onColor="#8d4bf6"
-                    offColor="#d2d2d2"
-                  />
-                </FlexWrapper>
-                <ProfileWrapper>
-                  <Profile>
-                    <ProfileImage
-                      width="48"
-                      height="48"
-                      url="https://static.solved.ac/misc/360x360/default_profile.png"
-                    >
-                      <div>
-                        <img src="/absent-mark.svg" alt="mark" />
-                      </div>
-                    </ProfileImage>
-                    <div>이찬희</div>
-                  </Profile>
-                  <Profile>
-                    <ProfileImage
-                      width="48"
-                      height="48"
-                      url="https://static.solved.ac/misc/360x360/default_profile.png"
-                    >
-                      <div>
-                        <img src="/attendance-mark.svg" alt="mark" />
-                      </div>
-                    </ProfileImage>
-                    <div>이찬희</div>
-                  </Profile>
-                  <Profile>
-                    <ProfileImage
-                      width="48"
-                      height="48"
-                      url="https://static.solved.ac/misc/360x360/default_profile.png"
-                    >
-                      <div>
-                        <img src="/attendance-mark.svg" alt="mark" />
-                      </div>
-                    </ProfileImage>
-                    <div>이찬희</div>
-                  </Profile>
-                </ProfileWrapper>
-              </>
-            )}
-          </Content>
+          <TitleDiv>{dayjs(selectDate).format('M월 D일 스터디 일정')}</TitleDiv>
+          {!isEmpty(schedule) && schedule.length > 0 ? (
+            <>
+              <Schedule
+                time={schedule[0].time}
+                studyId={groupId}
+                title={schedule[0].title}
+              />
+              {attendanceInfo && (
+                <>
+                  <VoteWrapper>
+                    나의 참석 여부
+                    <CustomSwitch
+                      checked={attendanceInfo.isAttended}
+                      onChange={toggleAttendance}
+                    />
+                  </VoteWrapper>
+                  <AttendanceList>
+                    참석인원
+                    <div>
+                      {attendanceInfo.attendMemberList.length > 0 ? (
+                        attendanceInfo.attendMemberList.map((user, i) => (
+                          <div key={i}>
+                            <ProfileImage
+                              width="30"
+                              height="30"
+                              url="https://static.solved.ac/misc/360x360/default_profile.png"
+                            />
+                            <div>{user}</div>
+                          </div>
+                        ))
+                      ) : (
+                        <span>참석 인원이 없습니다.</span>
+                      )}
+                    </div>
+                  </AttendanceList>
+                  <AttendanceList>
+                    불참인원
+                    <div>
+                      {attendanceInfo.absenceMemberList.length > 0 ? (
+                        attendanceInfo.absenceMemberList.map((user, i) => (
+                          <div key={i}>
+                            <ProfileImage
+                              width="30"
+                              height="30"
+                              url="https://static.solved.ac/misc/360x360/default_profile.png"
+                            />
+                            <div>{user}</div>
+                          </div>
+                        ))
+                      ) : (
+                        <span>불참 인원이 없습니다.</span>
+                      )}
+                    </div>
+                  </AttendanceList>
+                </>
+              )}
+            </>
+          ) : (
+            <NoSchedule>
+              <div>스터디 일정이 없습니다.</div>
+            </NoSchedule>
+          )}
         </Container>
       </CalendarBlock>
     </div>

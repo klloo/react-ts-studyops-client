@@ -42,3 +42,14 @@ export interface ITodayStudy {
   finishTime?: string;
   attendanceTime?: string;
 }
+
+export interface IStudyScheduleInfo {
+  schedules: ISchedule[];
+  startDate: string;
+}
+
+export interface IAttendance {
+  attendMemberList: string[];
+  absenceMemberList: string[];
+  isAttended: boolean;
+}
