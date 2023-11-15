@@ -124,3 +124,16 @@ export const TabDiv = styled.div<{ selected?: boolean }>`
 `;
 
 export const TabContentWrapper = styled.div``;
+
+export const ContentTitle = styled.div`
+  > span {
+    color: var(--color-gray2);
+    padding-top: 0.3rem;
+  }
+  font-size: 1.4rem;
+  font-weight: 500;
+  padding-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;

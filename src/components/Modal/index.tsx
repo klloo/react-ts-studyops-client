@@ -11,7 +11,17 @@ interface PropType {
 const Modal = ({ children, show, onCloseModal }: PropType) => {
   if (!show) return null;
 
-  return <CreateModal onClick={onCloseModal}>{children}</CreateModal>;
+  return (
+    <CreateModal onClick={onCloseModal}>
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        {children}
+      </div>
+    </CreateModal>
+  );
 };
 
 export default Modal;

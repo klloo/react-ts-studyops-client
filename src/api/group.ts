@@ -34,3 +34,15 @@ export function getGroupInfo(id: number): Promise<{
 }> {
   return axios.get(`${INFO_PREFIX_URL}/${id}`);
 }
+
+/**
+ * 스터디 납부 계좌 정보를 수정한다.
+ */
+export function modifyAccount(
+  id: number,
+  account: string,
+): Promise<{
+  data: ResponseType<boolean>;
+}> {
+  return axios.patch(`${INFO_PREFIX_URL}/accounts/${id}`, { account });
+}

@@ -23,6 +23,7 @@ import ProfileImage from 'components/ProfileImage';
 import TodaySchedule from './TodaySchedule';
 import StudyInfo from './StudyInfo';
 import StudySchedule from './SutdySchedule';
+import AttendanceInfo from './AttendanceInfo';
 
 /**
  * 탭 정보 타입
@@ -43,17 +44,23 @@ function StudyDetail() {
   }
   const { data: studyInfo } = useSWR<IStudy>(`/info/${groupId}`, fetcher);
 
+  // 임시
+  const isHost = true;
+
   // 탭 정보 설정
   const tabs: Record<string, Tab> = {
     schedule: {
       label: '일정',
       component: <StudySchedule groupId={parseInt(groupId)} />,
     },
-    attendance: { label: '출결', component: null },
+    attendance: {
+      label: '출결',
+      component: <AttendanceInfo groupId={parseInt(groupId)} isHost={isHost} />,
+    },
     document: { label: '자료', component: null },
     info: {
       label: '정보',
-      component: <StudyInfo groupId={parseInt(groupId)} />,
+      component: <StudyInfo groupId={parseInt(groupId)} isHost={isHost} />,
     },
   };
   const [curTab, setCurTab] = useState<Tab>(tabs.schedule);

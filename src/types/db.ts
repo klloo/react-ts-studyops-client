@@ -53,3 +53,16 @@ export interface IAttendance {
   absenceMemberList: string[];
   isAttended: boolean;
 }
+
+export interface IFineTotal {
+  totalFine: number;
+  account: string | null;
+  settledPenalties: {
+    name: string;
+    penalty: number;
+  }[];
+  notSettledPenalties: {
+    name: string;
+    penalty: number;
+  }[];
+}

@@ -2,13 +2,15 @@ import React from 'react';
 import useSWR from 'swr';
 import { IStudy } from 'types/db';
 import fetcher from 'utils/fetcher';
-import { Container, TitleDiv, ContentDiv } from './style';
+import { Container, ContentDiv } from './style';
 import { costFormatter } from 'utils/formatter';
 import { IoMenuOutline } from 'react-icons/io5';
 import { FaRegClock } from 'react-icons/fa';
 import { MdCreditCard } from 'react-icons/md';
+import { ContentTitle } from '../style';
 
-function StudyInfo({ groupId }: { groupId: number }) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function StudyInfo({ groupId, isHost }: { groupId: number; isHost: boolean }) {
   // 스터디 기본 정보
   const { data: studyInfo } = useSWR<IStudy>(`/info/${groupId}`, fetcher);
   if (!studyInfo) {
@@ -17,21 +19,21 @@ function StudyInfo({ groupId }: { groupId: number }) {
   return (
     <Container>
       <div>
-        <TitleDiv>
+        <ContentTitle>
           <span>
             <IoMenuOutline size="22" />
           </span>
           스터디 규칙
-        </TitleDiv>
+        </ContentTitle>
         <ContentDiv>{studyInfo.rule}</ContentDiv>
       </div>
       <div>
-        <TitleDiv>
+        <ContentTitle>
           <span>
             <FaRegClock size="18" />
           </span>
           스터디 시간
-        </TitleDiv>
+        </ContentTitle>
         <ContentDiv>
           {studyInfo.schedules.map((sch) => (
             <div key={sch.dayWeek}>
@@ -42,12 +44,12 @@ function StudyInfo({ groupId }: { groupId: number }) {
         </ContentDiv>
       </div>
       <div>
-        <TitleDiv>
+        <ContentTitle>
           <span>
             <MdCreditCard size="20" />
           </span>
           벌금 정책
-        </TitleDiv>
+        </ContentTitle>
         <ContentDiv>
           {studyInfo.lateCost === 0 ? (
             <div>지각 벌금 없음</div>

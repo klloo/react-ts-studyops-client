@@ -2,6 +2,7 @@ import CalendarBlock from 'components/CalendarBlock';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
 import { IStudySchedule } from 'types/calendar';
+import { FaRegCalendar } from 'react-icons/fa';
 import {
   Container,
   TitleDiv,
@@ -9,6 +10,7 @@ import {
   VoteWrapper,
   AttendanceList,
 } from './style';
+import { ContentTitle } from '../style';
 import fetcher from 'utils/fetcher';
 import useSWR from 'swr';
 import { IAttendance, IStudyScheduleInfo } from 'types/db';
@@ -78,6 +80,12 @@ function StudySchedule({ groupId }: { groupId: number }) {
 
   return (
     <div>
+      <ContentTitle>
+        <span>
+          <FaRegCalendar size="21" />
+        </span>
+        스터디 일정
+      </ContentTitle>
       <CalendarBlock
         selectDate={selectDate}
         setSelectDate={setSelectDate}
