@@ -54,7 +54,7 @@ export interface IAttendance {
   isAttended: boolean;
 }
 
-export interface IFineTotal {
+export interface IPenaltyTotal {
   totalFine: number;
   account: string | null;
   settledPenalties: {

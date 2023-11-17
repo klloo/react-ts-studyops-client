@@ -14,19 +14,21 @@ import CustomSwitch from 'components/CustomSwitch';
 import { IPenaltyMemberInfo } from 'types/db';
 
 function MemberItem({
-  isHost,
+  isHost = true,
   penaltyMember,
   cost,
   info,
+  noPenalty = false,
   settle,
   exempt,
 }: {
-  isHost: boolean;
+  isHost?: boolean;
   penaltyMember: IPenaltyMemberInfo | Omit<IPenaltyMemberInfo, 'lateTime'>;
   cost: number;
   info: string;
+  noPenalty?: boolean;
   settle: () => void;
-  exempt: () => void;
+  exempt?: () => void;
 }) {
   return (
     <Container key={penaltyMember.name}>
@@ -39,19 +41,24 @@ function MemberItem({
         <div>{penaltyMember.name}</div>
         <span>{info}</span>
       </ProfileWrapper>
-      <CostWrapper>
-        {costFormatter(cost)} 원
-        {isHost ? (
-          <>
-            <CustomSwitch checked={penaltyMember.isSettled} onChange={settle} />
-            <ExemptButton onClick={exempt}>면제</ExemptButton>
-          </>
-        ) : penaltyMember.isSettled ? (
-          <CheckedIcon size="18" />
-        ) : (
-          <UnCheckedIcon size="18" />
-        )}
-      </CostWrapper>
+      {!noPenalty && (
+        <CostWrapper>
+          {costFormatter(cost)} 원
+          {isHost ? (
+            <>
+              <CustomSwitch
+                checked={penaltyMember.isSettled}
+                onChange={settle}
+              />
+              {exempt && <ExemptButton onClick={exempt}>면제</ExemptButton>}
+            </>
+          ) : penaltyMember.isSettled ? (
+            <CheckedIcon size="18" />
+          ) : (
+            <UnCheckedIcon size="18" />
+          )}
+        </CostWrapper>
+      )}
     </Container>
   );
 }

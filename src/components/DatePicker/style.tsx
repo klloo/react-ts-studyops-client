@@ -1,13 +1,18 @@
 import styled from '@emotion/styled';
 
 export const Container = styled.div<{ error?: boolean }>`
+  .react-datepicker-wrapper {
+    display: block;
+  }
   .datePicker {
+    box-sizing: border-box;
     background-color: #fff;
     border: solid 1px
       ${(props) => (props.error ? 'var(--color-red)' : 'var(--color-gray3)')};
     border-radius: 0.2rem;
     padding: 0.81rem 0.94rem;
     cursor: pointer;
+    width: 100%;
     &::placeholder {
       color: var(--color-gray2);
       font-size: 0.875rem;

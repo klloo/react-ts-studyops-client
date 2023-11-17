@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { MdCheckCircle } from 'react-icons/md';
 import { MdCircle } from 'react-icons/md';
+import theme from 'styles/theme';
 
 export const CheckedIcon = styled(MdCheckCircle)`
   color: var(--color-primary);
@@ -20,6 +21,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 0;
+  flex-wrap: wrap;
 `;
 
 export const ProfileWrapper = styled.div`
@@ -28,14 +30,17 @@ export const ProfileWrapper = styled.div`
   align-items: center;
   > div {
     color: var(--color-gray1);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
   }
   > span {
     color: var(--color-gray2);
     font-size: 0.9rem;
     font-weight: 500;
-    margin-left: 1rem;
+    margin-left: 0.5rem;
+    @media ${theme.device.phone} {
+      margin-left: 0;
+    }
   }
 `;
 
@@ -44,7 +49,7 @@ export const CostWrapper = styled.div`
   align-items: center;
   gap: 0.8rem;
   color: #000;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 500;
 `;
 
@@ -57,7 +62,7 @@ export const ExemptButton = styled.div`
   background: var(--color-gray4);
   color: var(--color-gray2);
   text-align: center;
-  font-size: 0.8rem;
+  font-size: 0.725rem;
   font-weight: 500;
   cursor: pointer;
 `;

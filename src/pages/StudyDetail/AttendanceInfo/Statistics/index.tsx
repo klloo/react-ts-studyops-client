@@ -3,11 +3,11 @@ import { isEmpty } from 'lodash';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import accessibility from 'highcharts/modules/accessibility';
-import { IFineTotal } from 'types/db';
+import { IPenaltyTotal } from 'types/db';
 
 accessibility(Highcharts);
 
-function Statistics({ fineInfo }: { fineInfo: IFineTotal }) {
+function Statistics({ penaltyInfo }: { penaltyInfo: IPenaltyTotal }) {
   const [series, setSeries] = useState<
     {
       name: string;
@@ -18,21 +18,21 @@ function Statistics({ fineInfo }: { fineInfo: IFineTotal }) {
   const [options, setOptions] = useState({});
 
   useEffect(() => {
-    if (!fineInfo) return;
+    if (!penaltyInfo) return;
     setSeries([
       {
         name: 'Penalty',
-        data: fineInfo.settledPenalties.map(
+        data: penaltyInfo.settledPenalties.map(
           (item: { name: string; penalty: number }) => item.penalty || 0,
         ),
         color: '#8D4BF6',
       },
     ]);
-  }, [fineInfo]);
+  }, [penaltyInfo]);
 
   useEffect(() => {
-    if (isEmpty(series) || !fineInfo) return;
-    const users = fineInfo.settledPenalties.map(
+    if (isEmpty(series) || !penaltyInfo) return;
+    const users = penaltyInfo.settledPenalties.map(
       (item: { name: string; penalty: number }) => item.name,
     );
     setOptions({
@@ -79,7 +79,7 @@ function Statistics({ fineInfo }: { fineInfo: IFineTotal }) {
       },
       series: series,
     });
-  }, [series, fineInfo]);
+  }, [series, penaltyInfo]);
 
   return <HighchartsReact highcharts={Highcharts} options={options} />;
 }

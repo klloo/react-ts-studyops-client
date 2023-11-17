@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { IStudySchedule } from 'types/calendar';
-import { IPenaltyInfo, IStudyScheduleInfo } from 'types/db';
+import { IPenaltyInfo, IPenaltyTotal, IStudyScheduleInfo } from 'types/db';
 import fetcher from 'utils/fetcher';
 import { getDay, getDayNum, settledColor } from 'utils/schedule';
 import {
@@ -14,24 +14,29 @@ import {
   ContentDiv,
   SettledNotSettledTotalDiv,
   TotalCostDiv,
+  TopWrapper,
+  SettleButton,
 } from './style';
 import { isEmpty } from 'lodash';
 import { costFormatter, timeStringFormatter } from 'utils/formatter';
-import MemberItem from './MemberItem';
+import MemberItem from '../MemberItem';
 import useRequest from 'hooks/useRequest';
 import { exemptPenalty, settlePenalty } from 'api/penalty';
 import { toast } from 'react-toastify';
+import BatchSettlePopup from '../BatchSettlePopup';
 
 function SettleCalendar({
   groupId,
   isHost,
+  noPenalty,
 }: {
   groupId: number;
   isHost: boolean;
+  noPenalty: boolean;
 }) {
-  const [selectDate, setSelectDate] = useState(dayjs());
-  // 선택한 일정
-  const [, setSchedules] = useState<IStudySchedule[]>([]);
+  const [selectDate, setSelectDate] = useState(dayjs()); // 선택한 날짜
+  const [showBatchSettlePopup, setShowBatchSettlePopup] = useState(false); // 일괄 정산 팝업 띄우기 여부
+  const [, setSchedules] = useState<IStudySchedule[]>([]); // 선택한 일정
   // 스터디 스케줄 로드
   const { data: scheduleInfo } = useSWR<IStudyScheduleInfo>(
     `/schedules/${groupId}`,
@@ -46,9 +51,15 @@ function SettleCalendar({
     `/penalty/${groupId}/date?date=${selectDate.format('YYYY-MM-DD')}`,
     fetcher,
   );
-  const [totalCost, setTotalCost] = useState(0);
-  const [settledTotal, setSettledTotal] = useState(0);
-  const [notSettledTotal, setNotSettledTotal] = useState(0);
+  // 총 벌금 정보
+  const { mutate: mutatePenalty } = useSWR<IPenaltyTotal>(
+    `/penalty/${groupId}`,
+    fetcher,
+  );
+
+  const [totalCost, setTotalCost] = useState(0); // 해당 날짜의 총 벌금
+  const [settledTotal, setSettledTotal] = useState(0); // 해당 날짜의 정산된 총 금액
+  const [notSettledTotal, setNotSettledTotal] = useState(0); // 해당 날짜의 미정산된 총 금액
 
   // 정산, 미정산 금액 계산
   useEffect(() => {
@@ -119,7 +130,9 @@ function SettleCalendar({
           title: '',
           studyId: groupId,
           attendance: true,
-          color: getSettledColor(currentDateStr),
+          color: noPenalty
+            ? settledColor.true
+            : getSettledColor(currentDateStr),
           startDate: currentDateStr,
           finishDate: currentDateStr,
         });
@@ -128,7 +141,7 @@ function SettleCalendar({
       currentDate = currentDate.add(1, 'day');
     }
     setStudySchedules(scheduleList);
-  }, [scheduleInfo, notSettledInfo]);
+  }, [scheduleInfo, notSettledInfo, noPenalty]);
 
   // 벌금 정산
   const requestSettle = useRequest<boolean>(settlePenalty);
@@ -137,6 +150,7 @@ function SettleCalendar({
       .then(() => {
         mutateSettleDate();
         mutatePenaltyInfo();
+        mutatePenalty();
       })
       .catch((e) => {
         console.error(e);
@@ -153,6 +167,7 @@ function SettleCalendar({
       .then(() => {
         mutateSettleDate();
         mutatePenaltyInfo();
+        mutatePenalty();
         toast.success('벌금을 면제하였습니다.');
       })
       .catch((e) => {
@@ -162,16 +177,29 @@ function SettleCalendar({
 
   return (
     <div>
-      <LegendInfo>
-        <div>
-          <ScheduleDot color={settledColor.true} />
-          정산 완료
-        </div>
-        <div>
-          <ScheduleDot color={settledColor.false} />
-          미정산
-        </div>
-      </LegendInfo>
+      {!noPenalty && (
+        <TopWrapper>
+          <LegendInfo>
+            <div>
+              <ScheduleDot color={settledColor.true} />
+              정산 완료
+            </div>
+            <div>
+              <ScheduleDot color={settledColor.false} />
+              미정산
+            </div>
+          </LegendInfo>
+          {isHost && (
+            <SettleButton
+              onClick={() => {
+                setShowBatchSettlePopup(true);
+              }}
+            >
+              일괄 정산
+            </SettleButton>
+          )}
+        </TopWrapper>
+      )}
       <CalendarBlock
         selectDate={selectDate}
         setSelectDate={setSelectDate}
@@ -180,12 +208,13 @@ function SettleCalendar({
       >
         <TitleDiv>
           {dayjs(selectDate).format('M월 D일')} ({getDay(dayjs(selectDate))})
+          {!noPenalty && <div>결석 벌금은 매 시 정각에 업데이트 됩니다.</div>}
         </TitleDiv>
         <ContentDiv>
-          {/* 결석 멤버 목록 */}
-          {!isEmpty(penaltyInfo?.absentMembers) && (
-            <div>
-              {penaltyInfo?.absentMembers.map((mem) => (
+          <div>
+            {/* 결석 멤버 목록 */}
+            {!isEmpty(penaltyInfo?.absentMembers) &&
+              penaltyInfo?.absentMembers.map((mem) => (
                 <MemberItem
                   key={mem.name}
                   isHost={isHost}
@@ -198,13 +227,11 @@ function SettleCalendar({
                   exempt={() => {
                     exemptProc(mem.penaltyId, mem.isSettled);
                   }}
+                  noPenalty={noPenalty}
                 />
               ))}
-            </div>
-          )}
-          {!isEmpty(penaltyInfo?.lateMembers) && ( // 지각멤버 목록
-            <div>
-              {penaltyInfo?.lateMembers.map((mem) => (
+            {!isEmpty(penaltyInfo?.lateMembers) && // 지각멤버 목록
+              penaltyInfo?.lateMembers.map((mem) => (
                 <MemberItem
                   key={mem.name}
                   isHost={isHost}
@@ -217,10 +244,10 @@ function SettleCalendar({
                   exempt={() => {
                     exemptProc(mem.penaltyId, mem.isSettled);
                   }}
+                  noPenalty={noPenalty}
                 />
               ))}
-            </div>
-          )}
+          </div>
           {/* 지각, 결석 멤버가 없는 경우 */}
           {isEmpty(penaltyInfo?.absentMembers) &&
           isEmpty(penaltyInfo?.lateMembers) ? (
@@ -228,23 +255,32 @@ function SettleCalendar({
               <div>정산 정보가 없습니다.</div>
             </NoSchedule>
           ) : (
-            <div>
-              <SettledNotSettledTotalDiv>
-                <div>
-                  정산 완료 <span>{costFormatter(settledTotal)}원</span>
-                </div>
-                <div>
-                  미정산 <span>{costFormatter(notSettledTotal)}원</span>
-                </div>
-              </SettledNotSettledTotalDiv>
-              <TotalCostDiv>
-                <span>총 </span>
-                {costFormatter(totalCost)}
-              </TotalCostDiv>
-            </div>
+            !noPenalty && (
+              <div>
+                <SettledNotSettledTotalDiv>
+                  <div>
+                    미정산 <span>{costFormatter(notSettledTotal)}원</span>
+                  </div>
+                  <div>
+                    정산 완료 <span>{costFormatter(settledTotal)}원</span>
+                  </div>
+                </SettledNotSettledTotalDiv>
+                <TotalCostDiv>
+                  <span>총 </span>
+                  {costFormatter(totalCost)}
+                </TotalCostDiv>
+              </div>
+            )
           )}
         </ContentDiv>
       </CalendarBlock>
+      <BatchSettlePopup
+        show={showBatchSettlePopup}
+        onClose={() => {
+          setShowBatchSettlePopup(false);
+        }}
+        groupId={groupId}
+      />
     </div>
   );
 }

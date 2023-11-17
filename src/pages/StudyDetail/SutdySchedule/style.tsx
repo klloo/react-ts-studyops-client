@@ -30,18 +30,18 @@ export const VoteWrapper = styled.div`
   display: flex;
   gap: 1.87rem;
   color: var(--color-gray1);
-  font-size: 0.875rem;
+  font-size: 0.925rem;
   font-weight: 500;
   align-items: center;
 `;
 
 export const AttendanceList = styled.div`
   color: var(--color-gray1);
-  font-size: 0.875rem;
+  font-size: 0.925rem;
   font-weight: 500;
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 1rem;
   > div {
     display: flex;
     flex-wrap: wrap;
@@ -51,7 +51,7 @@ export const AttendanceList = styled.div`
       flex-direction: column;
       align-items: center;
       text-align: center;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 500;
       gap: 0.38rem;
     }
