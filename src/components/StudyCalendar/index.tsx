@@ -16,7 +16,6 @@ import {
 import ScheduleDot from 'components/ScheduleDot';
 import { MdArrowBackIos } from 'react-icons/md';
 import { MdArrowForwardIos } from 'react-icons/md';
-import { getScheduleColor } from 'utils/schedule';
 import { IStudyCalendarProps, IStudySchedule } from 'types/calendar';
 
 /**
@@ -45,9 +44,19 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
   useEffect(() => {
     const currentDay = dayjs().format('d');
     let curSchedule = schedulesInfo[currentDay];
-    curSchedule = curSchedule?.filter(
-      (schedule) => dayjs(schedule.startDate) <= dayjs(),
-    );
+    curSchedule = curSchedule?.filter((schedule) => {
+      if (!schedule.finishDate) {
+        return (
+          dayjs(schedule.finishDate).isAfter(dayjs()) ||
+          dayjs(schedule.finishDate).isSame(dayjs())
+        );
+      }
+      return (
+        dayjs(schedule.startDate).isBefore(dayjs()) &&
+        (dayjs(schedule.finishDate).isAfter(dayjs()) ||
+          dayjs(schedule.finishDate).isSame(dayjs()))
+      );
+    });
     if (!isEqual(curSchedule, schedules)) {
       setSelectSchedules?.(curSchedule);
     }
@@ -80,7 +89,7 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
                 .startOf('week')
                 .week(week)
                 .add(n + i, 'day');
-              // 현재 날짜 (기준)
+              // 현재 날짜
               const isSelected =
                 selectDate.format('YYYYMMDD') === current.format('YYYYMMDD')
                   ? 'selected'
@@ -101,9 +110,24 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
                         setSelectDate(current);
                         if (setSelectSchedules) {
                           let curSchedule = schedulesInfo[currentDay];
-                          curSchedule = curSchedule?.filter((schedule) =>
-                            dayjs(schedule.startDate).isBefore(current),
-                          );
+                          curSchedule = curSchedule?.filter((schedule) => {
+                            if (!schedule.finishDate) {
+                              return (
+                                dayjs(schedule.startDate).isBefore(
+                                  selectDate,
+                                ) ||
+                                dayjs(schedule.startDate).isSame(selectDate)
+                              );
+                            }
+                            return (
+                              (dayjs(schedule.startDate).isBefore(selectDate) ||
+                                dayjs(schedule.startDate).isSame(selectDate)) &&
+                              (dayjs(schedule.finishDate).isAfter(
+                                dayjs(selectDate),
+                              ) ||
+                                dayjs(schedule.finishDate).isSame(dayjs()))
+                            );
+                          });
                           setSelectSchedules(curSchedule);
                         }
                       }}
@@ -118,13 +142,29 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
                                 i: React.Key | null | undefined,
                               ) => {
                                 // 시작일 이후의 일정만 표시
-                                if (dayjs(item.startDate).isBefore(current)) {
-                                  return (
-                                    <ScheduleDot
-                                      key={i}
-                                      color={getScheduleColor(item.studyId)}
-                                    />
-                                  );
+                                if (
+                                  dayjs(item.startDate).isBefore(current) ||
+                                  dayjs(item.startDate).isSame(current)
+                                ) {
+                                  // 종료일이 있다면 종료일 이전의 일정만 표시
+                                  if (item.finishDate) {
+                                    if (
+                                      dayjs(current).isBefore(
+                                        item.finishDate,
+                                      ) ||
+                                      dayjs(item.finishDate).isSame(current)
+                                    )
+                                      return (
+                                        <ScheduleDot
+                                          key={i}
+                                          color={item.color}
+                                        />
+                                      );
+                                  } else {
+                                    return (
+                                      <ScheduleDot key={i} color={item.color} />
+                                    );
+                                  }
                                 }
                               },
                             )}

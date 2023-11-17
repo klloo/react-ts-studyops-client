@@ -11,6 +11,11 @@ const colors = [
   '#B282CC',
 ];
 
+export const settledColor = {
+  true: '#5DA7EF',
+  false: '#EE97A4',
+};
+
 /**
  * TODO: 수정 필요
  */

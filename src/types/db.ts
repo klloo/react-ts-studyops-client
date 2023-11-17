@@ -66,3 +66,17 @@ export interface IFineTotal {
     penalty: number;
   }[];
 }
+
+export interface IPenaltyMemberInfo {
+  penaltyId: number;
+  isSettled: boolean;
+  name: string;
+  lateTime?: number;
+}
+
+export interface IPenaltyInfo {
+  absentMembers: Omit<IPenaltyMemberInfo, 'lateTime'>[];
+  lateMembers: IPenaltyMemberInfo[];
+  lateCost: number;
+  absentCost: number;
+}

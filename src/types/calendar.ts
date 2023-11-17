@@ -7,6 +7,8 @@ export interface IStudySchedule {
   studyId: number;
   attendance: boolean;
   startDate: string;
+  color: string;
+  finishDate?: string;
 }
 
 export interface IStudyCalendarProps {

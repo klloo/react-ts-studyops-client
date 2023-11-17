@@ -7,6 +7,7 @@ import {
   SetAccountButton,
   TotalFineInfo,
   NoAccoutText,
+  CalendarWrapper,
 } from './style';
 import { ContentTitle } from '../style';
 import { MdCreditCard } from 'react-icons/md';
@@ -22,6 +23,8 @@ import Statistics from './Statistics';
 import useRequest from 'hooks/useRequest';
 import { modifyAccount } from 'api/group';
 import { toast } from 'react-toastify';
+import SettleCalendar from './SettleCalendar';
+import { FaRegCalendar } from 'react-icons/fa';
 
 accessibility(Highcharts);
 
@@ -104,6 +107,9 @@ function AttendanceInfo({
             <Statistics fineInfo={fineInfo} />
           </>
         )}
+        <CalendarWrapper>
+          <SettleCalendar groupId={groupId} isHost={isHost} />
+        </CalendarWrapper>
       </ContentDiv>
       <SetAccountPopup
         show={showAccountSettigPopup}

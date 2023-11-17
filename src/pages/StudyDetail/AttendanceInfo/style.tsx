@@ -65,3 +65,8 @@ export const NoAccoutText = styled.div`
   color: var(--color-gray2);
   font-size: 0.875rem;
 `;
+
+export const CalendarWrapper = styled.div`
+  padding-top: 3rem;
+  border-top: 1px solid var(--color-gray4);
+`;

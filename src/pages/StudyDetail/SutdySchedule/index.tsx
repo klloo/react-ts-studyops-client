@@ -14,13 +14,14 @@ import { ContentTitle } from '../style';
 import fetcher from 'utils/fetcher';
 import useSWR from 'swr';
 import { IAttendance, IStudyScheduleInfo } from 'types/db';
-import { getDayNum } from 'utils/schedule';
+import { getDay, getDayNum, getScheduleColor } from 'utils/schedule';
 import { isEmpty } from 'lodash';
 import Schedule from 'components/Schedule';
 import CustomSwitch from 'components/CustomSwitch';
 import useRequest from 'hooks/useRequest';
 import { attendanceVoteGroup } from 'api/schedule';
 import ProfileImage from 'components/ProfileImage';
+import { toast } from 'react-toastify';
 
 /**
  * 스터디 상세화면의 일정 탭 내용
@@ -56,6 +57,7 @@ function StudySchedule({ groupId }: { groupId: number }) {
         studyId: groupId,
         attendance: true,
         startDate: scheduleInfo.startDate,
+        color: getScheduleColor(groupId),
       }),
     );
     setStudySchedules(scheduleList);
@@ -64,6 +66,16 @@ function StudySchedule({ groupId }: { groupId: number }) {
   // 출석 여부 스위치 버튼 핸들러
   const requestAttendanceVote = useRequest<boolean>(attendanceVoteGroup);
   const toggleAttendance = useCallback(() => {
+    if (
+      dayjs().format('YYYY-MM-DD') === dayjs(selectDate).format('YYYY-MM-DD')
+    ) {
+      toast.error('당일 일정은 변경할 수 없습니다.');
+      return;
+    }
+    if (dayjs().isAfter(dayjs(selectDate))) {
+      toast.error('지난 일정은 변경할 수 없습니다.');
+      return;
+    }
     requestAttendanceVote(
       groupId,
       userId,
@@ -93,7 +105,10 @@ function StudySchedule({ groupId }: { groupId: number }) {
         schedules={studySchedules}
       >
         <Container>
-          <TitleDiv>{dayjs(selectDate).format('M월 D일 스터디 일정')}</TitleDiv>
+          <TitleDiv>
+            {dayjs(selectDate).format('M월 D일')} ({getDay(dayjs(selectDate))})
+            스터디 일정
+          </TitleDiv>
           {!isEmpty(schedule) && schedule.length > 0 ? (
             <>
               <Schedule

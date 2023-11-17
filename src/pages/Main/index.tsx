@@ -17,7 +17,7 @@ import { IStudy } from 'types/db';
 import useRequest from 'hooks/useRequest';
 import { getGroupList } from 'api/group';
 import { getAskGroupList } from 'api/ask';
-import { getDayNum } from 'utils/schedule';
+import { getDayNum, getScheduleColor } from 'utils/schedule';
 import { isEmpty } from 'lodash';
 import { useNavigate } from 'react-router-dom';
 
@@ -63,6 +63,7 @@ const Main = () => {
           studyId: study.groupId,
           attendance: true,
           startDate: study.startDate,
+          color: getScheduleColor(study.groupId),
         }),
       );
       scheduleList.forEach((schedule) => {

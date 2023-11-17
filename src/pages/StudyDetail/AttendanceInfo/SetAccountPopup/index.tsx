@@ -77,7 +77,7 @@ function SetAccountPopup({
             onChange={onChangeAccount}
           />
           <input
-            placeholder="예금주"
+            placeholder="예금주 (선택)"
             value={accountHolder}
             onChange={onChangeAccountHolder}
           />

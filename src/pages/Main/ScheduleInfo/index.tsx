@@ -3,7 +3,7 @@ import { Title, Content, NoSchedule } from './style';
 import dayjs from 'dayjs';
 import { IStudySchedule } from 'types/calendar';
 import { isEmpty } from 'lodash';
-import { compareTime } from 'utils/schedule';
+import { compareTime, getDay } from 'utils/schedule';
 import Schedule from 'components/Schedule';
 
 /**
@@ -25,7 +25,8 @@ function ScheduleInfo({
   return (
     <>
       <Title>
-        <div>{dayjs(sheduleDate).format('M월 D일')} 스터디 일정</div>
+        {dayjs(sheduleDate).format('M월 D일')} ({getDay(dayjs(sheduleDate))})
+        스터디 일정
       </Title>
       <Content>
         {isEmpty(schedules) && (
