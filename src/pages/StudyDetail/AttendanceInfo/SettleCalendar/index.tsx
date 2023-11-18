@@ -252,7 +252,7 @@ function SettleCalendar({
           {isEmpty(penaltyInfo?.absentMembers) &&
           isEmpty(penaltyInfo?.lateMembers) ? (
             <NoSchedule>
-              <div>정산 정보가 없습니다.</div>
+              <div>출결 정보가 없습니다.</div>
             </NoSchedule>
           ) : (
             !noPenalty && (

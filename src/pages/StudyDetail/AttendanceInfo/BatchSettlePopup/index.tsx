@@ -8,17 +8,23 @@ import {
   SettleListWrapper,
   TotalCostDiv,
   NoSchedule,
-  SettledNotSettledTotalDiv,
+  SubTitle,
 } from './style';
 import DatePicker from 'components/DatePicker';
-import { SubTitle } from '../style';
 import dayjs from 'dayjs';
 import fetcher from 'utils/fetcher';
-import { IPenaltyInfo } from 'types/db';
+import { IPenaltyInfo, IPenaltyMemberInfo } from 'types/db';
 import useSWR from 'swr';
-import MemberItem from '../MemberItem';
 import { isEmpty } from 'lodash';
 import { costFormatter } from 'utils/formatter';
+import BatchMemberItem from './BatchMemberItem';
+
+export interface IBatchPenaltyInfo
+  extends Omit<IPenaltyMemberInfo, 'penaltyId' | 'lateTime'> {
+  penaltyIds: number[];
+  penaltyCount: number;
+  penaltyCost: number;
+}
 
 function BatchSettlePopup({
   show,
@@ -56,34 +62,54 @@ function BatchSettlePopup({
   );
 
   const [totalCost, setTotalCost] = useState(0); // 해당 날짜의 총 벌금
-  const [settledTotal, setSettledTotal] = useState(0); // 해당 날짜의 정산된 총 금액
-  const [notSettledTotal, setNotSettledTotal] = useState(0); // 해당 날짜의 미정산된 총 금액
+  const [batchPenaltyInfo, setBatchPenaltyInfo] = useState<IBatchPenaltyInfo[]>(
+    [],
+  );
 
-  // 정산, 미정산 금액 계산
+  // 지각, 결석 벌금 일괄 정보 가공
+  useEffect(() => {
+    if (!penaltyInfo) return;
+    const penaltyInfoMap: { [name: string]: IBatchPenaltyInfo } = {};
+    penaltyInfo.lateMembers.forEach((item) => {
+      const { penaltyId, name } = item;
+      if (!penaltyInfoMap[name]) {
+        penaltyInfoMap[name] = {
+          isSettled: false,
+          name: item.name,
+          penaltyIds: [],
+          penaltyCount: 0,
+          penaltyCost: 0,
+        };
+      }
+      penaltyInfoMap[name].penaltyIds.push(penaltyId);
+      penaltyInfoMap[name].penaltyCount += 1;
+      penaltyInfoMap[name].penaltyCost += penaltyInfo.lateCost;
+    });
+    penaltyInfo.absentMembers.forEach((item) => {
+      const { penaltyId, name } = item;
+      if (!penaltyInfoMap[name]) {
+        penaltyInfoMap[name] = {
+          isSettled: false,
+          name: item.name,
+          penaltyIds: [],
+          penaltyCount: 0,
+          penaltyCost: 0,
+        };
+      }
+      penaltyInfoMap[name].penaltyIds.push(penaltyId);
+      penaltyInfoMap[name].penaltyCount += 1;
+      penaltyInfoMap[name].penaltyCost += penaltyInfo.absentCost;
+    });
+    setBatchPenaltyInfo(Object.values(penaltyInfoMap));
+  }, [penaltyInfo]);
+
+  // 미정산 총 금액 계산
   useEffect(() => {
     if (!penaltyInfo) return;
     const total =
       penaltyInfo.absentMembers.length * penaltyInfo.absentCost +
       penaltyInfo.lateMembers.length * penaltyInfo.lateCost;
     setTotalCost(total);
-    let settled = 0;
-    let notSettled = 0;
-    penaltyInfo.absentMembers.forEach((mem) => {
-      if (mem.isSettled) {
-        settled += penaltyInfo.absentCost;
-      } else {
-        notSettled += penaltyInfo.lateCost;
-      }
-    });
-    penaltyInfo.lateMembers.forEach((mem) => {
-      if (mem.isSettled) {
-        settled += penaltyInfo.lateCost;
-      } else {
-        notSettled += penaltyInfo.lateCost;
-      }
-    });
-    setSettledTotal(settled);
-    setNotSettledTotal(notSettled);
   }, [penaltyInfo]);
 
   return (
@@ -116,31 +142,17 @@ function BatchSettlePopup({
           <div>
             <SubTitle>
               {startDateStr} ~ {finishDateStr}
+              <div>기간 내 미정산된 금액만 조회됩니다.</div>
             </SubTitle>
             <SettleListWrapper>
               <div>
-                {/* 결석 멤버 목록 */}
-                {!isEmpty(penaltyInfo?.absentMembers) && (
+                {!isEmpty(batchPenaltyInfo) && !isEmpty(penaltyInfo) && (
                   <>
-                    {penaltyInfo?.absentMembers.map((mem) => (
-                      <MemberItem
+                    {batchPenaltyInfo.map((mem) => (
+                      <BatchMemberItem
                         key={mem.name}
-                        cost={penaltyInfo.absentCost}
-                        penaltyMember={mem}
-                        info=""
-                        settle={() => {}}
-                      />
-                    ))}
-                  </>
-                )}
-                {!isEmpty(penaltyInfo?.lateMembers) && ( // 지각멤버 목록
-                  <>
-                    {penaltyInfo?.lateMembers.map((mem) => (
-                      <MemberItem
-                        key={mem.name}
-                        cost={penaltyInfo.lateCost}
-                        penaltyMember={mem}
-                        info=""
+                        cost={mem.penaltyCost}
+                        penaltyMember={{ name: mem.name }}
                         settle={() => {}}
                       />
                     ))}
@@ -148,26 +160,16 @@ function BatchSettlePopup({
                 )}
               </div>
               {/* 지각, 결석 멤버가 없는 경우 */}
-              {isEmpty(penaltyInfo?.absentMembers) &&
-              isEmpty(penaltyInfo?.lateMembers) ? (
+              {isEmpty(penaltyInfo?.lateMembers) &&
+              isEmpty(penaltyInfo?.absentMembers) ? (
                 <NoSchedule>
                   <div>정산할 내역이 없습니다.</div>
                 </NoSchedule>
               ) : (
-                <div>
-                  <SettledNotSettledTotalDiv>
-                    <div>
-                      미정산 <span>{costFormatter(notSettledTotal)}원</span>
-                    </div>
-                    <div>
-                      정산 완료 <span>{costFormatter(settledTotal)}원</span>
-                    </div>
-                  </SettledNotSettledTotalDiv>
-                  <TotalCostDiv>
-                    <span>총 </span>
-                    {costFormatter(totalCost)}
-                  </TotalCostDiv>
-                </div>
+                <TotalCostDiv>
+                  <span>총 </span>
+                  {costFormatter(totalCost)}
+                </TotalCostDiv>
               )}
             </SettleListWrapper>
           </div>

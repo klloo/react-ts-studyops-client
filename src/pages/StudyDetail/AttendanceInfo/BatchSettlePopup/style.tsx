@@ -11,6 +11,7 @@ export const Container = styled.div`
   background: #fff;
   box-sizing: border-box;
   width: 37rem;
+  height: 40rem;
   box-shadow: 0px 16px 32px 0px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
@@ -39,6 +40,14 @@ export const ContentDiv = styled.div`
   gap: 2rem;
   height: 100%;
   overflow: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
+  > :last-child {
+    flex-grow: 1;
+  }
 `;
 
 export const SelectDateForm = styled.div`
@@ -64,14 +73,20 @@ export const SettleListWrapper = styled.div`
   flex-direction: column;
   gap: 1.5rem;
   justify-content: space-between;
-  height: 100%;
+  height: 80%;
 `;
 
 export const SubTitle = styled.div`
   color: #000;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 500;
   margin-bottom: 1rem;
+  > div {
+    margin-top: 0.5rem;
+    color: var(--color-gray2);
+    font-size: 0.775rem;
+    font-weight: 400;
+  }
 `;
 
 export const NoSchedule = styled.div`
@@ -89,31 +104,11 @@ export const TotalCostDiv = styled.div`
   color: var(--color-primary);
   font-size: 1.7rem;
   font-weight: 700;
+  border-top: 1px solid var(--color-gray4);
   > span {
     color: var(--color-gray1);
     font-size: 1rem;
     font-weight: 500;
     margin-right: 0.5rem;
-  }
-`;
-
-export const SettledNotSettledTotalDiv = styled.div`
-  padding: 1.5rem 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.3rem;
-  border-top: 1px solid var(--color-gray4);
-  border-bottom: 1px solid var(--color-gray4);
-  box-sizing: border-box;
-  > div {
-    color: var(--color-gray1);
-    font-size: 0.9rem;
-    font-weight: 500;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    > span {
-      font-weight: 700;
-    }
   }
 `;

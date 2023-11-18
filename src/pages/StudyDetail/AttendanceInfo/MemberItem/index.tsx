@@ -31,7 +31,7 @@ function MemberItem({
   exempt?: () => void;
 }) {
   return (
-    <Container key={penaltyMember.name}>
+    <Container>
       <ProfileWrapper>
         <ProfileImage
           url="https://static.solved.ac/misc/360x360/default_profile.png"
