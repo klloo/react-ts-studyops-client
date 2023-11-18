@@ -20,3 +20,12 @@ export function settlePenalty(penaltyId: number): Promise<{
 }> {
   return axios.patch(`${PREFIX_URL}/${penaltyId}`);
 }
+
+/**
+ * 벌금을 일괄로 정산한다.
+ */
+export function batchSettle(penalties: number[]): Promise<{
+  data: ResponseType<boolean>;
+}> {
+  return axios.patch(`${PREFIX_URL}`, { penalties });
+}

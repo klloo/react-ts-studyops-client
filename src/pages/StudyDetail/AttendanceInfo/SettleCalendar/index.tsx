@@ -143,14 +143,19 @@ function SettleCalendar({
     setStudySchedules(scheduleList);
   }, [scheduleInfo, notSettledInfo, noPenalty]);
 
+  // 데이터 리로드
+  const mutateData = useCallback(() => {
+    mutateSettleDate();
+    mutatePenaltyInfo();
+    mutatePenalty();
+  }, []);
+
   // 벌금 정산
   const requestSettle = useRequest<boolean>(settlePenalty);
   const settleProc = useCallback((penaltyId: number) => {
     requestSettle(penaltyId)
       .then(() => {
-        mutateSettleDate();
-        mutatePenaltyInfo();
-        mutatePenalty();
+        mutateData();
       })
       .catch((e) => {
         console.error(e);
@@ -280,6 +285,7 @@ function SettleCalendar({
           setShowBatchSettlePopup(false);
         }}
         groupId={groupId}
+        mutateData={mutateData}
       />
     </div>
   );

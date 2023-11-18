@@ -1,5 +1,5 @@
 import Modal from 'components/Modal';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Container,
   TitleDiv,
@@ -18,6 +18,9 @@ import useSWR from 'swr';
 import { isEmpty } from 'lodash';
 import { costFormatter } from 'utils/formatter';
 import BatchMemberItem from './BatchMemberItem';
+import useRequest from 'hooks/useRequest';
+import { batchSettle } from 'api/penalty';
+import { toast } from 'react-toastify';
 
 export interface IBatchPenaltyInfo
   extends Omit<IPenaltyMemberInfo, 'penaltyId' | 'lateTime'> {
@@ -30,10 +33,12 @@ function BatchSettlePopup({
   show,
   onClose,
   groupId,
+  mutateData,
 }: {
   show: boolean;
   onClose: () => void;
   groupId: number;
+  mutateData: () => void;
 }) {
   const [startDate, setStartDate] = useState<Date | null>(new Date()); // 정산 시작일
   const [finishDate, setFinishDate] = useState<Date | null>(new Date()); // 정산 완료일
@@ -54,7 +59,7 @@ function BatchSettlePopup({
   }, [startDate, finishDate]);
 
   // 기간 내 정산정보 조회
-  const { data: penaltyInfo } = useSWR<IPenaltyInfo>(
+  const { data: penaltyInfo, mutate: mutatePenaltyInfo } = useSWR<IPenaltyInfo>(
     `/penalty/${groupId}/between?start=${dayjs(startDate).format(
       'YYYY-MM-DD',
     )}&finish=${dayjs(finishDate).format('YYYY-MM-DD')}`,
@@ -112,6 +117,20 @@ function BatchSettlePopup({
     setTotalCost(total);
   }, [penaltyInfo]);
 
+  // 벌금 정산
+  const requestSettle = useRequest<boolean>(batchSettle);
+  const settleProc = useCallback((penalties: number[]) => {
+    requestSettle(penalties)
+      .then(() => {
+        mutatePenaltyInfo();
+        mutateData();
+        toast.success('정산 되었습니다.');
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }, []);
+
   return (
     <Modal show={show} onCloseModal={onClose}>
       <Container>
@@ -153,7 +172,9 @@ function BatchSettlePopup({
                         key={mem.name}
                         cost={mem.penaltyCost}
                         penaltyMember={{ name: mem.name }}
-                        settle={() => {}}
+                        settle={() => {
+                          settleProc(mem.penaltyIds);
+                        }}
                       />
                     ))}
                   </>
