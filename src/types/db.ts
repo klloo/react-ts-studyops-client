@@ -80,3 +80,9 @@ export interface IPenaltyInfo {
   lateCost: number;
   absentCost: number;
 }
+
+export interface IAttendanceInfo {
+  nickName: string;
+  absentCount: number;
+  lateCount: number;
+}

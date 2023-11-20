@@ -11,7 +11,6 @@ export const InfoText = styled.div`
   color: var(--color-primary);
   font-size: 0.875rem;
   font-weight: 500;
-  padding: 1rem 0 3rem 0;
 `;
 
 export const TotalPenaltyInfo = styled.div`
@@ -138,4 +137,39 @@ export const FlexWrapper = styled.div<{ column: boolean }>`
       width: 100%;
     }
   }
+`;
+
+export const TopWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap-reverse;
+  padding: 1rem;
+  gap: 1.5rem;
+`;
+
+export const ChartWrapper = styled.div`
+  margin-top: 3rem;
+`;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+`;
+
+export const GraphButton = styled.div<{ selected?: boolean }>`
+  display: flex;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  width: 4.5rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.1875rem;
+  ${(props) => props.selected && 'background: var(--color-gray4)'};
+  color: ${(props) =>
+    props.selected ? 'var(--color-gray1)' : 'var(--color-gray2)'};
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 400;
+  cursor: pointer;
+  align-self: flex-end;
 `;
