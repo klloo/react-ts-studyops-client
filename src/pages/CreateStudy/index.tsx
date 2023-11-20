@@ -22,13 +22,14 @@ import { costFormatter } from 'utils/formatter';
 import useInput from 'hooks/useInput';
 import { isEmpty } from 'lodash';
 import DatePicker from 'components/DatePicker';
-import { getDayString, parseTime } from 'utils/schedule';
+import { getDayString, compareTime } from 'utils/schedule';
 import { INewStudy, ISchedule } from 'types/db';
 import dayjs from 'dayjs';
 import useRequest from 'hooks/useRequest';
 import { createGroup } from 'api/group';
 import { useNavigate } from 'react-router-dom';
 import TextareaAutosize from 'react-textarea-autosize';
+import { toast } from 'react-toastify';
 
 interface IOption {
   label: string;
@@ -67,7 +68,7 @@ function CreateStudy() {
   const [costFlag, setCostFlag] = useState(false); // 벌금 여부
   const [lateCost, setLateCost] = useState(1000); // 지각비
   const [absenceCost, setAbsenceCost] = useState(1000); // 결석비
-  const [allowedTime, setAllowedTime] = useState(5); // 지각 기준 시간
+  const [allowedTime, setAllowedTime] = useState(3); // 지각 기준 시간
   const [invitees, setInvitees] = useState<string[]>([]); // 초대할 닉네임 목록
   const [invitee, onChangeInvitee, setInvitee] = useInput<string>(''); // 입력한 초대자 이름
 
@@ -237,7 +238,7 @@ function CreateStudy() {
       flag = false;
     } else setIntroErr(false);
     // 규칙
-    if (!intro.trim()) {
+    if (!rule.trim()) {
       setRuleErr(true);
       flag = false;
     } else setRuleErr(false);
@@ -259,24 +260,23 @@ function CreateStudy() {
     } else setScheduleErr(false);
     // 시작시간이 끝시간보다 크거나 같으면 안됨
     if (!isEmpty(scheduleList)) {
-      scheduleList.forEach((schedule) => {
-        const startTime = parseTime(
-          `${schedule.startTimeHour}:${schedule.startTimeMinute}`,
-        );
-        const finishTime = parseTime(
-          `${schedule.finishTimeHour}:${schedule.finishTimeMinute}`,
-        );
-        if (startTime >= finishTime) {
-          setScheduleErr(true);
-          setScheduleErrMsg('유효하지 않은 시간 범위가 존재합니다.');
-        } else setScheduleErr(false);
+      const hasNotValid = scheduleList.some((schedule) => {
+        const startTime = `${schedule.startTimeHour}:${schedule.startTimeMinute}`;
+        const finishTime = `${schedule.finishTimeHour}:${schedule.finishTimeMinute}`;
+        // startTime이 finishTime보다 크거나 같으면 안된다.
+        return compareTime(startTime, finishTime) >= 0;
       });
+      if (hasNotValid) {
+        flag = false;
+        setScheduleErr(true);
+        setScheduleErrMsg('유효하지 않은 시간 범위가 존재합니다.');
+      } else setScheduleErr(false);
     }
     return flag;
   };
 
   // 스터디 생성 요청
-  const requestCreateStudy = useRequest<{ postId: number }>(createGroup);
+  const requestCreateStudy = useRequest<{ groupId: number }>(createGroup);
   // 생성 버튼 클릭
   const onClickCreateButton = () => {
     if (!validateForm()) return;
@@ -298,9 +298,9 @@ function CreateStudy() {
       schedules,
     };
     requestCreateStudy(1, newStudy).then((data) => {
-      const groupId = data.postId;
+      const { groupId } = data;
       navigate(`/group/${groupId}`);
-      console.log('스터디 생성');
+      toast.success('스터디를 생성하였습니다.');
     });
   };
 
@@ -320,10 +320,10 @@ function CreateStudy() {
           <FormItemDiv error={introErr} textareaHeight="3">
             <label>스터디 소개</label>
             <textarea
-              placeholder="30자 내외로 작성해주세요"
+              placeholder="50자 내외로 작성해주세요"
               value={intro}
               onChange={onChangeIntro}
-              maxLength={30}
+              maxLength={50}
             />
           </FormItemDiv>
           <FormItemDiv error={inviteesErr}>
@@ -360,7 +360,17 @@ function CreateStudy() {
             <label>스터디 시작일</label>
             <DatePicker
               selectedDate={startDate}
-              setSelectedDate={setStartDate}
+              onChange={(date) => {
+                if (
+                  dayjs(date).isBefore(
+                    dayjs().hour(0).minute(0).second(0).millisecond(0),
+                  )
+                ) {
+                  toast.error('오늘 이후의 날짜만 선택할 수 있습니다.');
+                  return;
+                }
+                setStartDate(date);
+              }}
               error={startDateErr}
             />
           </FormItemDiv>

@@ -15,7 +15,7 @@ function CustomSwitch({
       checkedIcon={false}
       uncheckedIcon={false}
       width={42}
-      height={25}
+      height={23}
       onColor="#8D4BF6"
       offColor="#d2d2d2"
     />

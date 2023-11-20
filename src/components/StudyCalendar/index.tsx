@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
-import { isEmpty } from 'lodash';
+import { isEmpty, isEqual } from 'lodash';
 import {
   Container,
   CalendarHeaderDiv,
@@ -16,7 +16,6 @@ import {
 import ScheduleDot from 'components/ScheduleDot';
 import { MdArrowBackIos } from 'react-icons/md';
 import { MdArrowForwardIos } from 'react-icons/md';
-import { getScheduleColor } from 'utils/schedule';
 import { IStudyCalendarProps, IStudySchedule } from 'types/calendar';
 
 /**
@@ -45,11 +44,23 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
   useEffect(() => {
     const currentDay = dayjs().format('d');
     let curSchedule = schedulesInfo[currentDay];
-    curSchedule = curSchedule?.filter(
-      (schedule) => dayjs(schedule.startDate) <= dayjs(),
-    );
-    setSelectSchedules?.(curSchedule);
-  }, [schedulesInfo]);
+    curSchedule = curSchedule?.filter((schedule) => {
+      if (!schedule.finishDate) {
+        return (
+          dayjs(schedule.finishDate).isAfter(dayjs()) ||
+          dayjs(schedule.finishDate).isSame(dayjs())
+        );
+      }
+      return (
+        dayjs(schedule.startDate).isBefore(dayjs()) &&
+        (dayjs(schedule.finishDate).isAfter(dayjs()) ||
+          dayjs(schedule.finishDate).isSame(dayjs()))
+      );
+    });
+    if (!isEqual(curSchedule, schedules)) {
+      setSelectSchedules?.(curSchedule);
+    }
+  }, [schedulesInfo, schedules]);
 
   // day extend
   dayjs.extend(weekday);
@@ -74,17 +85,11 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
           {Array(7)
             .fill(0)
             .map((n, i) => {
-              let current = viewDate
+              const current = viewDate
                 .startOf('week')
                 .week(week)
                 .add(n + i, 'day');
-              if (viewDate.format('MM') === '12') {
-                current = viewDate
-                  .startOf('week')
-                  .week(week - 52)
-                  .add(n + i, 'day');
-              }
-              // 현재 날짜 (기준)
+              // 현재 날짜
               const isSelected =
                 selectDate.format('YYYYMMDD') === current.format('YYYYMMDD')
                   ? 'selected'
@@ -105,9 +110,24 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
                         setSelectDate(current);
                         if (setSelectSchedules) {
                           let curSchedule = schedulesInfo[currentDay];
-                          curSchedule = curSchedule?.filter(
-                            (schedule) => dayjs(schedule.startDate) <= current,
-                          );
+                          curSchedule = curSchedule?.filter((schedule) => {
+                            if (!schedule.finishDate) {
+                              return (
+                                dayjs(schedule.startDate).isBefore(
+                                  selectDate,
+                                ) ||
+                                dayjs(schedule.startDate).isSame(selectDate)
+                              );
+                            }
+                            return (
+                              (dayjs(schedule.startDate).isBefore(selectDate) ||
+                                dayjs(schedule.startDate).isSame(selectDate)) &&
+                              (dayjs(schedule.finishDate).isAfter(
+                                dayjs(selectDate),
+                              ) ||
+                                dayjs(schedule.finishDate).isSame(dayjs()))
+                            );
+                          });
                           setSelectSchedules(curSchedule);
                         }
                       }}
@@ -122,13 +142,29 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
                                 i: React.Key | null | undefined,
                               ) => {
                                 // 시작일 이후의 일정만 표시
-                                if (dayjs(item.startDate) <= current) {
-                                  return (
-                                    <ScheduleDot
-                                      key={i}
-                                      color={getScheduleColor(item.studyId)}
-                                    />
-                                  );
+                                if (
+                                  dayjs(item.startDate).isBefore(current) ||
+                                  dayjs(item.startDate).isSame(current)
+                                ) {
+                                  // 종료일이 있다면 종료일 이전의 일정만 표시
+                                  if (item.finishDate) {
+                                    if (
+                                      dayjs(current).isBefore(
+                                        item.finishDate,
+                                      ) ||
+                                      dayjs(item.finishDate).isSame(current)
+                                    )
+                                      return (
+                                        <ScheduleDot
+                                          key={i}
+                                          color={item.color}
+                                        />
+                                      );
+                                  } else {
+                                    return (
+                                      <ScheduleDot key={i} color={item.color} />
+                                    );
+                                  }
                                 }
                               },
                             )}
@@ -145,12 +181,14 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
     return calender;
   };
 
-  const changegeMonth = (date: unknown, changeString: string) => {
+  const changeMonth = (date: unknown, changeString: string) => {
     switch (changeString) {
       case 'add':
         return setViewDate(viewDate.add(1, 'month'));
       case 'subtract':
         return setViewDate(viewDate.subtract(1, 'month'));
+      case 'today':
+        return setViewDate(viewDate.month(dayjs().month()));
       default:
         return date;
     }
@@ -159,11 +197,13 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
   return (
     <Container>
       <CalendarHeaderDiv>
-        <button onClick={() => changegeMonth(viewDate, 'subtract')}>
+        <button onClick={() => changeMonth(viewDate, 'subtract')}>
           <MdArrowBackIos />
         </button>
-        <span>{viewDate.format('M')}월</span>
-        <button onClick={() => changegeMonth(viewDate, 'add')}>
+        <span onClick={() => changeMonth(viewDate, 'today')}>
+          {viewDate.format('M')}월
+        </span>
+        <button onClick={() => changeMonth(viewDate, 'add')}>
           <MdArrowForwardIos />
         </button>
       </CalendarHeaderDiv>

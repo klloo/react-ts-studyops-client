@@ -1,13 +1,18 @@
 import styled from '@emotion/styled';
 
 export const Container = styled.div<{ error?: boolean }>`
+  .react-datepicker-wrapper {
+    display: block;
+  }
   .datePicker {
+    box-sizing: border-box;
     background-color: #fff;
     border: solid 1px
       ${(props) => (props.error ? 'var(--color-red)' : 'var(--color-gray3)')};
     border-radius: 0.2rem;
     padding: 0.81rem 0.94rem;
     cursor: pointer;
+    width: 100%;
     &::placeholder {
       color: var(--color-gray2);
       font-size: 0.875rem;
@@ -40,8 +45,14 @@ export const Container = styled.div<{ error?: boolean }>`
   }
   .selectedDay {
     background-color: var(--color-primary);
+    font-weight: 500;
     color: #fff;
-    font-weight: 600;
+  }
+  .today {
+    border-radius: 50%;
+    background-color: var(--color-primary-light);
+    color: #000;
+    font-weight: 400;
   }
 `;
 

@@ -6,10 +6,11 @@ export const Container = styled.div`
   gap: 1.5rem;
   flex-wrap: wrap;
   width: 100%;
+  justify-content: space-between;
 `;
 
 export const CalendarWrapper = styled.div`
-  width: calc(50% - 1.5rem);
+  width: calc(50% - 1rem);
   padding: 1.8rem 0.8rem;
   border-radius: 0.1875rem;
   box-sizing: border-box;

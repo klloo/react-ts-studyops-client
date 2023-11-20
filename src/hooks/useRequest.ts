@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { ResponseType } from 'types/common';
 
 const useRequest = <T>(
@@ -19,7 +20,7 @@ const useRequest = <T>(
             resolve(data.isSuccess as T);
           }
         } else {
-          reject(new Error(data.error));
+          toast.error('서비스에 오류가 발생하였습니다.');
         }
       } catch (e) {
         reject(e);

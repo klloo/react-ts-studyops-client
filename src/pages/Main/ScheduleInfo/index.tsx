@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Title, Content, NoSchedule, Schedule } from './style';
+import { Title, Content, NoSchedule } from './style';
 import dayjs from 'dayjs';
 import { IStudySchedule } from 'types/calendar';
 import { isEmpty } from 'lodash';
-import ScheduleDot from 'components/ScheduleDot';
-import { getScheduleColor, parseTime } from 'utils/schedule';
+import { compareTime, getDay } from 'utils/schedule';
+import Schedule from 'components/Schedule';
 
 /**
  * 선택한 날짜의 일정 컴포넌트
@@ -19,17 +19,14 @@ function ScheduleInfo({
   const [sortedSchedules, setSortedSchedules] = useState<IStudySchedule[]>([]);
 
   useEffect(() => {
-    setSortedSchedules(
-      schedules?.sort(
-        (a, b) => parseTime(a.time).getTime() - parseTime(b.time).getTime(),
-      ),
-    );
+    setSortedSchedules(schedules?.sort((a, b) => compareTime(a.time, b.time)));
   }, [schedules]);
 
   return (
     <>
       <Title>
-        <div>{dayjs(sheduleDate).format('M월 D일')} 스터디 일정</div>
+        {dayjs(sheduleDate).format('M월 D일')} ({getDay(dayjs(sheduleDate))})
+        스터디 일정
       </Title>
       <Content>
         {isEmpty(schedules) && (
@@ -39,13 +36,12 @@ function ScheduleInfo({
         )}
         {!isEmpty(sortedSchedules) &&
           sortedSchedules.map((item) => (
-            <Schedule key={item.studyId}>
-              <div className="time">
-                <ScheduleDot color={getScheduleColor(item.studyId)} />
-                <div>{item.time}</div>
-              </div>
-              <div className="title">{item.title}</div>
-            </Schedule>
+            <Schedule
+              key={item.studyId}
+              time={item.time}
+              studyId={item.studyId}
+              title={item.title}
+            />
           ))}
       </Content>
     </>

@@ -26,6 +26,11 @@ const baseStyle = css`
     height: 100%;
     font-size: 16px;
     word-break: keep-all;
+    .Toastify__toast {
+      font-size: 0.9rem;
+      line-height: 1.2;
+      word-break: keep-all;
+    }
   }
 
   textarea,

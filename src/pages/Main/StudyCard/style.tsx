@@ -50,7 +50,7 @@ export const Tag = styled.div`
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.31rem;
+  gap: 1rem;
   height: 100%;
 `;
 

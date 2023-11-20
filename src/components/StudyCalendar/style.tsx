@@ -15,6 +15,7 @@ export const CalendarHeaderDiv = styled.div`
   & span {
     font-weight: 700;
     color: #292929;
+    cursor: pointer;
   }
   & button {
     background: none;
