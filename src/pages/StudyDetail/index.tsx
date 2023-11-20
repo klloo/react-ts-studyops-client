@@ -24,6 +24,7 @@ import TodaySchedule from './TodaySchedule';
 import StudyInfo from './StudyInfo';
 import StudySchedule from './SutdySchedule';
 import AttendanceInfo from './AttendanceInfo';
+import StudyMemberPopup from './StudyMemberPopup';
 
 /**
  * 탭 정보 타입
@@ -43,6 +44,8 @@ function StudyDetail() {
     return <Navigate to="/" />;
   }
   const { data: studyInfo } = useSWR<IStudy>(`/info/${groupId}`, fetcher);
+
+  const [showMemberPopup, setShowMemberPopup] = useState(false);
 
   // 임시
   const isHost = true;
@@ -82,7 +85,11 @@ function StudyDetail() {
                 width="40"
                 height="40"
               />
-              <span>
+              <span
+                onClick={() => {
+                  setShowMemberPopup(true);
+                }}
+              >
                 <span>{studyInfo.hostName}</span>님 외{' '}
                 <span>{(studyInfo.members?.length || 1) - 1}명</span>
               </span>
@@ -109,6 +116,14 @@ function StudyDetail() {
         </TabWrapper>
         <TabContentWrapper>{curTab.component}</TabContentWrapper>
       </Container>
+      <StudyMemberPopup
+        show={showMemberPopup}
+        onClose={() => {
+          setShowMemberPopup(false);
+        }}
+        groupId={parseInt(groupId)}
+        isHost={isHost}
+      />
     </Layout>
   );
 }

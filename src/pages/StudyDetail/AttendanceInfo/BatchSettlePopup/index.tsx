@@ -144,7 +144,7 @@ function BatchSettlePopup({
               <div>
                 <DatePicker
                   selectedDate={startDate}
-                  setSelectedDate={setStartDate}
+                  onChange={(date) => setStartDate(date)}
                 />
               </div>
             </div>
@@ -153,7 +153,7 @@ function BatchSettlePopup({
               <div>
                 <DatePicker
                   selectedDate={finishDate}
-                  setSelectedDate={setFinishDate}
+                  onChange={(date) => setFinishDate(date)}
                 />
               </div>
             </div>

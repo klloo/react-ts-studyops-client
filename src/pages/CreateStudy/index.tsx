@@ -360,7 +360,17 @@ function CreateStudy() {
             <label>스터디 시작일</label>
             <DatePicker
               selectedDate={startDate}
-              setSelectedDate={setStartDate}
+              onChange={(date) => {
+                if (
+                  dayjs(date).isBefore(
+                    dayjs().hour(0).minute(0).second(0).millisecond(0),
+                  )
+                ) {
+                  toast.error('오늘 이후의 날짜만 선택할 수 있습니다.');
+                  return;
+                }
+                setStartDate(date);
+              }}
               error={startDateErr}
             />
           </FormItemDiv>

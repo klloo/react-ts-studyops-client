@@ -36,3 +36,15 @@ export function rejectAsk(
 }> {
   return axios.patch(`${PREFIX_URL}/responses/${groupId}/${userId}`);
 }
+
+/**
+ * 닉네임으로 스터디원을 초대한다.
+ */
+export function inviteMembers(
+  groupId: number,
+  invitees: string,
+): Promise<{
+  data: ResponseType<never>;
+}> {
+  return axios.post(`${PREFIX_URL}/${groupId}`, { invitees });
+}

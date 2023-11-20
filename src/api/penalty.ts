@@ -22,6 +22,14 @@ export function settlePenalty(penaltyId: number): Promise<{
 }
 
 /**
+ * penaltyId에 해당하는 벌금을 정산을 취소한다.
+ */
+export function cancelSettlePenalty(penaltyId: number): Promise<{
+  data: ResponseType<boolean>;
+}> {
+  return axios.delete(`${PREFIX_URL}/${penaltyId}`);
+}
+/**
  * 벌금을 일괄로 정산한다.
  */
 export function batchSettle(penalties: number[]): Promise<{

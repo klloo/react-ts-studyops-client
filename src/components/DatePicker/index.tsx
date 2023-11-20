@@ -8,11 +8,11 @@ import dayjs from 'dayjs';
 
 const DatePicker = ({
   selectedDate,
-  setSelectedDate,
+  onChange,
   error,
 }: {
   selectedDate: Date | null;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  onChange: (date: Date | null) => void;
   error?: boolean;
 }) => {
   const dayMap: { [key: string]: string } = {
@@ -32,7 +32,9 @@ const DatePicker = ({
         dateFormat="yyyy/MM/dd"
         shouldCloseOnSelect
         selected={selectedDate}
-        onChange={(date) => setSelectedDate(date)}
+        onChange={(date: Date | null) => {
+          onChange(date);
+        }}
         className="datePicker"
         calendarClassName="calenderWrapper"
         placeholderText="YYYY / MM / DD"

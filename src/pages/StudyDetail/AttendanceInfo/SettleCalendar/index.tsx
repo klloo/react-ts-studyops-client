@@ -21,7 +21,7 @@ import { isEmpty } from 'lodash';
 import { costFormatter, timeStringFormatter } from 'utils/formatter';
 import MemberItem from '../MemberItem';
 import useRequest from 'hooks/useRequest';
-import { exemptPenalty, settlePenalty } from 'api/penalty';
+import { cancelSettlePenalty, exemptPenalty, settlePenalty } from 'api/penalty';
 import { toast } from 'react-toastify';
 import BatchSettlePopup from '../BatchSettlePopup';
 
@@ -152,14 +152,25 @@ function SettleCalendar({
 
   // 벌금 정산
   const requestSettle = useRequest<boolean>(settlePenalty);
-  const settleProc = useCallback((penaltyId: number) => {
-    requestSettle(penaltyId)
-      .then(() => {
-        mutateData();
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+  const requestCancelSettle = useRequest<boolean>(cancelSettlePenalty);
+  const settleProc = useCallback((penaltyId: number, isSettled: boolean) => {
+    if (isSettled) {
+      requestCancelSettle(penaltyId)
+        .then(() => {
+          mutateData();
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    } else {
+      requestSettle(penaltyId)
+        .then(() => {
+          mutateData();
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    }
   }, []);
   // 벌금 면제
   const requestExempt = useRequest<boolean>(exemptPenalty);
@@ -227,7 +238,7 @@ function SettleCalendar({
                   penaltyMember={mem}
                   info="결석"
                   settle={() => {
-                    settleProc(mem.penaltyId);
+                    settleProc(mem.penaltyId, mem.isSettled);
                   }}
                   exempt={() => {
                     exemptProc(mem.penaltyId, mem.isSettled);
@@ -244,7 +255,7 @@ function SettleCalendar({
                   penaltyMember={mem}
                   info={`${timeStringFormatter(mem.lateTime || 0)} 지각`}
                   settle={() => {
-                    settleProc(mem.penaltyId);
+                    settleProc(mem.penaltyId, mem.isSettled);
                   }}
                   exempt={() => {
                     exemptProc(mem.penaltyId, mem.isSettled);
