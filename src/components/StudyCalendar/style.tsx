@@ -89,8 +89,7 @@ export const DayNumberDiv = styled.div<{
   day?: boolean;
   num?: boolean;
 }>`
-  ${(props) => props.sun && 'color: #FF0926;'}
-  ${(props) => props.day && 'color:  var(--color-gray2);'}
+  ${(props) => (props.sun ? 'color: #FF0926;' : 'color: var(--color-gray2);')}
   ${(props) => !props.sun && props.num && 'color: var(--color-gray1);'}
   font-size: 0.875rem;
 `;

@@ -17,6 +17,7 @@ import ScheduleDot from 'components/ScheduleDot';
 import { MdArrowBackIos } from 'react-icons/md';
 import { MdArrowForwardIos } from 'react-icons/md';
 import { IStudyCalendarProps, IStudySchedule } from 'types/calendar';
+import { JSX } from 'react/jsx-runtime';
 
 /**
  * 스터디 달력 컴포넌트
@@ -66,8 +67,12 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
   dayjs.extend(weekday);
   dayjs.extend(isoWeek);
   dayjs.extend(weekOfYear);
-  const today = dayjs();
 
+  // 요일
+  const weekDays = useMemo(
+    () => ['일', '월', '화', '수', '목', '금', '토'],
+    [],
+  );
   // 보여질 날짜
   const [viewDate, setViewDate] = useState(dayjs());
 
@@ -77,17 +82,20 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
       viewDate.endOf('month').week() === 1
         ? 53
         : viewDate.endOf('month').week();
-    const calender = [];
+    const calender: JSX.Element[] = [];
 
-    for (let week = startWeek; week <= endWeek; week++) {
+    Array.from(
+      { length: endWeek - startWeek + 1 },
+      (_, index) => startWeek + index,
+    ).forEach((week) => {
       calender.push(
         <WeekDiv key={week}>
           {Array(7)
             .fill(0)
             .map((n, i) => {
               const current = viewDate
-                .startOf('week')
                 .week(week)
+                .startOf('week')
                 .add(n + i, 'day');
               // 현재 날짜
               const isSelected =
@@ -95,7 +103,7 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
                   ? 'selected'
                   : '';
               const isToday =
-                today.format('YYYYMMDD') === current.format('YYYYMMDD')
+                dayjs().format('YYYYMMDD') === current.format('YYYYMMDD')
                   ? 'today'
                   : '';
               const isNone =
@@ -177,7 +185,7 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
             })}
         </WeekDiv>,
       );
-    }
+    });
     return calender;
   };
 
@@ -188,7 +196,7 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
       case 'subtract':
         return setViewDate(viewDate.subtract(1, 'month'));
       case 'today':
-        return setViewDate(viewDate.month(dayjs().month()));
+        return setViewDate(dayjs());
       default:
         return date;
     }
@@ -209,27 +217,11 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
       </CalendarHeaderDiv>
       <CalendarContentDiv>
         <WeekDiv>
-          <div>
-            <DayNumberDiv sun>일</DayNumberDiv>
-          </div>
-          <div>
-            <DayNumberDiv day>월</DayNumberDiv>
-          </div>
-          <div>
-            <DayNumberDiv day>화</DayNumberDiv>
-          </div>
-          <div>
-            <DayNumberDiv day>수</DayNumberDiv>
-          </div>
-          <div>
-            <DayNumberDiv day>목</DayNumberDiv>
-          </div>
-          <div>
-            <DayNumberDiv day>금</DayNumberDiv>
-          </div>
-          <div>
-            <DayNumberDiv day>토</DayNumberDiv>
-          </div>
+          {weekDays.map((day, i) => (
+            <div key={i}>
+              <DayNumberDiv sun={i === 0}>{day}</DayNumberDiv>
+            </div>
+          ))}
         </WeekDiv>
         <CalendarContentDiv>{createCalendar()}</CalendarContentDiv>
       </CalendarContentDiv>
