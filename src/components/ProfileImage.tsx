@@ -4,6 +4,7 @@ const ProfileImage = styled.div<{
   url: string;
   height: string;
   width: string;
+  cursor?: string;
 }>`
   height: ${(props) => props.height}px;
   width: ${(props) => props.width}px;
@@ -12,6 +13,7 @@ const ProfileImage = styled.div<{
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  ${(props) => props.cursor && `cursor:${props.cursor}`}
 `;
 
 export default ProfileImage;

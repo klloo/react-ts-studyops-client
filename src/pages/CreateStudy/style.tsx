@@ -24,56 +24,6 @@ export const CreateForm = styled.div`
   max-width: 100%;
 `;
 
-export const FormItemDiv = styled.div<{
-  emptyLabel?: boolean;
-  error?: boolean;
-  textareaHeight?: string;
-}>`
-  display: flex;
-  gap: 0.5rem;
-  width: 100%;
-  @media ${theme.device.tablet}, ${theme.device.phone} {
-    flex-direction: column;
-  }
-  > label {
-    width: 8rem;
-    color: var(--color-gray1);
-    font-size: 0.875rem;
-    font-weight: 700;
-    padding: 0.87rem 0;
-    @media ${theme.device.tablet}, ${theme.device.phone} {
-      ${(props) => props.emptyLabel && 'display:none;'}
-    }
-  }
-  > input {
-    flex-grow: 1;
-    background-color: #fff;
-    border: solid 1px
-      ${(props) => (props.error ? 'var(--color-red)' : 'var(--color-gray3)')};
-    border-radius: 0.2rem;
-    padding: 0.81rem 0.94rem;
-    &::placeholder {
-      color: var(--color-gray2);
-      font-size: 0.875rem;
-    }
-  }
-  > textarea {
-    flex-grow: 1;
-    background-color: #fff;
-    border: solid 1px
-      ${(props) => (props.error ? '#f33535' : 'var(--color-gray3)')};
-    border-radius: 0.2rem;
-    padding: 0.81rem 0.94rem;
-    &::placeholder {
-      color: var(--color-gray2);
-      font-size: 0.875rem;
-    }
-    resize: none;
-    min-height: ${(props) =>
-      props.textareaHeight && `${props.textareaHeight}rem`};
-  }
-`;
-
 export const DaysWrapper = styled.div<{ selected?: boolean }>`
   display: flex;
   gap: 1.31rem;

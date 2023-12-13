@@ -24,6 +24,7 @@ const baseStyle = css`
     margin: 0;
     font-family: 'Noto Sans KR', sans-serif;
     height: 100%;
+    width: 100%;
     font-size: 16px;
     word-break: keep-all;
     .Toastify__toast {

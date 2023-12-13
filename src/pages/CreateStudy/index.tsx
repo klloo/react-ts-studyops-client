@@ -4,7 +4,6 @@ import {
   Container,
   TitleDiv,
   CreateForm,
-  FormItemDiv,
   DaysWrapper,
   DayDiv,
   CostWrapper,
@@ -30,6 +29,7 @@ import { createGroup } from 'api/group';
 import { useNavigate } from 'react-router-dom';
 import TextareaAutosize from 'react-textarea-autosize';
 import { toast } from 'react-toastify';
+import FormItem from 'components/FormItem';
 
 interface IOption {
   label: string;
@@ -309,15 +309,15 @@ function CreateStudy() {
       <Container>
         <TitleDiv>스터디 생성</TitleDiv>
         <CreateForm>
-          <FormItemDiv error={nameErr}>
+          <FormItem error={nameErr}>
             <label>스터디 이름</label>
             <input
               placeholder="이름을 입력해주세요"
               value={name}
               onChange={onChangeName}
             />
-          </FormItemDiv>
-          <FormItemDiv error={introErr} textareaHeight="3">
+          </FormItem>
+          <FormItem error={introErr} textareaHeight="3">
             <label>스터디 소개</label>
             <textarea
               placeholder="50자 내외로 작성해주세요"
@@ -325,8 +325,8 @@ function CreateStudy() {
               onChange={onChangeIntro}
               maxLength={50}
             />
-          </FormItemDiv>
-          <FormItemDiv error={inviteesErr}>
+          </FormItem>
+          <FormItem error={inviteesErr}>
             <label>스터디 인원</label>
             <input
               placeholder="초대할 사용자의 닉네임을 입력하고 엔터 키를 눌러주세요."
@@ -336,9 +336,9 @@ function CreateStudy() {
               onCompositionStart={() => setIsComposing(true)}
               onCompositionEnd={() => setIsComposing(false)}
             />
-          </FormItemDiv>
+          </FormItem>
           {!isEmpty(invitees) && (
-            <FormItemDiv emptyLabel>
+            <FormItem emptyLabel>
               <label />
               <NameTagWrapper>
                 {invitees.map((user, i) => (
@@ -354,9 +354,9 @@ function CreateStudy() {
                   </NameTagDiv>
                 ))}
               </NameTagWrapper>
-            </FormItemDiv>
+            </FormItem>
           )}
-          <FormItemDiv>
+          <FormItem>
             <label>스터디 시작일</label>
             <DatePicker
               selectedDate={startDate}
@@ -373,8 +373,8 @@ function CreateStudy() {
               }}
               error={startDateErr}
             />
-          </FormItemDiv>
-          <FormItemDiv>
+          </FormItem>
+          <FormItem>
             <label>스터디 요일</label>
             <div>
               <DaysWrapper>
@@ -392,9 +392,9 @@ function CreateStudy() {
               </DaysWrapper>
               {scheduleErr && <ErrorMsg>{scheduleErrMsg}</ErrorMsg>}
             </div>
-          </FormItemDiv>
+          </FormItem>
           {!isEmpty(scheduleList) && (
-            <FormItemDiv>
+            <FormItem>
               <label>스터디 시간</label>
               <ScheduleTimeWrapper>
                 {scheduleList.map((schedule) => (
@@ -454,17 +454,17 @@ function CreateStudy() {
                   </ScheduleTimeDiv>
                 ))}
               </ScheduleTimeWrapper>
-            </FormItemDiv>
+            </FormItem>
           )}
-          <FormItemDiv error={ruleErr} textareaHeight="8.5">
+          <FormItem error={ruleErr} textareaHeight="8.5">
             <label>스터디 규칙</label>
             <TextareaAutosize
               placeholder="스터디 규칙을 작성해주세요"
               value={rule}
               onChange={onChangeRule}
             />
-          </FormItemDiv>
-          <FormItemDiv>
+          </FormItem>
+          <FormItem>
             <label>벌금 여부</label>
             <CostWrapper>
               <CustomSwitch
@@ -494,9 +494,9 @@ function CreateStudy() {
                 </>
               )}
             </CostWrapper>
-          </FormItemDiv>
+          </FormItem>
           {costFlag && (
-            <FormItemDiv>
+            <FormItem>
               <label>지각 기준 시간</label>
               <CostWrapper>
                 <div>
@@ -508,7 +508,7 @@ function CreateStudy() {
                   />
                 </div>
               </CostWrapper>
-            </FormItemDiv>
+            </FormItem>
           )}
         </CreateForm>
         <Button onClick={onClickCreateButton}>생성하기</Button>
