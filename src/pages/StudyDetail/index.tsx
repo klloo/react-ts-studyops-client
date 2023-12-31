@@ -12,7 +12,6 @@ import {
   TabDiv,
   TabContentWrapper,
 } from './style';
-import Layout from 'components/Layout';
 import dayjs from 'dayjs';
 import { Navigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
@@ -22,7 +21,7 @@ import { IStudy } from 'types/db';
 import ProfileImage from 'components/ProfileImage';
 import TodaySchedule from './TodaySchedule';
 import StudyInfo from './StudyInfo';
-import StudySchedule from './SutdySchedule';
+import StudySchedule from './StudySchedule';
 import AttendanceInfo from './AttendanceInfo';
 import StudyMemberPopup from './StudyMemberPopup';
 
@@ -73,18 +72,14 @@ function StudyDetail() {
   }
 
   return (
-    <Layout>
+    <>
       <Container>
         <div>
           <StudyOutlineDiv>
             <DdayTag>{calcDiffDays(studyInfo.startDate)}</DdayTag>
             <StudyTitle>{studyInfo.name}</StudyTitle>
             <MemberInfoDiv>
-              <ProfileImage
-                url="https://static.solved.ac/misc/360x360/default_profile.png"
-                width="40"
-                height="40"
-              />
+              <ProfileImage width="40" height="40" />
               <span
                 onClick={() => {
                   setShowMemberPopup(true);
@@ -124,7 +119,7 @@ function StudyDetail() {
         groupId={parseInt(groupId)}
         isHost={isHost}
       />
-    </Layout>
+    </>
   );
 }
 

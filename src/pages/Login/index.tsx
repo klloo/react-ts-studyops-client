@@ -15,17 +15,19 @@ import FormItem from 'components/FormItem';
 import useInput from 'hooks/useInput';
 import { RiKakaoTalkFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
+import { signin } from 'api/auth';
+import useRequest from 'hooks/useRequest';
 
 function Login() {
   const navigate = useNavigate();
   const [id, onChangeId] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const tmpPw = '1234';
 
+  const requestLogin = useRequest(signin);
   const onClickLoginButton = useCallback(() => {
     if (!id.trim()) {
-      setErrorMsg('아이디를 입력해주세요.');
+      setErrorMsg('이메일을 입력해주세요.');
       return;
     }
     if (!password.trim()) {
@@ -34,13 +36,18 @@ function Login() {
     }
     setErrorMsg(null);
     // 로그인 성공
-    if (tmpPw === password) {
-      navigate('/');
-      setErrorMsg(null);
-    } else {
-      // 로그인 실패
-      setErrorMsg('비밀번호가 일치하지 않습니다.');
-    }
+    requestLogin({ email: id, password })
+      .then((data) => {
+        const { accessToken } = data;
+        if (accessToken) {
+          localStorage.setItem('accessToken', accessToken);
+        }
+        navigate('/');
+      })
+      .catch((e) => {
+        console.log(e);
+        setErrorMsg('로그인에 실패하였습니다.');
+      });
   }, [id, password]);
 
   return (

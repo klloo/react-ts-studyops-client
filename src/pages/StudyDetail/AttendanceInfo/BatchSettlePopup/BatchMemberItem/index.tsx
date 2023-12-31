@@ -15,11 +15,7 @@ function BatchMemberItem({
   return (
     <Container>
       <ProfileWrapper>
-        <ProfileImage
-          url="https://static.solved.ac/misc/360x360/default_profile.png"
-          width="35"
-          height="35"
-        />
+        <ProfileImage width="35" height="35" />
         <div>{penaltyMember.name}</div>
       </ProfileWrapper>
       <CostWrapper>

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './config';
 import { ResponseType } from 'types/common';
 import { IStudy, INewStudy } from 'types/db';
 
@@ -8,22 +8,19 @@ const INFO_PREFIX_URL = '/info';
 /**
  * 참여중인 스터디 목록을 조회한다.
  */
-export function getGroupList(id: number): Promise<{
+export function getGroupList(): Promise<{
   data: ResponseType<IStudy[]>;
 }> {
-  return axios.get(`${PREFIX_URL}/${id}`);
+  return axios.get(`${PREFIX_URL}`);
 }
 
 /**
  * 스터디 그룹을 생성한다.
  */
-export function createGroup(
-  id: number,
-  group: INewStudy,
-): Promise<{
+export function createGroup(group: INewStudy): Promise<{
   data: ResponseType<{ groupId: number }>;
 }> {
-  return axios.post(`${PREFIX_URL}/${id}`, group);
+  return axios.post(`${PREFIX_URL}`, group);
 }
 
 /**

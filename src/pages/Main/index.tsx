@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import Layout from 'components/Layout';
 import {
   Container,
   Title,
@@ -40,10 +39,10 @@ const Main = () => {
   // 데이터 로드 (참여중인 스터디 목록, 초대받은 스터디 목록)
   const loadData = useCallback(async () => {
     // 참여중인 스터디 목록 로드
-    const studyData = await requestStudyList(1);
+    const studyData = await requestStudyList();
     setStudyList(studyData);
     // 초대받은 스터디 목록 로드
-    const askData = await requestAskStudyList(4);
+    const askData = await requestAskStudyList();
     setAskStudyList(askData);
   }, []);
   useEffect(() => {
@@ -76,64 +75,62 @@ const Main = () => {
   const navigate = useNavigate();
 
   return (
-    <Layout>
-      <Container>
-        <ContentItem>
-          <Title>11월 스터디 일정이에요 🗓️</Title>
-          <div>
-            <CalendarBlock
-              selectDate={selectDate}
-              setSelectDate={setSelectDate}
-              setSelectSchedules={setSchedules}
-              schedules={studySchedules}
-            >
-              <ScheduleInfo sheduleDate={selectDate} schedules={schedules} />
-            </CalendarBlock>
-          </div>
-        </ContentItem>
-        <ContentItem>
-          <Title>참여 중인 스터디에요 ✨</Title>
-          <CardWrapper>
-            {studyList.map((study) => (
-              <StudyCard key={study.groupId} study={study} />
-            ))}
-            {isEmpty(studyList) && (
-              <EmptyCard>
-                새로운 스터디를
-                <br />
-                추가해보세요!
-                <PlusButton
-                  onClick={() => {
-                    navigate('/create');
-                  }}
-                  size="60"
-                />
-              </EmptyCard>
-            )}
-          </CardWrapper>
-        </ContentItem>
-        <ContentItem>
-          <Title>초대받은 스터디 목록이에요 💜</Title>
-          <CardWrapper>
-            {askStudyList.map((study) => (
-              <StudyCard
-                key={study.groupId}
-                study={study}
-                isInvite
-                loadData={loadData}
+    <Container>
+      <ContentItem>
+        <Title>11월 스터디 일정이에요 🗓️</Title>
+        <div>
+          <CalendarBlock
+            selectDate={selectDate}
+            setSelectDate={setSelectDate}
+            setSelectSchedules={setSchedules}
+            schedules={studySchedules}
+          >
+            <ScheduleInfo sheduleDate={selectDate} schedules={schedules} />
+          </CalendarBlock>
+        </div>
+      </ContentItem>
+      <ContentItem>
+        <Title>참여 중인 스터디에요 ✨</Title>
+        <CardWrapper>
+          {studyList.map((study) => (
+            <StudyCard key={study.groupId} study={study} />
+          ))}
+          {isEmpty(studyList) && (
+            <EmptyCard>
+              새로운 스터디를
+              <br />
+              추가해보세요!
+              <PlusButton
+                onClick={() => {
+                  navigate('/create');
+                }}
+                size="60"
               />
-            ))}
-            {isEmpty(askStudyList) && (
-              <EmptyCard>
-                아직 초대받은
-                <br />
-                스터디가 없어요 😭
-              </EmptyCard>
-            )}
-          </CardWrapper>
-        </ContentItem>
-      </Container>
-    </Layout>
+            </EmptyCard>
+          )}
+        </CardWrapper>
+      </ContentItem>
+      <ContentItem>
+        <Title>초대받은 스터디 목록이에요 💜</Title>
+        <CardWrapper>
+          {askStudyList.map((study) => (
+            <StudyCard
+              key={study.groupId}
+              study={study}
+              isInvite
+              loadData={loadData}
+            />
+          ))}
+          {isEmpty(askStudyList) && (
+            <EmptyCard>
+              아직 초대받은
+              <br />
+              스터디가 없어요 😭
+            </EmptyCard>
+          )}
+        </CardWrapper>
+      </ContentItem>
+    </Container>
   );
 };
 

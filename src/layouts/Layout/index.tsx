@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useCallback, useState } from 'react';
 import {
   Header,
   Content,
@@ -6,10 +6,13 @@ import {
   Logo,
   Container,
   HeaderSide,
+  UserInfoBox,
 } from './style';
 import { Link, useNavigate } from 'react-router-dom';
 import ProfileImage from 'components/ProfileImage';
 import { Button } from 'components/Button';
+// import useSWR from 'swr';
+// import fetcher from 'utils/fetcher';
 
 interface LayoutProps {
   children: ReactNode;
@@ -20,6 +23,14 @@ interface LayoutProps {
  */
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
+  const [showUserInfoBox, setShowUserInfoBox] = useState(false);
+
+  // const { data: loginUser } = useSWR('/api/user/me', fetcher);
+
+  const logout = useCallback(() => {
+    localStorage.removeItem('accessToken');
+    navigate('/login');
+  }, []);
 
   return (
     <Container>
@@ -38,11 +49,32 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               스터디 생성
             </Button>
             <ProfileImage
+              onClick={() => {
+                setShowUserInfoBox(true);
+              }}
               width="35"
               height="35"
-              url="https://static.solved.ac/misc/360x360/default_profile.png"
+              cursor="pointer"
             />
           </HeaderSide>
+          {showUserInfoBox && (
+            <UserInfoBox
+              onClick={() => {
+                setShowUserInfoBox(false);
+              }}
+            >
+              <div>
+                <div
+                  onClick={() => {
+                    navigate('/profile');
+                  }}
+                >
+                  마이페이지
+                </div>
+                <div onClick={logout}>로그아웃</div>
+              </div>
+            </UserInfoBox>
+          )}
         </HeaderContent>
       </Header>
       <Content>{children}</Content>

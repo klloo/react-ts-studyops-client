@@ -1,4 +1,4 @@
-import Modal from 'components/Modal';
+import Modal from 'layouts/Modal';
 import React, { useCallback, useEffect } from 'react';
 import { Container, TitleDiv, ContentForm } from './style';
 import useInput from 'hooks/useInput';

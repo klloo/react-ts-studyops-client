@@ -38,8 +38,38 @@ export const HeaderContent = styled.div`
   max-width: var(--width-maxwidth);
   margin-left: auto;
   margin-right: auto;
+  position: relative;
 `;
 
 export const Logo = styled.img`
   height: 1.5rem;
+`;
+
+export const UserInfoBox = styled.div`
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  height: 100vh;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  z-index: 1022;
+  > div {
+    position: absolute;
+    border: 0.5px solid var(--color-gray2);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 5rem;
+    right: 0.5rem;
+    top: 4rem;
+    padding: 0.5rem 1rem;
+    gap: 0.7rem;
+    font-size: 0.9rem;
+    font-weight: 300;
+    cursor: pointer !important;
+    background-color: #fff;
+  }
 `;

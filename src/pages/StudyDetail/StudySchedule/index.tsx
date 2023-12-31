@@ -28,7 +28,6 @@ import { toast } from 'react-toastify';
  */
 function StudySchedule({ groupId }: { groupId: number }) {
   // 임시
-  const userId = 1;
   const [selectDate, setSelectDate] = useState(dayjs());
   const [schedule, setSchedules] = useState<IStudySchedule[]>([]);
   // 스터디 스케줄 로드
@@ -39,9 +38,9 @@ function StudySchedule({ groupId }: { groupId: number }) {
   // 선택한 날짜의 스터디 참석 여부 조회
   const { data: attendanceInfo, mutate: mutateAttendance } =
     useSWR<IAttendance>(
-      `/schedules/attendances/${groupId}/${userId}?date=${dayjs(
-        selectDate,
-      ).format('YYYY-MM-DD')}`,
+      `/schedules/attendances/${groupId}?date=${dayjs(selectDate).format(
+        'YYYY-MM-DD',
+      )}`,
       fetcher,
     );
 
@@ -78,7 +77,6 @@ function StudySchedule({ groupId }: { groupId: number }) {
     }
     requestAttendanceVote(
       groupId,
-      userId,
       dayjs(selectDate).format('YYYY-MM-DD'),
       !attendanceInfo?.isAttended,
     )
@@ -88,7 +86,7 @@ function StudySchedule({ groupId }: { groupId: number }) {
       .catch((e) => {
         console.error(e);
       });
-  }, [attendanceInfo, groupId, userId]);
+  }, [attendanceInfo, groupId]);
 
   return (
     <div>
@@ -131,11 +129,7 @@ function StudySchedule({ groupId }: { groupId: number }) {
                       {attendanceInfo.attendMemberList.length > 0 ? (
                         attendanceInfo.attendMemberList.map((user, i) => (
                           <div key={i}>
-                            <ProfileImage
-                              width="30"
-                              height="30"
-                              url="https://static.solved.ac/misc/360x360/default_profile.png"
-                            />
+                            <ProfileImage width="30" height="30" />
                             <div>{user}</div>
                           </div>
                         ))
@@ -150,11 +144,7 @@ function StudySchedule({ groupId }: { groupId: number }) {
                       {attendanceInfo.absenceMemberList.length > 0 ? (
                         attendanceInfo.absenceMemberList.map((user, i) => (
                           <div key={i}>
-                            <ProfileImage
-                              width="30"
-                              height="30"
-                              url="https://static.solved.ac/misc/360x360/default_profile.png"
-                            />
+                            <ProfileImage width="30" height="30" />
                             <div>{user}</div>
                           </div>
                         ))

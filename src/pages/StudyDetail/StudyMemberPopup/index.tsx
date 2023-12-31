@@ -1,4 +1,4 @@
-import Modal from 'components/Modal';
+import Modal from 'layouts/Modal';
 import React, { useCallback } from 'react';
 import {
   Container,
@@ -65,11 +65,7 @@ function StudyMemberPopup({
         <MemberList>
           <div>
             <ProfileWarpper>
-              <ProfileImage
-                width="35"
-                height="35"
-                url="https://static.solved.ac/misc/360x360/default_profile.png"
-              />
+              <ProfileImage width="35" height="35" />
               <div>{studyInfo?.hostName}</div>
               <img src={`${process.env.PUBLIC_URL}/crown.svg`} alt="icon" />
             </ProfileWarpper>
@@ -79,11 +75,7 @@ function StudyMemberPopup({
             mem.status === 'REJECT' ? null : (
               <div key={mem.nickName}>
                 <ProfileWarpper>
-                  <ProfileImage
-                    width="35"
-                    height="35"
-                    url="https://static.solved.ac/misc/360x360/default_profile.png"
-                  />
+                  <ProfileImage width="35" height="35" />
                   <div>{mem.nickName}</div>
                 </ProfileWarpper>
                 <StatusDiv>{status[mem.status]}</StatusDiv>

@@ -42,6 +42,7 @@ export const ErrorMsg = styled.div`
   color: var(--color-red);
   font-size: 0.875rem;
   margin-bottom: -24px;
+  text-align: start;
 `;
 
 export const FormItemDescDiv = styled.div`
@@ -49,6 +50,7 @@ export const FormItemDescDiv = styled.div`
   font-size: 0.875rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
+  text-align: start;
 `;
 
 export const ProfileInputWrapper = styled.div`
