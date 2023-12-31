@@ -154,10 +154,11 @@ function AttendanceInfo({
           <div>
             {!noPenalty && (
               <TopWrapper>
-                <InfoText>
-                  {graphMode === GRAPH_MODE.PENALTY &&
-                    '납부된 벌금의 누적합으로 계산된 그래프입니다.'}
-                </InfoText>
+                {graphMode === GRAPH_MODE.PENALTY && (
+                  <InfoText>
+                    '납부된 벌금의 누적합으로 계산된 그래프입니다.'
+                  </InfoText>
+                )}
                 <ButtonWrapper>
                   <GraphButton
                     selected={graphMode === GRAPH_MODE.PENALTY}

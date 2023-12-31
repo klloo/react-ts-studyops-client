@@ -110,6 +110,8 @@ function Join() {
       .catch((e) => {
         if (e.status === 409) {
           setNickNameErrorMsg(e.message);
+        } else if (e.status === 400) {
+          setIdErrorMsg(e.message);
         } else {
           setNickNameErrorMsg(null);
           setIdErrorMsg(null);
