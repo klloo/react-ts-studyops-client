@@ -77,7 +77,7 @@ const Main = () => {
   return (
     <Container>
       <ContentItem>
-        <Title>11월 스터디 일정이에요 🗓️</Title>
+        <Title>스터디 일정이에요 🗓️</Title>
         <div>
           <CalendarBlock
             selectDate={selectDate}

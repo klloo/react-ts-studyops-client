@@ -24,7 +24,7 @@ import { timeStringFormatter } from 'utils/formatter';
 function TodaySchedule({ groupId }: { groupId: number }) {
   // 오늘의 스터디 일정 정보
   const { data: todaySchedule, mutate: mutateTodaySchedule } =
-    useSWR<ITodayStudy>(`/schedules/${groupId}`, fetcher);
+    useSWR<ITodayStudy>(`/schedules/today/${groupId}`, fetcher);
 
   const [showLateInfo, setShowLateInfo] = useState(false);
   const [showAttendInfo, setShowAttendInfo] = useState(false);
