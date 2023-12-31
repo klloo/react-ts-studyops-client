@@ -9,6 +9,7 @@ export interface IStudySchedule {
   startDate: string;
   color: string;
   finishDate?: string;
+  studyIdx: number;
 }
 
 export interface IStudyCalendarProps {

@@ -53,7 +53,7 @@ const Main = () => {
   const [studySchedules, setStudySchedules] = useState<IStudySchedule[]>([]);
   useEffect(() => {
     const totalSchedules: IStudySchedule[] = [];
-    studyList.forEach((study) => {
+    studyList.forEach((study, studyIdx) => {
       const scheduleList: IStudySchedule[] = study.schedules.map(
         (schedule) => ({
           day: getDayNum(schedule.dayWeek).toString(),
@@ -62,7 +62,8 @@ const Main = () => {
           studyId: study.groupId,
           attendance: true,
           startDate: study.startDate,
-          color: getScheduleColor(study.groupId),
+          color: getScheduleColor(studyIdx),
+          studyIdx,
         }),
       );
       scheduleList.forEach((schedule) => {

@@ -1,12 +1,12 @@
 import dayjs from 'dayjs';
 
 const colors = [
-  '#F8D457',
-  '#F1A23E',
   '#EE97A4',
+  '#F8D457',
+  '#5DA7EF',
+  '#F1A23E',
   '#D5D769',
   '#81C7BA',
-  '#5DA7EF',
   '#859FC1',
   '#B282CC',
 ];
@@ -16,11 +16,8 @@ export const settledColor = {
   false: '#EE97A4',
 };
 
-/**
- * TODO: 수정 필요
- */
-export const getScheduleColor = (studyId: number): string => {
-  return colors[studyId % 8];
+export const getScheduleColor = (id: number): string => {
+  return colors[id % 8];
 };
 
 const days = ['일', '월', '화', '수', '목', '금', '토'];

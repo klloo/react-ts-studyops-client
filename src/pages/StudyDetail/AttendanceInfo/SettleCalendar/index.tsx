@@ -135,6 +135,7 @@ function SettleCalendar({
             : getSettledColor(currentDateStr),
           startDate: currentDateStr,
           finishDate: currentDateStr,
+          studyIdx: groupId,
         });
       }
       // 다음 날짜로 이동

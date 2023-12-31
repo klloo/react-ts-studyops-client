@@ -57,6 +57,7 @@ function StudySchedule({ groupId }: { groupId: number }) {
         attendance: true,
         startDate: scheduleInfo.startDate,
         color: getScheduleColor(groupId),
+        studyIdx: groupId,
       }),
     );
     setStudySchedules(scheduleList);
