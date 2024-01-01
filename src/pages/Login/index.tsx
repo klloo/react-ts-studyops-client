@@ -45,8 +45,11 @@ function Login() {
         navigate('/');
       })
       .catch((e) => {
-        console.log(e);
-        setErrorMsg('로그인에 실패하였습니다.');
+        if (e.status === 400) {
+          setErrorMsg('아이디 또는 비밀번호가 일치하지 않습니다.');
+        } else {
+          setErrorMsg('로그인에 실패하였습니다.');
+        }
       });
   }, [id, password]);
 

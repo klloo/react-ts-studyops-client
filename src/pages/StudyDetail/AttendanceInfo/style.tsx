@@ -142,7 +142,7 @@ export const FlexWrapper = styled.div<{ column: boolean }>`
 export const TopWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: end;
   flex-wrap: wrap-reverse;
   padding: 1rem;
   gap: 1.5rem;

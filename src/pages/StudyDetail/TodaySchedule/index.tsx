@@ -134,7 +134,9 @@ function TodaySchedule({ groupId }: { groupId: number }) {
       <TodayDate>
         {`${dayjs().format('YYYY년 M월 D일')} (${getDay(dayjs())})`}
       </TodayDate>
-      {todaySchedule && (
+      {todaySchedule === undefined ? (
+        <TodayStudy>{'오늘은 스터디가 없습니다 :)'}</TodayStudy>
+      ) : (
         <TodayStudy>
           {!todaySchedule.isStudyDay || !todaySchedule.startTime ? (
             '오늘은 스터디가 없습니다 :)'

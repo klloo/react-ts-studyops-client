@@ -24,6 +24,7 @@ import StudyInfo from './StudyInfo';
 import StudySchedule from './StudySchedule';
 import AttendanceInfo from './AttendanceInfo';
 import StudyMemberPopup from './StudyMemberPopup';
+import SkeletonComponent from './SkeletonComponent';
 
 /**
  * 탭 정보 타입
@@ -67,34 +68,34 @@ function StudyDetail() {
   };
   const [curTab, setCurTab] = useState<Tab>(tabs.schedule);
 
-  if (!studyInfo) {
-    return null;
-  }
-
   return (
     <>
       <Container>
-        <div>
-          <StudyOutlineDiv>
-            <DdayTag>{calcDiffDays(studyInfo.startDate)}</DdayTag>
-            <StudyTitle>{studyInfo.name}</StudyTitle>
-            <MemberInfoDiv>
-              <ProfileImage width="40" height="40" />
-              <span
-                onClick={() => {
-                  setShowMemberPopup(true);
-                }}
-              >
-                <span>{studyInfo.hostName}</span>님 외{' '}
-                <span>{(studyInfo.members?.length || 1) - 1}명</span>
-              </span>
-            </MemberInfoDiv>
-            <StartDateDiv>
-              {dayjs(studyInfo.startDate).format('YYYY.MM.DD')}
-            </StartDateDiv>
-          </StudyOutlineDiv>
-          <DescriptionDiv>{studyInfo.intro}</DescriptionDiv>
-        </div>
+        {studyInfo === undefined ? (
+          <SkeletonComponent />
+        ) : (
+          <div>
+            <StudyOutlineDiv>
+              <DdayTag>{calcDiffDays(studyInfo.startDate)}</DdayTag>
+              <StudyTitle>{studyInfo.name}</StudyTitle>
+              <MemberInfoDiv>
+                <ProfileImage width="40" height="40" />
+                <span
+                  onClick={() => {
+                    setShowMemberPopup(true);
+                  }}
+                >
+                  <span>{studyInfo.hostName}</span>님 외{' '}
+                  <span>{(studyInfo.members?.length || 1) - 1}명</span>
+                </span>
+              </MemberInfoDiv>
+              <StartDateDiv>
+                {dayjs(studyInfo.startDate).format('YYYY.MM.DD')}
+              </StartDateDiv>
+            </StudyOutlineDiv>
+            <DescriptionDiv>{studyInfo.intro}</DescriptionDiv>
+          </div>
+        )}
         <TodaySchedule groupId={parseInt(groupId)} />
         <TabWrapper>
           {Object.keys(tabs).map((key) => (

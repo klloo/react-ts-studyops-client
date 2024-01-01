@@ -153,31 +153,32 @@ function AttendanceInfo({
         <FlexWrapper column={totalNotSettled <= 0}>
           <div>
             {!noPenalty && (
-              <TopWrapper>
-                {graphMode === GRAPH_MODE.PENALTY && (
-                  <InfoText>
-                    '납부된 벌금의 누적합으로 계산된 그래프입니다.'
-                  </InfoText>
-                )}
-                <ButtonWrapper>
-                  <GraphButton
-                    selected={graphMode === GRAPH_MODE.PENALTY}
-                    onClick={() => {
-                      setGraphMode(GRAPH_MODE.PENALTY);
-                    }}
-                  >
-                    벌금
-                  </GraphButton>
-                  <GraphButton
-                    selected={graphMode === GRAPH_MODE.ATTENDANCE}
-                    onClick={() => {
-                      setGraphMode(GRAPH_MODE.ATTENDANCE);
-                    }}
-                  >
-                    출결
-                  </GraphButton>
-                </ButtonWrapper>
-              </TopWrapper>
+              <>
+                <TopWrapper>
+                  <ButtonWrapper>
+                    <GraphButton
+                      selected={graphMode === GRAPH_MODE.PENALTY}
+                      onClick={() => {
+                        setGraphMode(GRAPH_MODE.PENALTY);
+                      }}
+                    >
+                      벌금
+                    </GraphButton>
+                    <GraphButton
+                      selected={graphMode === GRAPH_MODE.ATTENDANCE}
+                      onClick={() => {
+                        setGraphMode(GRAPH_MODE.ATTENDANCE);
+                      }}
+                    >
+                      출결
+                    </GraphButton>
+                  </ButtonWrapper>
+                </TopWrapper>
+                <InfoText>
+                  {graphMode === GRAPH_MODE.PENALTY &&
+                    '납부된 벌금의 누적합으로 계산된 그래프입니다.'}
+                </InfoText>
+              </>
             )}
             {attendanceInfo && penaltyInfo && (
               <ChartWrapper>
@@ -189,10 +190,11 @@ function AttendanceInfo({
               </ChartWrapper>
             )}
           </div>
-          {penaltyInfo && !noPenalty && (
+          {!noPenalty && (
             <div>
               <TotalPenaltyInfo>
-                <span>총</span> {costFormatter(penaltyInfo.totalFine)}
+                <span>총</span>{' '}
+                {costFormatter(penaltyInfo ? penaltyInfo.totalFine : 0)}
               </TotalPenaltyInfo>
               {totalNotSettled > 0 && (
                 <>
