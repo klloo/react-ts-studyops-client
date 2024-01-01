@@ -25,6 +25,7 @@ import StudySchedule from './StudySchedule';
 import AttendanceInfo from './AttendanceInfo';
 import StudyMemberPopup from './StudyMemberPopup';
 import SkeletonComponent from './SkeletonComponent';
+import Board from './Board';
 
 /**
  * 탭 정보 타입
@@ -60,7 +61,7 @@ function StudyDetail() {
       label: '출결',
       component: <AttendanceInfo groupId={parseInt(groupId)} isHost={isHost} />,
     },
-    document: { label: '자료', component: null },
+    document: { label: '자료', component: <Board /> },
     info: {
       label: '정보',
       component: <StudyInfo groupId={parseInt(groupId)} isHost={isHost} />,

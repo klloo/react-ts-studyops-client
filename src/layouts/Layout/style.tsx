@@ -54,7 +54,7 @@ export const UserInfoBox = styled.div`
   bottom: 0;
   top: 0;
   right: 0;
-  z-index: 1022;
+  z-index: 1000;
   > div {
     position: absolute;
     border: 0.5px solid var(--color-gray2);
@@ -71,5 +71,6 @@ export const UserInfoBox = styled.div`
     font-weight: 300;
     cursor: pointer !important;
     background-color: #fff;
+    z-index: 1022;
   }
 `;

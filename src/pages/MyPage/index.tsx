@@ -12,6 +12,8 @@ import {
   RowWrapper,
   HeaderButton,
   ChangePasswordButton,
+  EditIcon,
+  Layout,
 } from './style';
 import { CiCamera } from 'react-icons/ci';
 import useInput from 'hooks/useInput';
@@ -96,40 +98,31 @@ function MyPage() {
   ]);
 
   return (
-    <Container>
-      <TitleDiv>
-        내 정보
-        {editMode ? (
-          <RowWrapper>
-            <HeaderButton
-              onClick={() => {
-                setEditMode((prev) => !prev);
-                setProfileImage(userInfo.image);
-              }}
-            >
-              취소
-            </HeaderButton>
-            <HeaderButton
-              onClick={() => {
-                updateUserInfoProc();
-              }}
-              primary
-            >
-              완료
-            </HeaderButton>
-          </RowWrapper>
-        ) : (
-          <HeaderButton
-            onClick={() => {
-              setEditMode((prev) => !prev);
-            }}
-            primary
-          >
-            수정
-          </HeaderButton>
-        )}
-      </TitleDiv>
-      <ContentDiv>
+    <Layout>
+      <Container>
+        <TitleDiv>
+          내 정보
+          {editMode && (
+            <RowWrapper>
+              <HeaderButton
+                onClick={() => {
+                  setEditMode((prev) => !prev);
+                  setProfileImage(userInfo.image);
+                }}
+              >
+                취소
+              </HeaderButton>
+              <HeaderButton
+                onClick={() => {
+                  updateUserInfoProc();
+                }}
+                primary
+              >
+                완료
+              </HeaderButton>
+            </RowWrapper>
+          )}
+        </TitleDiv>
         <UserProfileInfo>
           <ProfileInputWrapper>
             <ProfileImage
@@ -177,38 +170,48 @@ function MyPage() {
               />
             </FormItem>
           ) : (
-            userInfo && userInfo.nickname
+            <RowWrapper>
+              {userInfo && userInfo.nickname}
+              <EditIcon
+                size="11"
+                onClick={() => {
+                  setEditMode((prev) => !prev);
+                }}
+              />
+            </RowWrapper>
           )}
         </UserProfileInfo>
-        <UserDetailInfo>
-          <div>
-            <div>닉네임</div> <span>{userInfo && userInfo.nickname}</span>
-          </div>
-          <div>
-            <div>이메일</div> <span>{userInfo && userInfo.email}</span>
-          </div>
-          <div>
-            <div>비밀번호</div>
-            <span>
-              ••••••••
-              <ChangePasswordButton
-                onClick={() => {
-                  setShowPasswordPopup(true);
-                }}
-              >
-                변경하기
-              </ChangePasswordButton>
-            </span>
-          </div>
-        </UserDetailInfo>
-      </ContentDiv>
-      <ChangePasswordPopup
-        show={showPasswordPopup}
-        onClose={() => {
-          setShowPasswordPopup(false);
-        }}
-      />
-    </Container>
+        <ContentDiv>
+          <UserDetailInfo>
+            <div>
+              <div>닉네임</div> <span>{userInfo && userInfo.nickname}</span>
+            </div>
+            <div>
+              <div>이메일</div> <span>{userInfo && userInfo.email}</span>
+            </div>
+            <div>
+              <div>비밀번호</div>
+              <span>
+                ••••••••
+                <ChangePasswordButton
+                  onClick={() => {
+                    setShowPasswordPopup(true);
+                  }}
+                >
+                  변경하기
+                </ChangePasswordButton>
+              </span>
+            </div>
+          </UserDetailInfo>
+        </ContentDiv>
+        <ChangePasswordPopup
+          show={showPasswordPopup}
+          onClose={() => {
+            setShowPasswordPopup(false);
+          }}
+        />
+      </Container>
+    </Layout>
   );
 }
 

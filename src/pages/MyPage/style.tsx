@@ -1,4 +1,6 @@
 import styled from '@emotion/styled';
+import { FaPen } from 'react-icons/fa';
+import theme from 'styles/theme';
 
 export const TitleDiv = styled.div`
   font-weight: bold;
@@ -6,13 +8,30 @@ export const TitleDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
   margin-top: 2rem;
+  width: 100%;
+`;
+
+export const Layout = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 `;
 
 export const Container = styled.div`
-  width: 100%;
+  width: 50%;
   display: flex;
   flex-direction: column;
+  @media ${theme.device.tablet} {
+    width: 80%;
+  }
+  @media ${theme.device.phone} {
+    width: 100%;
+  }
 `;
 
 export const HeaderButton = styled.div<{ primary?: boolean }>`
@@ -38,34 +57,40 @@ export const ContentDiv = styled.div`
   border: 1px solid var(--color-gray2);
   border-radius: 0.1875rem;
   background-color: #fff;
-  padding: 1.5rem 1rem;
+  padding: 2rem 1.8rem;
 `;
 
 export const UserProfileInfo = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-direction: column;
   font-weight: 600;
   font-size: 1.1rem;
   gap: 1rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--color-gray2);
+  padding: 2rem;
 `;
 
 export const UserDetailInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
   padding: 0 0.5rem;
   > div {
     display: flex;
-    gap: 1.5rem;
-    font-weight: 600;
+    flex-wrap: wrap;
+    row-gap: 0.6rem;
     > div {
-      width: 4rem;
+      width: 5rem;
+      color: var(--color-gray1);
+      font-size: 0.9rem;
+      font-weight: 500;
     }
     > span {
-      font-weight: 300;
-      color: #000;
+      color: var(--color-gray1);
+      font-size: 1rem;
+      font-weight: 700;
     }
   }
 `;
@@ -76,11 +101,11 @@ export const FormItem = styled.div`
   width: 100%;
   position: relative;
   align-items: center;
+  justify-content: center;
   > div {
     font-weight: 600;
   }
   > input {
-    flex-grow: 1;
     background-color: #fff;
     border: solid 1px var(--color-gray3);
     border-radius: 0.2rem;
@@ -97,6 +122,7 @@ export const RowWrapper = styled.div`
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  flex-wrap: wrap;
 `;
 
 export const ChangePasswordButton = styled.span`
@@ -107,5 +133,10 @@ export const ChangePasswordButton = styled.span`
   font-weight: 500;
   background-color: var(--color-primary);
   color: white;
-  margin-left: 0.5rem;
+  margin-left: 1rem;
+`;
+
+export const EditIcon = styled(FaPen)`
+  color: var(--color-gray2);
+  cursor: pointer;
 `;

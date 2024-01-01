@@ -94,7 +94,7 @@ export const TabWrapper = styled.div`
   }
   position: sticky;
   top: 4.2rem;
-  z-index: 999;
+  z-index: 1;
   @media ${theme.device.phone} {
     margin: 0 -1rem;
     > :last-child {
