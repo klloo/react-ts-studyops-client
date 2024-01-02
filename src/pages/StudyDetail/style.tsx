@@ -54,6 +54,7 @@ export const StudyTitle = styled.div`
   border-right: 1px solid var(--color-gray1);
   @media ${theme.device.phone} {
     border-right: none;
+    width: 100%;
   }
 `;
 
@@ -75,6 +76,10 @@ export const DescriptionDiv = styled.div`
   font-size: 1.2rem;
   font-weight: 500;
   margin-top: 1.44rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 1rem;
 `;
 
 export const StartDateDiv = styled.div`
@@ -136,4 +141,14 @@ export const ContentTitle = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+`;
+
+export const EditButton = styled.div`
+  border-radius: 20px;
+  padding: 0.2rem 0.7rem;
+  color: var(--color-gray2);
+  background-color: var(--color-gray4);
+  font-weight: 500;
+  font-size: 0.8rem;
+  cursor: pointer;
 `;

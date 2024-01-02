@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Container,
   StudyOutlineDiv,
@@ -11,9 +10,10 @@ import {
   TabWrapper,
   TabDiv,
   TabContentWrapper,
+  EditButton,
 } from './style';
 import dayjs from 'dayjs';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
 import { calcDiffDays } from 'utils/schedule';
@@ -48,8 +48,10 @@ function StudyDetail() {
 
   const [showMemberPopup, setShowMemberPopup] = useState(false);
 
-  // 임시
-  const isHost = true;
+  const isHost = useMemo(() => {
+    if (!studyInfo) return false;
+    return studyInfo.host;
+  }, [studyInfo]);
 
   // 탭 정보 설정
   const tabs: Record<string, Tab> = {
@@ -69,6 +71,8 @@ function StudyDetail() {
   };
   const [curTab, setCurTab] = useState<Tab>(tabs.schedule);
 
+  const navigate = useNavigate();
+
   return (
     <>
       <Container>
@@ -80,7 +84,11 @@ function StudyDetail() {
               <DdayTag>{calcDiffDays(studyInfo.startDate)}</DdayTag>
               <StudyTitle>{studyInfo.name}</StudyTitle>
               <MemberInfoDiv>
-                <ProfileImage width="40" height="40" />
+                <ProfileImage
+                  width="40"
+                  height="40"
+                  url={studyInfo.hostProfileImageUrl}
+                />
                 <span
                   onClick={() => {
                     setShowMemberPopup(true);
@@ -94,7 +102,16 @@ function StudyDetail() {
                 {dayjs(studyInfo.startDate).format('YYYY.MM.DD')}
               </StartDateDiv>
             </StudyOutlineDiv>
-            <DescriptionDiv>{studyInfo.intro}</DescriptionDiv>
+            <DescriptionDiv>
+              {studyInfo.intro}
+              <EditButton
+                onClick={() => {
+                  navigate(`/update/${groupId}`);
+                }}
+              >
+                정보 수정
+              </EditButton>
+            </DescriptionDiv>
           </div>
         )}
         <TodaySchedule groupId={parseInt(groupId)} />

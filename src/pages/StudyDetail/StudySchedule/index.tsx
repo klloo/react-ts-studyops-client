@@ -130,8 +130,12 @@ function StudySchedule({ groupId }: { groupId: number }) {
                       {attendanceInfo.attendMemberList.length > 0 ? (
                         attendanceInfo.attendMemberList.map((user, i) => (
                           <div key={i}>
-                            <ProfileImage width="30" height="30" />
-                            <div>{user}</div>
+                            <ProfileImage
+                              width="30"
+                              height="30"
+                              url={user.profileImageUrl}
+                            />
+                            <div>{user.nickName}</div>
                           </div>
                         ))
                       ) : (
@@ -145,8 +149,12 @@ function StudySchedule({ groupId }: { groupId: number }) {
                       {attendanceInfo.absenceMemberList.length > 0 ? (
                         attendanceInfo.absenceMemberList.map((user, i) => (
                           <div key={i}>
-                            <ProfileImage width="30" height="30" />
-                            <div>{user}</div>
+                            <ProfileImage
+                              width="30"
+                              height="30"
+                              url={user.profileImageUrl}
+                            />
+                            <div>{user.nickName}</div>
                           </div>
                         ))
                       ) : (

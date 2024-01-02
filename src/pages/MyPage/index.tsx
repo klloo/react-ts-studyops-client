@@ -1,7 +1,7 @@
 import ProfileImage from 'components/ProfileImage';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-// import useSWR from 'swr';
-// import fetcher from 'utils/fetcher';
+import useSWR from 'swr';
+import fetcher from 'utils/fetcher';
 import {
   Container,
   TitleDiv,
@@ -12,7 +12,6 @@ import {
   RowWrapper,
   HeaderButton,
   ChangePasswordButton,
-  EditIcon,
   Layout,
 } from './style';
 import { CiCamera } from 'react-icons/ci';
@@ -20,24 +19,17 @@ import useInput from 'hooks/useInput';
 import { toast } from 'react-toastify';
 import { ProfileInputButton, ProfileInputWrapper } from 'pages/Join/style';
 import ChangePasswordPopup from './ChangePasswordPopup';
+import EditIcon from 'components/EditIcon';
 // import useRequest from 'hooks/useRequest';
 
 function MyPage() {
-  // const { data: loginUser, mutate: mutateLoginUser } = useSWR(
-  //   '/member/inform',
-  //   fetcher,
-  // );
-  // const { data: userInfo, mutate: mutateUserInfo } = useSWR(
-  //   loginUser ? `/member?username=${loginUser.id}` : null,
-  //   fetcher,
-  // );
-  const userInfo = {
-    email: 'asdf016182@naver.com',
-    nickname: '희영',
-    image: '',
-  };
+  const { data: loginUser } = useSWR('/users/me', fetcher);
+  const { data: userInfo } = useSWR(
+    loginUser ? `/users/me/${loginUser.email}` : null,
+    fetcher,
+  );
   const [editMode, setEditMode] = useState(false);
-  const [nickname, onChangeNickname, setNickname] = useInput('');
+  const [nickName, onChangeNickName, setNickName] = useInput('');
 
   const [showPasswordPopup, setShowPasswordPopup] = useState(false);
 
@@ -65,18 +57,18 @@ function MyPage() {
 
   useEffect(() => {
     if (!userInfo) return;
-    setNickname(userInfo.nickname || '');
+    setNickName(userInfo.nickName || '');
     setProfileImage(userInfo.image);
-  }, [setNickname]);
+  }, [setNickName]);
 
   // const requestUpdate = useRequest(updateUserInfo);
   const updateUserInfoProc = useCallback(() => {
     const newUserInfo = {
-      nickname: userInfo?.nickname,
+      nickName: userInfo?.nickName,
       photoUrl: profileImage,
     };
-    if (nickname && nickname.trim()) {
-      newUserInfo.nickname = nickname;
+    if (nickName && nickName.trim()) {
+      newUserInfo.nickName = nickName;
     }
     // requestUpdate(newUserInfo)
     //   .then(() => {
@@ -90,11 +82,11 @@ function MyPage() {
   }, [
     // mutateLoginUser,
     // mutateUserInfo,
-    nickname,
+    nickName,
     profileImage,
     // requestUpdate,
     userInfo?.email,
-    userInfo?.nickname,
+    userInfo?.nickName,
   ]);
 
   return (
@@ -165,13 +157,13 @@ function MyPage() {
             <FormItem>
               <input
                 placeholder="닉네임"
-                value={nickname}
-                onChange={onChangeNickname}
+                value={nickName}
+                onChange={onChangeNickName}
               />
             </FormItem>
           ) : (
             <RowWrapper>
-              {userInfo && userInfo.nickname}
+              {userInfo && userInfo.nickName}
               <EditIcon
                 size="11"
                 onClick={() => {
@@ -184,7 +176,7 @@ function MyPage() {
         <ContentDiv>
           <UserDetailInfo>
             <div>
-              <div>닉네임</div> <span>{userInfo && userInfo.nickname}</span>
+              <div>닉네임</div> <span>{userInfo && userInfo.nickName}</span>
             </div>
             <div>
               <div>이메일</div> <span>{userInfo && userInfo.email}</span>

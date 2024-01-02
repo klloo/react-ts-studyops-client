@@ -231,9 +231,9 @@ function SettleCalendar({
           <div>
             {/* 결석 멤버 목록 */}
             {!isEmpty(penaltyInfo?.absentMembers) &&
-              penaltyInfo?.absentMembers.map((mem) => (
+              penaltyInfo?.absentMembers.map((mem, i) => (
                 <MemberItem
-                  key={mem.name}
+                  key={i}
                   isHost={isHost}
                   cost={penaltyInfo.absentCost}
                   penaltyMember={mem}
@@ -248,9 +248,9 @@ function SettleCalendar({
                 />
               ))}
             {!isEmpty(penaltyInfo?.lateMembers) && // 지각멤버 목록
-              penaltyInfo?.lateMembers.map((mem) => (
+              penaltyInfo?.lateMembers.map((mem, i) => (
                 <MemberItem
-                  key={mem.name}
+                  key={i}
                   isHost={isHost}
                   cost={penaltyInfo.lateCost}
                   penaltyMember={mem}

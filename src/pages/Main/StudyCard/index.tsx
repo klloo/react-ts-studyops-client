@@ -75,7 +75,7 @@ function StudyCard({
         <ContentDiv>
           <Title>
             {study.name}
-            {study.hostStatus && (
+            {study.host && (
               <div>
                 <img src={`${process.env.PUBLIC_URL}/crown.svg`} alt="icon" />
               </div>

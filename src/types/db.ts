@@ -6,12 +6,13 @@ export interface ISchedule {
 
 export interface IStudy {
   groupId: number;
-  hostStatus: boolean;
+  host: boolean;
   headCount: number;
   name: string;
   intro: string;
   schedules: ISchedule[];
   hostName: string;
+  hostProfileImageUrl: string | null;
   absenceCost: number;
   lateCost: number;
   startDate: string;
@@ -24,7 +25,6 @@ export interface INewStudy {
   name: string;
   intro: string;
   schedules: ISchedule[];
-  hostName: string;
   absenceCost: number;
   lateCost: number;
   startDate: string;
@@ -49,8 +49,8 @@ export interface IStudyScheduleInfo {
 }
 
 export interface IAttendance {
-  attendMemberList: string[];
-  absenceMemberList: string[];
+  attendMemberList: { nickName: string; profileImageUrl: string | null }[];
+  absenceMemberList: { nickName: string; profileImageUrl: string | null }[];
   isAttended: boolean;
 }
 
@@ -58,11 +58,13 @@ export interface IPenaltyTotal {
   totalFine: number;
   account: string | null;
   settledPenalties: {
-    name: string;
+    nickName: string;
+    profileImageUrl: string | null;
     penalty: number;
   }[];
   notSettledPenalties: {
-    name: string;
+    nickName: string;
+    profileImageUrl: string | null;
     penalty: number;
   }[];
 }
@@ -70,7 +72,8 @@ export interface IPenaltyTotal {
 export interface IPenaltyMemberInfo {
   penaltyId: number;
   isSettled: boolean;
-  name: string;
+  nickName: string;
+  profileImageUrl: string | null;
   lateTime?: number;
 }
 

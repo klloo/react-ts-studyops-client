@@ -17,6 +17,7 @@ import { CiCamera } from 'react-icons/ci';
 import useRequest from 'hooks/useRequest';
 import { signup } from 'api/auth';
 import { useNavigate } from 'react-router-dom';
+import BackIcon from 'components/BackIcon';
 
 function Join() {
   const [id, onChangeId] = useInput('');
@@ -122,6 +123,7 @@ function Join() {
 
   return (
     <Container>
+      <BackIcon />
       <TitleDiv>회원가입</TitleDiv>
       <FormDiv>
         <ProfileInputWrapper>

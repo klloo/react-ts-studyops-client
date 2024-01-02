@@ -10,6 +10,7 @@ import Login from 'pages/Login';
 import Join from 'pages/Join';
 import MyPage from 'pages/MyPage';
 import PrivateRoute from 'layouts/PrivateRoute';
+import UpdateStudy from 'pages/UpdateStudy';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/" element={<Main />} />
             <Route path="/profile" element={<MyPage />} />
             <Route path="/create" element={<CreateStudy />} />
+            <Route path="/update/:groupId" element={<UpdateStudy />} />
             <Route path="/group/:groupId" element={<StudyDetail />} />
           </Route>
           <Route element={<PrivateRoute userAuthentication={false} />}>

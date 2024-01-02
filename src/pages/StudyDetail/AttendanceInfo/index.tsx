@@ -202,11 +202,15 @@ function AttendanceInfo({
                     아직 {costFormatter(totalNotSettled)}원이 정산되지 않았어요
                   </NotSettledInfoButton>
                   <NotSettledWrapper>
-                    {penaltyInfo?.notSettledPenalties.map((item) => (
-                      <div key={item.name}>
+                    {penaltyInfo?.notSettledPenalties.map((item, i) => (
+                      <div key={i}>
                         <ProfileWrapper>
-                          <ProfileImage width="35" height="35" />
-                          <div>{item.name}</div>
+                          <ProfileImage
+                            width="35"
+                            height="35"
+                            url={item.profileImageUrl}
+                          />
+                          <div>{item.nickName}</div>
                         </ProfileWrapper>
                         <div>{costFormatter(item.penalty)}원</div>
                       </div>

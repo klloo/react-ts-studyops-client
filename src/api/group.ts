@@ -43,3 +43,27 @@ export function modifyAccount(
 }> {
   return axios.patch(`${INFO_PREFIX_URL}/accounts/${id}`, { account });
 }
+
+/**
+ * 스터디 규칙 정보를 수정한다.
+ */
+export function modifyRules(
+  id: number,
+  rule: string,
+): Promise<{
+  data: ResponseType<boolean>;
+}> {
+  return axios.patch(`${INFO_PREFIX_URL}/rules/${id}`, { rule });
+}
+
+/**
+ * 스터디 소개를 수정한다.
+ */
+export function modifyIntro(
+  id: number,
+  intro: string,
+): Promise<{
+  data: ResponseType<boolean>;
+}> {
+  return axios.patch(`${INFO_PREFIX_URL}/intro/${id}`, { intro });
+}

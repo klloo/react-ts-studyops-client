@@ -11,8 +11,8 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import ProfileImage from 'components/ProfileImage';
 import { Button } from 'components/Button';
-// import useSWR from 'swr';
-// import fetcher from 'utils/fetcher';
+import useSWR from 'swr';
+import fetcher from 'utils/fetcher';
 
 interface LayoutProps {
   children: ReactNode;
@@ -25,7 +25,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   const [showUserInfoBox, setShowUserInfoBox] = useState(false);
 
-  // const { data: loginUser } = useSWR('/api/user/me', fetcher);
+  const { data: loginUser } = useSWR<{
+    email: string;
+    profileImageUrl: string | null;
+  }>('/users/me', fetcher);
 
   const logout = useCallback(() => {
     localStorage.removeItem('accessToken');
@@ -55,6 +58,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               width="35"
               height="35"
               cursor="pointer"
+              url={loginUser?.profileImageUrl}
             />
           </HeaderSide>
           {showUserInfoBox && (

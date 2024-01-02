@@ -33,8 +33,12 @@ function MemberItem({
   return (
     <Container>
       <ProfileWrapper>
-        <ProfileImage width="35" height="35" />
-        <div>{penaltyMember.name}</div>
+        <ProfileImage
+          width="35"
+          height="35"
+          url={penaltyMember.profileImageUrl}
+        />
+        <div>{penaltyMember.nickName}</div>
         <span>{info}</span>
       </ProfileWrapper>
       {!noPenalty && (

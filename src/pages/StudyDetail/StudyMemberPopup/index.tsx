@@ -37,7 +37,7 @@ function StudyMemberPopup({
   const { data: studyInfo } = useSWR<IStudy>(`/info/${groupId}`, fetcher);
   // 스터디원 목록
   const { data: memberInfo, mutate: mutateMemberInfo } = useSWR<
-    { nickName: string; status: string }[]
+    { nickName: string; status: string; profileImageUrl: string | null }[]
   >(`/asks/responses/${groupId}`, fetcher);
 
   const [nickName, onChangeNickName, setNickName] = useInput('');
@@ -65,7 +65,11 @@ function StudyMemberPopup({
         <MemberList>
           <div>
             <ProfileWarpper>
-              <ProfileImage width="35" height="35" />
+              <ProfileImage
+                width="35"
+                height="35"
+                url={studyInfo?.hostProfileImageUrl}
+              />
               <div>{studyInfo?.hostName}</div>
               <img src={`${process.env.PUBLIC_URL}/crown.svg`} alt="icon" />
             </ProfileWarpper>
@@ -75,7 +79,11 @@ function StudyMemberPopup({
             mem.status === 'REJECT' ? null : (
               <div key={mem.nickName}>
                 <ProfileWarpper>
-                  <ProfileImage width="35" height="35" />
+                  <ProfileImage
+                    width="35"
+                    height="35"
+                    url={mem.profileImageUrl}
+                  />
                   <div>{mem.nickName}</div>
                 </ProfileWarpper>
                 <StatusDiv>{status[mem.status]}</StatusDiv>

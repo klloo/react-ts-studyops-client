@@ -29,6 +29,7 @@ import { useNavigate } from 'react-router-dom';
 import TextareaAutosize from 'react-textarea-autosize';
 import { toast } from 'react-toastify';
 import FormItem from 'components/FormItem';
+import BackIcon from 'components/BackIcon';
 
 interface IOption {
   label: string;
@@ -293,7 +294,6 @@ function CreateStudy() {
       absenceCost: costFlag ? absenceCost : 0, // 벌금여부 off면 0으로 넣어주기
       lateCost: costFlag ? lateCost : 0,
       allowedTime: costFlag ? allowedTime : 0,
-      hostName: '이찬희',
       schedules,
     };
     requestCreateStudy(newStudy).then((data) => {
@@ -305,6 +305,7 @@ function CreateStudy() {
 
   return (
     <Container>
+      <BackIcon />
       <TitleDiv>스터디 생성</TitleDiv>
       <CreateForm>
         <FormItem error={nameErr}>

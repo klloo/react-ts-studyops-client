@@ -8,7 +8,7 @@ function BatchMemberItem({
   cost,
   settle,
 }: {
-  penaltyMember: { name: string; url?: string };
+  penaltyMember: { name: string; url: string | null };
   cost: number;
   settle: () => void;
 }) {
