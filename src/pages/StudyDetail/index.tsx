@@ -104,13 +104,15 @@ function StudyDetail() {
             </StudyOutlineDiv>
             <DescriptionDiv>
               {studyInfo.intro}
-              <EditButton
-                onClick={() => {
-                  navigate(`/update/${groupId}`);
-                }}
-              >
-                정보 수정
-              </EditButton>
+              {isHost && (
+                <EditButton
+                  onClick={() => {
+                    navigate(`/update/${groupId}`);
+                  }}
+                >
+                  정보 수정
+                </EditButton>
+              )}
             </DescriptionDiv>
           </div>
         )}
