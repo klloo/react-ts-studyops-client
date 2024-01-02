@@ -20,11 +20,15 @@ import { ProfileInputButton, ProfileInputWrapper } from 'pages/Join/style';
 import ChangePasswordPopup from './ChangePasswordPopup';
 import EditIcon from 'components/EditIcon';
 import { Button } from 'components/Button';
-// import useRequest from 'hooks/useRequest';
+import useRequest from 'hooks/useRequest';
+import { updateUserInfo } from 'api/user';
 
 function MyPage() {
-  const { data: loginUser } = useSWR('/users/me', fetcher);
-  const { data: userInfo } = useSWR(
+  const { data: loginUser, mutate: mutateLoginUser } = useSWR(
+    '/users/me',
+    fetcher,
+  );
+  const { data: userInfo, mutate: mutateUserInfo } = useSWR(
     loginUser ? `/users/me/${loginUser.email}` : null,
     fetcher,
   );
@@ -59,32 +63,42 @@ function MyPage() {
     if (!userInfo) return;
     setNickName(userInfo.nickName || '');
     setProfileImage(userInfo.image);
-  }, [setNickName]);
+  }, [userInfo]);
 
-  // const requestUpdate = useRequest(updateUserInfo);
+  const requestUpdate = useRequest(updateUserInfo);
   const updateUserInfoProc = useCallback(() => {
     const newUserInfo = {
-      nickName: userInfo?.nickName,
-      photoUrl: profileImage,
+      nickName: nickName,
+      // photoUrl: profileImage,
     };
-    if (nickName && nickName.trim()) {
-      newUserInfo.nickName = nickName;
+    if (!nickName || !nickName.trim()) {
+      setNickName(userInfo.nickName);
+      setEditMode((prev) => !prev);
+      return;
     }
-    // requestUpdate(newUserInfo)
-    //   .then(() => {
-    //     mutateUserInfo();
-    //     mutateLoginUser();
-    //     setEditMode((prev) => !prev);
-    //   })
-    //   .catch(() => {
-    //     toast.error('사용자 정보를 수정하지 못하였습니다.');
-    //   });
+    if (userInfo.nickName === nickName) {
+      setEditMode((prev) => !prev);
+      return;
+    }
+    requestUpdate(newUserInfo)
+      .then(() => {
+        mutateUserInfo();
+        mutateLoginUser();
+        setEditMode((prev) => !prev);
+      })
+      .catch((e) => {
+        if (e.status === 409) {
+          toast.error(e.message);
+        } else {
+          toast.error('사용자 정보를 수정하지 못하였습니다.');
+        }
+      });
   }, [
-    // mutateLoginUser,
-    // mutateUserInfo,
+    mutateLoginUser,
+    mutateUserInfo,
     nickName,
     profileImage,
-    // requestUpdate,
+    requestUpdate,
     userInfo?.email,
     userInfo?.nickName,
   ]);
@@ -100,6 +114,7 @@ function MyPage() {
                 onClick={() => {
                   setEditMode((prev) => !prev);
                   setProfileImage(userInfo.image);
+                  setNickName(userInfo.nickName || '');
                 }}
               >
                 취소

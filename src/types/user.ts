@@ -1,7 +1,7 @@
 export interface IUserInfo {
   email: string;
   password: string;
-  nickname: string;
+  nickName: string;
 }
 
 export interface ILoginInfo {

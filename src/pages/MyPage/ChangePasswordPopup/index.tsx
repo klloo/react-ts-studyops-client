@@ -9,6 +9,10 @@ import {
 } from 'pages/Join/style';
 import FormItem from 'components/FormItem';
 import useInput from 'hooks/useInput';
+import useRequest from 'hooks/useRequest';
+import { updatePassword } from 'api/user';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function ChangePasswordPopup({
   show,
@@ -22,6 +26,8 @@ function ChangePasswordPopup({
   const [passwordRe, onChangePasswordRe, setPasswordRe] = useInput('');
   const [oldpwErrorMsg, setOldpwErrorMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   const validate = useCallback(() => {
     let valid = true;
@@ -48,9 +54,23 @@ function ChangePasswordPopup({
     return valid;
   }, [oldPassword, password, passwordRe]);
 
+  const requestUpdatePassword = useRequest<boolean>(updatePassword);
   const onClickConfirmButton = useCallback(() => {
     if (!validate()) return;
-    console.log(password);
+    const passwordInfo = { oldPassword, newPassword: password };
+    requestUpdatePassword(passwordInfo)
+      .then(() => {
+        toast.success('비밀번호가 변경되었습니다. 다시 로그인해주세요.');
+        localStorage.removeItem('accessToken');
+        navigate('/login');
+      })
+      .catch((e) => {
+        if (e.status === 400) {
+          setOldpwErrorMsg('기존 비밀번호가 일치하지 않습니다.');
+        } else {
+          setOldpwErrorMsg(null);
+        }
+      });
   }, [oldPassword, password, passwordRe]);
 
   const closeModal = useCallback(() => {
@@ -71,9 +91,6 @@ function ChangePasswordPopup({
         <FormDiv>
           <FormItem flexDirection="column" error={oldpwErrorMsg !== null}>
             <label>기존 비밀번호</label>
-            <FormItemDescDiv>
-              영문, 숫자를 포함한 8~20자의 비밀번호를 입력해주세요
-            </FormItemDescDiv>
             <input
               placeholder="비밀번호"
               type="password"
