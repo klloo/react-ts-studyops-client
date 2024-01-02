@@ -8,11 +8,12 @@ import {
   HeaderSide,
   UserInfoBox,
 } from './style';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import ProfileImage from 'components/ProfileImage';
 import { Button } from 'components/Button';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
+import StudyDeletePopup from './StudyDeletePopup';
 
 interface LayoutProps {
   children: ReactNode;
@@ -23,7 +24,9 @@ interface LayoutProps {
  */
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
+  const { groupId } = useParams();
   const [showUserInfoBox, setShowUserInfoBox] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
 
   const { data: loginUser } = useSWR<{
     email: string;
@@ -43,14 +46,25 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Logo src="/logo.svg" alt="logo" />
           </Link>
           <HeaderSide>
-            <Button
-              onClick={() => {
-                navigate('/create');
-              }}
-              yesButton
-            >
-              스터디 생성
-            </Button>
+            {groupId ? (
+              <Button
+                onClick={() => {
+                  setShowDeletePopup(true);
+                }}
+                yesButton
+              >
+                스터디 나가기
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  navigate('/create');
+                }}
+                yesButton
+              >
+                스터디 생성
+              </Button>
+            )}
             <ProfileImage
               onClick={() => {
                 setShowUserInfoBox(true);
@@ -82,6 +96,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </HeaderContent>
       </Header>
       <Content>{children}</Content>
+      {groupId && (
+        <StudyDeletePopup
+          show={showDeletePopup}
+          onClose={() => {
+            setShowDeletePopup(false);
+          }}
+          groupId={parseInt(groupId)}
+        />
+      )}
     </Container>
   );
 };

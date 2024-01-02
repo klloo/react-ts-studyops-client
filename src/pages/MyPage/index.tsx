@@ -10,7 +10,6 @@ import {
   UserDetailInfo,
   FormItem,
   RowWrapper,
-  HeaderButton,
   ChangePasswordButton,
   Layout,
 } from './style';
@@ -20,6 +19,7 @@ import { toast } from 'react-toastify';
 import { ProfileInputButton, ProfileInputWrapper } from 'pages/Join/style';
 import ChangePasswordPopup from './ChangePasswordPopup';
 import EditIcon from 'components/EditIcon';
+import { Button } from 'components/Button';
 // import useRequest from 'hooks/useRequest';
 
 function MyPage() {
@@ -96,22 +96,22 @@ function MyPage() {
           내 정보
           {editMode && (
             <RowWrapper>
-              <HeaderButton
+              <Button
                 onClick={() => {
                   setEditMode((prev) => !prev);
                   setProfileImage(userInfo.image);
                 }}
               >
                 취소
-              </HeaderButton>
-              <HeaderButton
+              </Button>
+              <Button
                 onClick={() => {
                   updateUserInfoProc();
                 }}
-                primary
+                yesButton
               >
                 완료
-              </HeaderButton>
+              </Button>
             </RowWrapper>
           )}
         </TitleDiv>

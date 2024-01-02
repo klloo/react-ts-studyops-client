@@ -108,7 +108,7 @@ function StudyCard({
             </span>
           ) : (
             <span>
-              이찬희 외 <b>{study.headCount - 1}명</b> 참여 중
+              {study.hostName} 외 <b>{study.headCount - 1}명</b> 참여 중
             </span>
           )}
         </InfoItem>

@@ -83,6 +83,10 @@ function UpdateStudy() {
     }
   };
 
+  if (studyInfo === undefined || !studyInfo.host) {
+    return null;
+  }
+
   return (
     <Container>
       <BackIcon />

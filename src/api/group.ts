@@ -67,3 +67,12 @@ export function modifyIntro(
 }> {
   return axios.patch(`${INFO_PREFIX_URL}/intro/${id}`, { intro });
 }
+
+/**
+ * 스터디 그룹을 탈퇴한다.
+ */
+export function deleteGroup(groupId: number): Promise<{
+  data: ResponseType<boolean>;
+}> {
+  return axios.delete(`${PREFIX_URL}/${groupId}`);
+}
