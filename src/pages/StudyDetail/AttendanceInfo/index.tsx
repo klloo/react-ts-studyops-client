@@ -83,7 +83,7 @@ function AttendanceInfo({
 
   // 납부 계좌 정보 등록
   const requestModify = useRequest<boolean>(modifyAccount);
-  const modifyAccountProc = useCallback((accout: string) => {
+  const modifyAccountProc = useCallback((accout: string | null) => {
     requestModify(groupId, accout)
       .then(() => {
         onClosePopup();

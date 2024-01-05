@@ -37,7 +37,7 @@ export function getGroupInfo(id: number): Promise<{
  */
 export function modifyAccount(
   id: number,
-  account: string,
+  account: string | null,
 ): Promise<{
   data: ResponseType<boolean>;
 }> {
