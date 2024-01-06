@@ -11,6 +11,7 @@ import Join from 'pages/Join';
 import MyPage from 'pages/MyPage';
 import PrivateRoute from 'layouts/PrivateRoute';
 import UpdateStudy from 'pages/UpdateStudy';
+import KakaoAuth from 'pages/Login/KakaoAuth';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route element={<PrivateRoute userAuthentication={false} />}>
             <Route path="/join" element={<Join />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/auth" element={<KakaoAuth />} />
           </Route>
           {/* 이 경로가 없을 때 "/"로 리다이렉트된다 */}
           <Route path="*" element={<Navigate to="/" />} />

@@ -23,6 +23,9 @@ function Login() {
   const [id, onChangeId] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const CLIENT_ID = `${process.env.REACT_APP_REST_API_KEY}`;
+  const REDIRECT_URI = `${process.env.REACT_APP_REDIRECT_URL}`;
+  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   const requestLogin = useRequest(signin);
   const onClickLoginButton = useCallback(() => {
@@ -87,7 +90,7 @@ function Login() {
         <HrSection>또는</HrSection>
         <SnsButtonWrapper>
           <div>SNS계정으로 간편하게 시작하기</div>
-          <KakaoButton>
+          <KakaoButton onClick={() => (window.location.href = kakaoURL)}>
             <RiKakaoTalkFill size="21" />
             카카오로 시작하기
           </KakaoButton>

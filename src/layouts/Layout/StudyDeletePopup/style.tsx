@@ -46,7 +46,4 @@ export const ButtonWrapper = styled.div`
   display: flex;
   gap: 0.5rem;
   width: 100%;
-  > div {
-    flex-grow: 1;
-  }
 `;

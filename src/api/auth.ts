@@ -30,3 +30,12 @@ export function refresh(): Promise<{
 }> {
   return axios.post(`${PREFIX_URL}/reissue`);
 }
+
+/**
+ * 소셜 로그인한다.
+ */
+export function socialLogin(authorizationCode: string): Promise<{
+  data: ResponseType<IJwt>;
+}> {
+  return axios.post(`${PREFIX_URL}/login/social`, { authorizationCode });
+}
