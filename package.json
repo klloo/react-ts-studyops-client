@@ -35,6 +35,7 @@
     "gravatar": "^1.8.2",
     "highcharts": "^11.2.0",
     "highcharts-react-official": "^3.2.1",
+    "mem": "^10.0.0",
     "moment": "^2.29.4",
     "prettier": "^3.0.3",
     "react": "^18.2.0",

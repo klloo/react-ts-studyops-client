@@ -2,6 +2,7 @@ export interface IUserInfo {
   email: string;
   password: string;
   nickName: string;
+  image: string | null;
 }
 
 export interface ILoginInfo {

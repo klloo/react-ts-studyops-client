@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useCallback, useRef, useState } from 'react';
 import {
   Container,
@@ -72,7 +73,13 @@ function Join() {
       valid = false;
       setNickNameErrorMsg('닉네임을 입력해주세요.');
     } else {
-      setNickNameErrorMsg(null);
+      const nicknamePw = /^user/;
+      if (nicknamePw.test(nickName.trim())) {
+        valid = false;
+        setNickNameErrorMsg('사용할 수 없는 닉네임입니다.');
+      } else {
+        setNickNameErrorMsg(null);
+      }
     }
     if (!password.trim() || !passwordRe.trim()) {
       valid = false;
@@ -126,6 +133,7 @@ function Join() {
       <BackIcon />
       <TitleDiv>회원가입</TitleDiv>
       <FormDiv>
+        {/*
         <ProfileInputWrapper>
           <ProfileImage
             width="100"
@@ -156,6 +164,7 @@ function Join() {
             }}
           />
         </ProfileInputWrapper>
+      */}
         <FormItem flexDirection="column" error={idErrorMsg !== null}>
           <label>이메일</label>
           <input

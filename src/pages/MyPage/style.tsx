@@ -82,7 +82,7 @@ export const UserDetailInfo = styled.div`
     flex-wrap: wrap;
     row-gap: 0.6rem;
     > div {
-      width: 5rem;
+      width: 6rem;
       color: var(--color-gray1);
       font-size: 0.9rem;
       font-weight: 500;

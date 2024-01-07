@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import ProfileImage from 'components/ProfileImage';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
@@ -22,22 +23,26 @@ import EditIcon from 'components/EditIcon';
 import { Button } from 'components/Button';
 import useRequest from 'hooks/useRequest';
 import { updateUserInfo } from 'api/user';
+import { IUserInfo } from 'types/user';
 
 function MyPage() {
   const { data: loginUser, mutate: mutateLoginUser } = useSWR(
     '/users/me',
     fetcher,
   );
-  const { data: userInfo, mutate: mutateUserInfo } = useSWR(
-    loginUser ? `/users/me/${loginUser.email}` : null,
-    fetcher,
-  );
+  const { data: userInfo, mutate: mutateUserInfo } = useSWR<
+    Omit<IUserInfo, 'password'>
+  >(loginUser ? `/users/me/${loginUser.email}` : null, fetcher);
+
+  const [socialLogin, setSocialLogin] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
+
   const [editMode, setEditMode] = useState(false);
   const [nickName, onChangeNickName, setNickName] = useInput('');
 
   const [showPasswordPopup, setShowPasswordPopup] = useState(false);
 
-  const [profileImage, setProfileImage] = useState('');
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   // const requestUpload = useRequest(imageUpload);
   const imageFileUpload = (fileBlob: File | null) => {
     // 이미지 업로드
@@ -63,6 +68,14 @@ function MyPage() {
     if (!userInfo) return;
     setNickName(userInfo.nickName || '');
     setProfileImage(userInfo.image);
+    const emailDomain = userInfo.email.split('@')[1];
+    const splitList = emailDomain.split('.');
+    if (splitList.length === 3) {
+      setSocialLogin(splitList[2]);
+      setEmail(userInfo.email.replace(/\.[^.]*$/, ''));
+    } else {
+      setEmail(userInfo.email);
+    }
   }, [userInfo]);
 
   const requestUpdate = useRequest(updateUserInfo);
@@ -72,12 +85,17 @@ function MyPage() {
       // photoUrl: profileImage,
     };
     if (!nickName || !nickName.trim()) {
-      setNickName(userInfo.nickName);
+      setNickName(userInfo?.nickName);
       setEditMode((prev) => !prev);
       return;
     }
-    if (userInfo.nickName === nickName) {
+    if (userInfo?.nickName === nickName) {
       setEditMode((prev) => !prev);
+      return;
+    }
+    const nicknamePw = /^user/;
+    if (nicknamePw.test(nickName.trim())) {
+      toast.error('사용할 수 없는 닉네임입니다.');
       return;
     }
     requestUpdate(newUserInfo)
@@ -113,8 +131,8 @@ function MyPage() {
               <Button
                 onClick={() => {
                   setEditMode((prev) => !prev);
-                  setProfileImage(userInfo.image);
-                  setNickName(userInfo.nickName || '');
+                  setProfileImage(userInfo?.image || null);
+                  setNickName(userInfo?.nickName || '');
                 }}
               >
                 취소
@@ -142,7 +160,7 @@ function MyPage() {
             />
             {editMode && (
               <>
-                <ProfileInputButton onClick={clickUploadButton}>
+                {/* <ProfileInputButton onClick={clickUploadButton}>
                   <CiCamera />
                 </ProfileInputButton>
                 <input
@@ -164,7 +182,7 @@ function MyPage() {
                       );
                     }
                   }}
-                />
+                /> */}
               </>
             )}
           </ProfileInputWrapper>
@@ -194,8 +212,14 @@ function MyPage() {
               <div>닉네임</div> <span>{userInfo && userInfo.nickName}</span>
             </div>
             <div>
-              <div>이메일</div> <span>{userInfo && userInfo.email}</span>
+              <div>이메일</div> <span>{email}</span>
             </div>
+            {socialLogin && (
+              <div>
+                <div>소셜 로그인</div>
+                <span>{socialLogin}</span>
+              </div>
+            )}
             <div>
               <div>비밀번호</div>
               <span>

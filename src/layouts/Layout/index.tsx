@@ -30,6 +30,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const { data: loginUser } = useSWR<{
     email: string;
+    nickName: string;
     profileImageUrl: string | null;
   }>('/users/me', fetcher);
 
