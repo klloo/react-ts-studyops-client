@@ -2,6 +2,7 @@ import { socialLogin } from 'api/auth';
 import useRequest from 'hooks/useRequest';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Container } from './style';
 
 function KakaoAuth() {
   const params = new URL(document.location.toString()).searchParams;
@@ -28,6 +29,6 @@ function KakaoAuth() {
       navigate('/login');
     });
 
-  return <></>;
+  return <Container>로그인 진행중입니다...</Container>;
 }
 export default KakaoAuth;

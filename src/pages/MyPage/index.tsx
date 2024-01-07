@@ -25,6 +25,7 @@ import useRequest from 'hooks/useRequest';
 import { updateUserInfo } from 'api/user';
 import { IUserInfo } from 'types/user';
 import ProfileAvatar from 'components/ProfileAvatar';
+import SkeletonComponent from './SkeletonComponent';
 
 function MyPage() {
   const { data: loginUser, mutate: mutateLoginUser } = useSWR(
@@ -122,6 +123,10 @@ function MyPage() {
     userInfo?.nickName,
   ]);
 
+  if (!userInfo) {
+    return <SkeletonComponent />;
+  }
+
   return (
     <Layout>
       <Container>
@@ -132,8 +137,8 @@ function MyPage() {
               <Button
                 onClick={() => {
                   setEditMode((prev) => !prev);
-                  setProfileImage(userInfo?.image || null);
-                  setNickName(userInfo?.nickName || '');
+                  setProfileImage(userInfo.image || null);
+                  setNickName(userInfo.nickName);
                 }}
               >
                 취소
@@ -198,7 +203,7 @@ function MyPage() {
             </FormItem>
           ) : (
             <RowWrapper>
-              {userInfo && userInfo.nickName}
+              {userInfo.nickName}
               <EditIcon
                 size="11"
                 onClick={() => {
@@ -211,7 +216,7 @@ function MyPage() {
         <ContentDiv>
           <UserDetailInfo>
             <div>
-              <div>닉네임</div> <span>{userInfo && userInfo.nickName}</span>
+              <div>닉네임</div> <span>{userInfo.nickName}</span>
             </div>
             <div>
               <div>이메일</div> <span>{email}</span>
