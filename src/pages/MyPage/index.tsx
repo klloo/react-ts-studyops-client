@@ -216,25 +216,26 @@ function MyPage() {
             <div>
               <div>이메일</div> <span>{email}</span>
             </div>
-            {socialLogin && (
+            {socialLogin ? (
               <div>
                 <div>소셜 로그인</div>
                 <span>{socialLogin}</span>
               </div>
+            ) : (
+              <div>
+                <div>비밀번호</div>
+                <span>
+                  ••••••••
+                  <ChangePasswordButton
+                    onClick={() => {
+                      setShowPasswordPopup(true);
+                    }}
+                  >
+                    변경하기
+                  </ChangePasswordButton>
+                </span>
+              </div>
             )}
-            <div>
-              <div>비밀번호</div>
-              <span>
-                ••••••••
-                <ChangePasswordButton
-                  onClick={() => {
-                    setShowPasswordPopup(true);
-                  }}
-                >
-                  변경하기
-                </ChangePasswordButton>
-              </span>
-            </div>
           </UserDetailInfo>
         </ContentDiv>
         <ChangePasswordPopup
