@@ -24,6 +24,7 @@ import { Button } from 'components/Button';
 import useRequest from 'hooks/useRequest';
 import { updateUserInfo } from 'api/user';
 import { IUserInfo } from 'types/user';
+import ProfileAvatar from 'components/ProfileAvatar';
 
 function MyPage() {
   const { data: loginUser, mutate: mutateLoginUser } = useSWR(
@@ -150,14 +151,15 @@ function MyPage() {
         </TitleDiv>
         <UserProfileInfo>
           <ProfileInputWrapper>
-            <ProfileImage
+            {/* <ProfileImage
               width="65"
               height="65"
               onClick={() => {
                 if (editMode) clickUploadButton();
               }}
               cursor={editMode ? 'pointer' : 'default'}
-            />
+            /> */}
+            <ProfileAvatar size={65} nickName={userInfo?.nickName || ''} />
             {editMode && (
               <>
                 {/* <ProfileInputButton onClick={clickUploadButton}>

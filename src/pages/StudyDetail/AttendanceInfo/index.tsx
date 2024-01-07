@@ -29,8 +29,9 @@ import useRequest from 'hooks/useRequest';
 import { modifyAccount } from 'api/group';
 import { toast } from 'react-toastify';
 import SettleCalendar from './SettleCalendar';
-import ProfileImage from 'components/ProfileImage';
+// import ProfileImage from 'components/ProfileImage';
 import { GRAPH_MODE } from 'utils/constants';
+import ProfileAvatar from 'components/ProfileAvatar';
 
 function AttendanceInfo({
   groupId,
@@ -205,11 +206,12 @@ function AttendanceInfo({
                     {penaltyInfo?.notSettledPenalties.map((item, i) => (
                       <div key={i}>
                         <ProfileWrapper>
-                          <ProfileImage
+                          {/* <ProfileImage
                             width="35"
                             height="35"
                             url={item.profileImageUrl}
-                          />
+                          /> */}
+                          <ProfileAvatar size={40} nickName={item.nickName} />
                           <div>{item.nickName}</div>
                         </ProfileWrapper>
                         <div>{costFormatter(item.penalty)}원</div>

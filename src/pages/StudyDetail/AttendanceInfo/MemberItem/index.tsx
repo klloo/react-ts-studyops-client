@@ -8,10 +8,11 @@ import {
   UnCheckedIcon,
   ExemptButton,
 } from './style';
-import ProfileImage from 'components/ProfileImage';
+// import ProfileImage from 'components/ProfileImage';
 import { costFormatter } from 'utils/formatter';
 import CustomSwitch from 'components/CustomSwitch';
 import { IPenaltyMemberInfo } from 'types/db';
+import ProfileAvatar from 'components/ProfileAvatar';
 
 function MemberItem({
   isHost = true,
@@ -33,11 +34,12 @@ function MemberItem({
   return (
     <Container>
       <ProfileWrapper>
-        <ProfileImage
+        {/* <ProfileImage
           width="35"
           height="35"
           url={penaltyMember.profileImageUrl}
-        />
+        /> */}
+        <ProfileAvatar size={40} nickName={penaltyMember.nickName} />
         <div>{penaltyMember.nickName}</div>
         <span>{info}</span>
       </ProfileWrapper>

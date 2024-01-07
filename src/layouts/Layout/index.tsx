@@ -9,11 +9,12 @@ import {
   UserInfoBox,
 } from './style';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import ProfileImage from 'components/ProfileImage';
+// import ProfileImage from 'components/ProfileImage';
 import { Button } from 'components/Button';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
 import StudyDeletePopup from './StudyDeletePopup';
+import ProfileAvatar from 'components/ProfileAvatar';
 
 interface LayoutProps {
   children: ReactNode;
@@ -66,7 +67,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 스터디 생성
               </Button>
             )}
-            <ProfileImage
+            {/* <ProfileImage
               onClick={() => {
                 setShowUserInfoBox(true);
               }}
@@ -74,6 +75,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               height="35"
               cursor="pointer"
               url={loginUser?.profileImageUrl}
+            /> */}
+            <ProfileAvatar
+              onClick={() => {
+                setShowUserInfoBox(true);
+              }}
+              size={40}
+              cursor="pointer"
+              nickName={loginUser?.nickName || ''}
             />
           </HeaderSide>
           {showUserInfoBox && (
