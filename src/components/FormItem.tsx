@@ -26,7 +26,7 @@ const FormItem = styled.div<{
       ${(props) => props.emptyLabel && 'display:none;'}
     }
   }
-  > input {
+  & input {
     flex-grow: 1;
     background-color: #fff;
     border: solid 1px

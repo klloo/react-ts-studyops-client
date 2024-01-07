@@ -76,6 +76,7 @@ function CreateStudy() {
   const [nameErr, setNameErr] = useState(false);
   const [introErr, setIntroErr] = useState(false);
   const [inviteesErr, setInviteesErr] = useState(false);
+  const [inviteesErrMsg, setInviteesErrMsg] = useState(false);
   const [ruleErr, setRuleErr] = useState(false);
   const [startDateErr, setStartDateErr] = useState(false);
   const [scheduleErr, setScheduleErr] = useState(false);
@@ -296,11 +297,21 @@ function CreateStudy() {
       allowedTime: costFlag ? allowedTime : 0,
       schedules,
     };
-    requestCreateStudy(newStudy).then((data) => {
-      const { groupId } = data;
-      navigate(`/group/${groupId}`);
-      toast.success('스터디를 생성하였습니다.');
-    });
+    requestCreateStudy(newStudy)
+      .then((data) => {
+        const { groupId } = data;
+        navigate(`/group/${groupId}`);
+        toast.success('스터디를 생성하였습니다.');
+      })
+      .catch((e) => {
+        if (e.status === 400) {
+          setInviteesErr(true);
+          setInviteesErrMsg(e.message);
+        } else {
+          setInviteesErr(false);
+          toast.error('스터디를 생성하지 못하였습니다.');
+        }
+      });
   };
 
   return (
@@ -353,6 +364,14 @@ function CreateStudy() {
                 </NameTagDiv>
               ))}
             </NameTagWrapper>
+          </FormItem>
+        )}
+        {inviteesErr && (
+          <FormItem emptyLabel>
+            <label />
+            <ErrorMsg style={{ marginTop: '-0.2rem' }}>
+              {inviteesErrMsg}
+            </ErrorMsg>
           </FormItem>
         )}
         <FormItem>
