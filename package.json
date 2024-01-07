@@ -2,8 +2,9 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080",
+  "proxy": "http://localhost:8080/api",
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fullcalendar/core": "^6.1.8",
@@ -23,6 +24,7 @@
     "@typescript-eslint/parser": "^6.6.0",
     "avvvatars-react": "^0.4.2",
     "axios": "^1.5.1",
+    "babel-preset-react-app": "^10.0.1",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.9",
     "emotion-normalize": "^11.0.1",
