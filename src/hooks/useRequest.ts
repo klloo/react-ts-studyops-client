@@ -1,5 +1,7 @@
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import { isAxiosError } from 'axios';
 import { ResponseType } from 'types/common';
+import { CustomError } from 'utils/error';
 
 const useRequest = <T>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -20,10 +22,19 @@ const useRequest = <T>(
             resolve(data.isSuccess as T);
           }
         } else {
-          toast.error('서비스에 오류가 발생하였습니다.');
+          const errorMessage = data.message || '';
+          const errorCode = data.status || 200;
+          reject(new CustomError(errorMessage, errorCode));
         }
       } catch (e) {
-        reject(e);
+        if (isAxiosError(e)) {
+          const data = e.response?.data;
+          const errorMessage = data.message;
+          const errorCode = data.status;
+          reject(new CustomError(errorMessage, errorCode));
+        } else {
+          reject(new CustomError('', 500));
+        }
       }
     });
   };

@@ -40,7 +40,7 @@ function StudyCard({
   // 초대 거절 함수
   const requestReject = useRequest<boolean>(rejectAsk);
   const rejectProc = useCallback(() => {
-    requestReject(study.groupId, 4)
+    requestReject(study.groupId)
       .then((res) => {
         if (res) {
           toast.success('초대를 거절하였습니다.');
@@ -52,7 +52,7 @@ function StudyCard({
   // 초대 수락 함수
   const requestAccept = useRequest<boolean>(acceptAsk);
   const acceptProc = useCallback(() => {
-    requestAccept(study.groupId, 4)
+    requestAccept(study.groupId)
       .then((res) => {
         if (res) {
           toast.success('초대를 수락하였습니다.');
@@ -75,7 +75,7 @@ function StudyCard({
         <ContentDiv>
           <Title>
             {study.name}
-            {study.hostStatus && (
+            {study.host && (
               <div>
                 <img src={`${process.env.PUBLIC_URL}/crown.svg`} alt="icon" />
               </div>
@@ -108,7 +108,7 @@ function StudyCard({
             </span>
           ) : (
             <span>
-              이찬희 외 <b>{study.headCount - 1}명</b> 참여 중
+              {study.hostName} 외 <b>{study.headCount - 1}명</b> 참여 중
             </span>
           )}
         </InfoItem>

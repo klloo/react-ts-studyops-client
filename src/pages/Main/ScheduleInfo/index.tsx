@@ -39,7 +39,7 @@ function ScheduleInfo({
             <Schedule
               key={item.studyId}
               time={item.time}
-              studyId={item.studyId}
+              studyId={item.studyIdx}
               title={item.title}
             />
           ))}

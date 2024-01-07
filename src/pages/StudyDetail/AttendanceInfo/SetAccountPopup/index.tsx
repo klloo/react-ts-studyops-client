@@ -1,7 +1,8 @@
-import Modal from 'components/Modal';
+import Modal from 'layouts/Modal';
 import React, { useCallback, useEffect } from 'react';
 import { Container, TitleDiv, ContentForm } from './style';
 import useInput from 'hooks/useInput';
+import { toast } from 'react-toastify';
 
 function SetAccountPopup({
   show,
@@ -11,7 +12,7 @@ function SetAccountPopup({
 }: {
   show: boolean;
   onClose: () => void;
-  modifyAccount: (account: string) => void;
+  modifyAccount: (account: string | null) => void;
   originAccount: string | null;
 }) {
   const [bank, onChangeBank, setBank] = useInput('');
@@ -51,11 +52,23 @@ function SetAccountPopup({
       const bankStr = bank.replace(/,/g, '');
       const accountStr = account.replace(/,/g, '');
       const accountHolderStr = accountHolder.replace(/,/g, '');
-      if (!bankStr.trim() || !accountStr.trim()) {
+      if (bankStr.trim() && !accountStr.trim()) {
+        toast.error('계좌 번호를 입력해주세요.');
         return;
       }
-      let accountInfo = `${bankStr},${accountStr}`;
+      if (!bankStr.trim() && accountStr.trim()) {
+        toast.error('은행명을 입력해주세요.');
+        return;
+      }
+      let accountInfo: string | null = `${bankStr},${accountStr}`;
+      if (!bankStr.trim() && !accountStr.trim() && !accountHolderStr) {
+        accountInfo = null;
+      }
       if (accountHolderStr) {
+        if (!bankStr.trim() && !accountStr.trim()) {
+          toast.error('계좌 정보를 입력해주세요.');
+          return;
+        }
         accountInfo = `${accountInfo},${accountHolderStr}`;
       }
       modifyAccount(accountInfo);

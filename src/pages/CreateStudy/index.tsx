@@ -1,10 +1,8 @@
-import Layout from 'components/Layout';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Container,
   TitleDiv,
   CreateForm,
-  FormItemDiv,
   DaysWrapper,
   DayDiv,
   CostWrapper,
@@ -30,6 +28,8 @@ import { createGroup } from 'api/group';
 import { useNavigate } from 'react-router-dom';
 import TextareaAutosize from 'react-textarea-autosize';
 import { toast } from 'react-toastify';
+import FormItem from 'components/FormItem';
+import BackIcon from 'components/BackIcon';
 
 interface IOption {
   label: string;
@@ -76,6 +76,7 @@ function CreateStudy() {
   const [nameErr, setNameErr] = useState(false);
   const [introErr, setIntroErr] = useState(false);
   const [inviteesErr, setInviteesErr] = useState(false);
+  const [inviteesErrMsg, setInviteesErrMsg] = useState(false);
   const [ruleErr, setRuleErr] = useState(false);
   const [startDateErr, setStartDateErr] = useState(false);
   const [scheduleErr, setScheduleErr] = useState(false);
@@ -294,226 +295,242 @@ function CreateStudy() {
       absenceCost: costFlag ? absenceCost : 0, // 벌금여부 off면 0으로 넣어주기
       lateCost: costFlag ? lateCost : 0,
       allowedTime: costFlag ? allowedTime : 0,
-      hostName: '이찬희',
       schedules,
     };
-    requestCreateStudy(1, newStudy).then((data) => {
-      const { groupId } = data;
-      navigate(`/group/${groupId}`);
-      toast.success('스터디를 생성하였습니다.');
-    });
+    requestCreateStudy(newStudy)
+      .then((data) => {
+        const { groupId } = data;
+        navigate(`/group/${groupId}`);
+        toast.success('스터디를 생성하였습니다.');
+      })
+      .catch((e) => {
+        if (e.status === 400) {
+          setInviteesErr(true);
+          setInviteesErrMsg(e.message);
+        } else {
+          setInviteesErr(false);
+          toast.error('스터디를 생성하지 못하였습니다.');
+        }
+      });
   };
 
   return (
-    <Layout>
-      <Container>
-        <TitleDiv>스터디 생성</TitleDiv>
-        <CreateForm>
-          <FormItemDiv error={nameErr}>
-            <label>스터디 이름</label>
-            <input
-              placeholder="이름을 입력해주세요"
-              value={name}
-              onChange={onChangeName}
-            />
-          </FormItemDiv>
-          <FormItemDiv error={introErr} textareaHeight="3">
-            <label>스터디 소개</label>
-            <textarea
-              placeholder="50자 내외로 작성해주세요"
-              value={intro}
-              onChange={onChangeIntro}
-              maxLength={50}
-            />
-          </FormItemDiv>
-          <FormItemDiv error={inviteesErr}>
-            <label>스터디 인원</label>
-            <input
-              placeholder="초대할 사용자의 닉네임을 입력하고 엔터 키를 눌러주세요."
-              value={invitee}
-              onChange={onChangeInvitee}
-              onKeyDown={onKeyDownInvitee}
-              onCompositionStart={() => setIsComposing(true)}
-              onCompositionEnd={() => setIsComposing(false)}
-            />
-          </FormItemDiv>
-          {!isEmpty(invitees) && (
-            <FormItemDiv emptyLabel>
-              <label />
-              <NameTagWrapper>
-                {invitees.map((user, i) => (
-                  <NameTagDiv key={i}>
-                    {user}
-                    <div
-                      onClick={() => {
-                        deleteInvitees(i);
-                      }}
-                    >
-                      &times;
-                    </div>
-                  </NameTagDiv>
-                ))}
-              </NameTagWrapper>
-            </FormItemDiv>
-          )}
-          <FormItemDiv>
-            <label>스터디 시작일</label>
-            <DatePicker
-              selectedDate={startDate}
-              onChange={(date) => {
-                if (
-                  dayjs(date).isBefore(
-                    dayjs().hour(0).minute(0).second(0).millisecond(0),
-                  )
-                ) {
-                  toast.error('오늘 이후의 날짜만 선택할 수 있습니다.');
-                  return;
-                }
-                setStartDate(date);
-              }}
-              error={startDateErr}
-            />
-          </FormItemDiv>
-          <FormItemDiv>
-            <label>스터디 요일</label>
-            <div>
-              <DaysWrapper>
-                {days.map((day, i) => (
-                  <DayDiv
-                    key={i}
-                    selected={selectedDaysMap[i]}
+    <Container>
+      <BackIcon />
+      <TitleDiv>스터디 생성</TitleDiv>
+      <CreateForm>
+        <FormItem error={nameErr}>
+          <label>스터디 이름</label>
+          <input
+            placeholder="이름을 입력해주세요"
+            value={name}
+            onChange={onChangeName}
+          />
+        </FormItem>
+        <FormItem error={introErr} textareaHeight="3">
+          <label>스터디 소개</label>
+          <textarea
+            placeholder="50자 내외로 작성해주세요"
+            value={intro}
+            onChange={onChangeIntro}
+            maxLength={50}
+          />
+        </FormItem>
+        <FormItem error={inviteesErr}>
+          <label>스터디 인원</label>
+          <input
+            placeholder="초대할 사용자의 닉네임을 입력하고 엔터 키를 눌러주세요."
+            value={invitee}
+            onChange={onChangeInvitee}
+            onKeyDown={onKeyDownInvitee}
+            onCompositionStart={() => setIsComposing(true)}
+            onCompositionEnd={() => setIsComposing(false)}
+          />
+        </FormItem>
+        {!isEmpty(invitees) && (
+          <FormItem emptyLabel>
+            <label />
+            <NameTagWrapper>
+              {invitees.map((user, i) => (
+                <NameTagDiv key={i}>
+                  {user}
+                  <div
                     onClick={() => {
-                      onClickDay(i);
+                      deleteInvitees(i);
                     }}
                   >
-                    {day}
-                  </DayDiv>
-                ))}
-              </DaysWrapper>
-              {scheduleErr && <ErrorMsg>{scheduleErrMsg}</ErrorMsg>}
-            </div>
-          </FormItemDiv>
-          {!isEmpty(scheduleList) && (
-            <FormItemDiv>
-              <label>스터디 시간</label>
-              <ScheduleTimeWrapper>
-                {scheduleList.map((schedule) => (
-                  <ScheduleTimeDiv key={schedule.dayWeek}>
-                    <span>{getDayString(schedule.dayWeek)}</span>
-                    <div>
-                      <Select
-                        onChange={(newValue) => {
-                          onChangeHour(
-                            newValue?.value as string,
-                            'start',
-                            schedule.dayWeek,
-                          );
-                        }}
-                        options={hourList}
-                        defaultValue={hourList[0]}
-                      />
-                      :
-                      <Select
-                        onChange={(newValue) => {
-                          onChangeMinute(
-                            newValue?.value as string,
-                            'start',
-                            schedule.dayWeek,
-                          );
-                        }}
-                        options={minuteList}
-                        defaultValue={minuteList[0]}
-                      />
-                    </div>
-                    ~
-                    <div>
-                      <Select
-                        onChange={(newValue) => {
-                          onChangeHour(
-                            newValue?.value as string,
-                            'finish',
-                            schedule.dayWeek,
-                          );
-                        }}
-                        options={hourList}
-                        defaultValue={hourList[0]}
-                      />
-                      :
-                      <Select
-                        onChange={(newValue) => {
-                          onChangeMinute(
-                            newValue?.value as string,
-                            'finish',
-                            schedule.dayWeek,
-                          );
-                        }}
-                        options={minuteList}
-                        defaultValue={minuteList[0]}
-                      />
-                    </div>
-                  </ScheduleTimeDiv>
-                ))}
-              </ScheduleTimeWrapper>
-            </FormItemDiv>
-          )}
-          <FormItemDiv error={ruleErr} textareaHeight="8.5">
-            <label>스터디 규칙</label>
-            <TextareaAutosize
-              placeholder="스터디 규칙을 작성해주세요"
-              value={rule}
-              onChange={onChangeRule}
+                    &times;
+                  </div>
+                </NameTagDiv>
+              ))}
+            </NameTagWrapper>
+          </FormItem>
+        )}
+        {inviteesErr && (
+          <FormItem emptyLabel>
+            <label />
+            <ErrorMsg style={{ marginTop: '-0.2rem' }}>
+              {inviteesErrMsg}
+            </ErrorMsg>
+          </FormItem>
+        )}
+        <FormItem>
+          <label>스터디 시작일</label>
+          <DatePicker
+            selectedDate={startDate}
+            onChange={(date) => {
+              if (
+                dayjs(date).isBefore(
+                  dayjs().hour(0).minute(0).second(0).millisecond(0),
+                )
+              ) {
+                toast.error('오늘 이후의 날짜만 선택할 수 있습니다.');
+                return;
+              }
+              setStartDate(date);
+            }}
+            error={startDateErr}
+          />
+        </FormItem>
+        <FormItem>
+          <label>스터디 요일</label>
+          <div>
+            <DaysWrapper>
+              {days.map((day, i) => (
+                <DayDiv
+                  key={i}
+                  selected={selectedDaysMap[i]}
+                  onClick={() => {
+                    onClickDay(i);
+                  }}
+                >
+                  {day}
+                </DayDiv>
+              ))}
+            </DaysWrapper>
+            {scheduleErr && <ErrorMsg>{scheduleErrMsg}</ErrorMsg>}
+          </div>
+        </FormItem>
+        {!isEmpty(scheduleList) && (
+          <FormItem>
+            <label>스터디 시간</label>
+            <ScheduleTimeWrapper>
+              {scheduleList.map((schedule) => (
+                <ScheduleTimeDiv key={schedule.dayWeek}>
+                  <span>{getDayString(schedule.dayWeek)}</span>
+                  <div>
+                    <Select
+                      onChange={(newValue) => {
+                        onChangeHour(
+                          newValue?.value as string,
+                          'start',
+                          schedule.dayWeek,
+                        );
+                      }}
+                      options={hourList}
+                      defaultValue={hourList[0]}
+                    />
+                    :
+                    <Select
+                      onChange={(newValue) => {
+                        onChangeMinute(
+                          newValue?.value as string,
+                          'start',
+                          schedule.dayWeek,
+                        );
+                      }}
+                      options={minuteList}
+                      defaultValue={minuteList[0]}
+                    />
+                  </div>
+                  ~
+                  <div>
+                    <Select
+                      onChange={(newValue) => {
+                        onChangeHour(
+                          newValue?.value as string,
+                          'finish',
+                          schedule.dayWeek,
+                        );
+                      }}
+                      options={hourList}
+                      defaultValue={hourList[0]}
+                    />
+                    :
+                    <Select
+                      onChange={(newValue) => {
+                        onChangeMinute(
+                          newValue?.value as string,
+                          'finish',
+                          schedule.dayWeek,
+                        );
+                      }}
+                      options={minuteList}
+                      defaultValue={minuteList[0]}
+                    />
+                  </div>
+                </ScheduleTimeDiv>
+              ))}
+            </ScheduleTimeWrapper>
+          </FormItem>
+        )}
+        <FormItem error={ruleErr} textareaHeight="8.5">
+          <label>스터디 규칙</label>
+          <TextareaAutosize
+            placeholder="스터디 규칙을 작성해주세요"
+            value={rule}
+            onChange={onChangeRule}
+          />
+        </FormItem>
+        <FormItem>
+          <label>벌금 여부</label>
+          <CostWrapper>
+            <CustomSwitch
+              checked={costFlag}
+              onChange={() => {
+                setCostFlag((prev) => !prev);
+              }}
             />
-          </FormItemDiv>
-          <FormItemDiv>
-            <label>벌금 여부</label>
-            <CostWrapper>
-              <CustomSwitch
-                checked={costFlag}
-                onChange={() => {
-                  setCostFlag((prev) => !prev);
-                }}
-              />
-              {costFlag && (
-                <>
-                  <div>
-                    <label>지각 벌금</label>
-                    <Select
-                      onChange={onChangeLateCost}
-                      options={costList}
-                      defaultValue={costList[2]}
-                    />
-                  </div>
-                  <div>
-                    <label>불참 벌금</label>
-                    <Select
-                      onChange={onChangeAbsenceCost}
-                      options={costList}
-                      defaultValue={costList[2]}
-                    />
-                  </div>
-                </>
-              )}
-            </CostWrapper>
-          </FormItemDiv>
-          {costFlag && (
-            <FormItemDiv>
-              <label>지각 기준 시간</label>
-              <CostWrapper>
+            {costFlag && (
+              <>
                 <div>
-                  <label>스터디 시작</label>
+                  <label>지각 벌금</label>
                   <Select
-                    onChange={onChangeAllowedTime}
-                    options={allowedTimeList}
-                    defaultValue={allowedTimeList[1]}
+                    onChange={onChangeLateCost}
+                    options={costList}
+                    defaultValue={costList[2]}
                   />
                 </div>
-              </CostWrapper>
-            </FormItemDiv>
-          )}
-        </CreateForm>
-        <Button onClick={onClickCreateButton}>생성하기</Button>
-      </Container>
-    </Layout>
+                <div>
+                  <label>불참 벌금</label>
+                  <Select
+                    onChange={onChangeAbsenceCost}
+                    options={costList}
+                    defaultValue={costList[2]}
+                  />
+                </div>
+              </>
+            )}
+          </CostWrapper>
+        </FormItem>
+        {costFlag && (
+          <FormItem>
+            <label>지각 기준 시간</label>
+            <CostWrapper>
+              <div>
+                <label>스터디 시작</label>
+                <Select
+                  onChange={onChangeAllowedTime}
+                  options={allowedTimeList}
+                  defaultValue={allowedTimeList[1]}
+                />
+              </div>
+            </CostWrapper>
+          </FormItem>
+        )}
+      </CreateForm>
+      <Button onClick={onClickCreateButton}>생성하기</Button>
+    </Container>
   );
 }
 

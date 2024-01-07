@@ -23,9 +23,8 @@ import { timeStringFormatter } from 'utils/formatter';
  */
 function TodaySchedule({ groupId }: { groupId: number }) {
   // 오늘의 스터디 일정 정보
-  const userId = 1; //임시
   const { data: todaySchedule, mutate: mutateTodaySchedule } =
-    useSWR<ITodayStudy>(`/schedules/${groupId}/${userId}`, fetcher);
+    useSWR<ITodayStudy>(`/schedules/today/${groupId}`, fetcher);
 
   const [showLateInfo, setShowLateInfo] = useState(false);
   const [showAttendInfo, setShowAttendInfo] = useState(false);
@@ -120,7 +119,7 @@ function TodaySchedule({ groupId }: { groupId: number }) {
 
   const requestAttendance = useRequest<boolean>(attendanceGroup);
   const onClickAttendance = useCallback(() => {
-    requestAttendance(groupId, userId)
+    requestAttendance(groupId)
       .then(() => {
         toast.success('출석을 완료하였습니다.');
         mutateTodaySchedule();
@@ -135,7 +134,9 @@ function TodaySchedule({ groupId }: { groupId: number }) {
       <TodayDate>
         {`${dayjs().format('YYYY년 M월 D일')} (${getDay(dayjs())})`}
       </TodayDate>
-      {todaySchedule && (
+      {todaySchedule === undefined ? (
+        <TodayStudy>{'오늘은 스터디가 없습니다 :)'}</TodayStudy>
+      ) : (
         <TodayStudy>
           {!todaySchedule.isStudyDay || !todaySchedule.startTime ? (
             '오늘은 스터디가 없습니다 :)'

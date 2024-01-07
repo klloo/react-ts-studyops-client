@@ -1,4 +1,4 @@
-import Modal from 'components/Modal';
+import Modal from 'layouts/Modal';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Container,
@@ -76,34 +76,36 @@ function BatchSettlePopup({
     if (!penaltyInfo) return;
     const penaltyInfoMap: { [name: string]: IBatchPenaltyInfo } = {};
     penaltyInfo.lateMembers.forEach((item) => {
-      const { penaltyId, name } = item;
-      if (!penaltyInfoMap[name]) {
-        penaltyInfoMap[name] = {
+      const { penaltyId, nickName } = item;
+      if (!penaltyInfoMap[nickName]) {
+        penaltyInfoMap[nickName] = {
           isSettled: false,
-          name: item.name,
+          nickName: item.nickName,
           penaltyIds: [],
           penaltyCount: 0,
           penaltyCost: 0,
+          profileImageUrl: item.profileImageUrl,
         };
       }
-      penaltyInfoMap[name].penaltyIds.push(penaltyId);
-      penaltyInfoMap[name].penaltyCount += 1;
-      penaltyInfoMap[name].penaltyCost += penaltyInfo.lateCost;
+      penaltyInfoMap[nickName].penaltyIds.push(penaltyId);
+      penaltyInfoMap[nickName].penaltyCount += 1;
+      penaltyInfoMap[nickName].penaltyCost += penaltyInfo.lateCost;
     });
     penaltyInfo.absentMembers.forEach((item) => {
-      const { penaltyId, name } = item;
-      if (!penaltyInfoMap[name]) {
-        penaltyInfoMap[name] = {
+      const { penaltyId, nickName } = item;
+      if (!penaltyInfoMap[nickName]) {
+        penaltyInfoMap[nickName] = {
           isSettled: false,
-          name: item.name,
+          nickName: item.nickName,
           penaltyIds: [],
           penaltyCount: 0,
           penaltyCost: 0,
+          profileImageUrl: item.profileImageUrl,
         };
       }
-      penaltyInfoMap[name].penaltyIds.push(penaltyId);
-      penaltyInfoMap[name].penaltyCount += 1;
-      penaltyInfoMap[name].penaltyCost += penaltyInfo.absentCost;
+      penaltyInfoMap[nickName].penaltyIds.push(penaltyId);
+      penaltyInfoMap[nickName].penaltyCount += 1;
+      penaltyInfoMap[nickName].penaltyCost += penaltyInfo.absentCost;
     });
     setBatchPenaltyInfo(Object.values(penaltyInfoMap));
   }, [penaltyInfo]);
@@ -167,11 +169,14 @@ function BatchSettlePopup({
               <div>
                 {!isEmpty(batchPenaltyInfo) && !isEmpty(penaltyInfo) && (
                   <>
-                    {batchPenaltyInfo.map((mem) => (
+                    {batchPenaltyInfo.map((mem, i) => (
                       <BatchMemberItem
-                        key={mem.name}
+                        key={i}
                         cost={mem.penaltyCost}
-                        penaltyMember={{ name: mem.name }}
+                        penaltyMember={{
+                          name: mem.nickName,
+                          url: mem.profileImageUrl,
+                        }}
                         settle={() => {
                           settleProc(mem.penaltyIds);
                         }}

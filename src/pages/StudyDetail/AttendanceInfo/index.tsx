@@ -29,8 +29,9 @@ import useRequest from 'hooks/useRequest';
 import { modifyAccount } from 'api/group';
 import { toast } from 'react-toastify';
 import SettleCalendar from './SettleCalendar';
-import ProfileImage from 'components/ProfileImage';
+// import ProfileImage from 'components/ProfileImage';
 import { GRAPH_MODE } from 'utils/constants';
+import ProfileAvatar from 'components/ProfileAvatar';
 
 function AttendanceInfo({
   groupId,
@@ -83,7 +84,7 @@ function AttendanceInfo({
 
   // 납부 계좌 정보 등록
   const requestModify = useRequest<boolean>(modifyAccount);
-  const modifyAccountProc = useCallback((accout: string) => {
+  const modifyAccountProc = useCallback((accout: string | null) => {
     requestModify(groupId, accout)
       .then(() => {
         onClosePopup();
@@ -153,30 +154,32 @@ function AttendanceInfo({
         <FlexWrapper column={totalNotSettled <= 0}>
           <div>
             {!noPenalty && (
-              <TopWrapper>
+              <>
+                <TopWrapper>
+                  <ButtonWrapper>
+                    <GraphButton
+                      selected={graphMode === GRAPH_MODE.PENALTY}
+                      onClick={() => {
+                        setGraphMode(GRAPH_MODE.PENALTY);
+                      }}
+                    >
+                      벌금
+                    </GraphButton>
+                    <GraphButton
+                      selected={graphMode === GRAPH_MODE.ATTENDANCE}
+                      onClick={() => {
+                        setGraphMode(GRAPH_MODE.ATTENDANCE);
+                      }}
+                    >
+                      출결
+                    </GraphButton>
+                  </ButtonWrapper>
+                </TopWrapper>
                 <InfoText>
                   {graphMode === GRAPH_MODE.PENALTY &&
                     '납부된 벌금의 누적합으로 계산된 그래프입니다.'}
                 </InfoText>
-                <ButtonWrapper>
-                  <GraphButton
-                    selected={graphMode === GRAPH_MODE.PENALTY}
-                    onClick={() => {
-                      setGraphMode(GRAPH_MODE.PENALTY);
-                    }}
-                  >
-                    벌금
-                  </GraphButton>
-                  <GraphButton
-                    selected={graphMode === GRAPH_MODE.ATTENDANCE}
-                    onClick={() => {
-                      setGraphMode(GRAPH_MODE.ATTENDANCE);
-                    }}
-                  >
-                    출결
-                  </GraphButton>
-                </ButtonWrapper>
-              </TopWrapper>
+              </>
             )}
             {attendanceInfo && penaltyInfo && (
               <ChartWrapper>
@@ -188,10 +191,11 @@ function AttendanceInfo({
               </ChartWrapper>
             )}
           </div>
-          {penaltyInfo && !noPenalty && (
+          {!noPenalty && (
             <div>
               <TotalPenaltyInfo>
-                <span>총</span> {costFormatter(penaltyInfo.totalFine)}
+                <span>총</span>{' '}
+                {costFormatter(penaltyInfo ? penaltyInfo.totalFine : 0)}
               </TotalPenaltyInfo>
               {totalNotSettled > 0 && (
                 <>
@@ -199,15 +203,16 @@ function AttendanceInfo({
                     아직 {costFormatter(totalNotSettled)}원이 정산되지 않았어요
                   </NotSettledInfoButton>
                   <NotSettledWrapper>
-                    {penaltyInfo?.notSettledPenalties.map((item) => (
-                      <div key={item.name}>
+                    {penaltyInfo?.notSettledPenalties.map((item, i) => (
+                      <div key={i}>
                         <ProfileWrapper>
-                          <ProfileImage
-                            url="https://static.solved.ac/misc/360x360/default_profile.png"
+                          {/* <ProfileImage
                             width="35"
                             height="35"
-                          />
-                          <div>{item.name}</div>
+                            url={item.profileImageUrl}
+                          /> */}
+                          <ProfileAvatar size={40} nickName={item.nickName} />
+                          <div>{item.nickName}</div>
                         </ProfileWrapper>
                         <div>{costFormatter(item.penalty)}원</div>
                       </div>

@@ -40,7 +40,7 @@ function Charts({
       {
         name: 'Penalty',
         data: penaltyInfo.settledPenalties.map(
-          (item: { name: string; penalty: number }) => item.penalty || 0,
+          (item: { nickName: string; penalty: number }) => item.penalty || 0,
         ),
         color: '#8D4BF6',
       },
@@ -67,7 +67,7 @@ function Charts({
   useEffect(() => {
     if (isEmpty(penaltySeries) || !penaltyInfo) return;
     const users = penaltyInfo.settledPenalties.map(
-      (item: { name: string; penalty: number }) => item.name,
+      (item: { nickName: string; penalty: number }) => item.nickName,
     );
     setPenaltyOptions({
       credits: {

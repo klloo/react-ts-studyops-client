@@ -8,13 +8,14 @@ import { IoMenuOutline } from 'react-icons/io5';
 import { FaRegClock } from 'react-icons/fa';
 import { MdCreditCard } from 'react-icons/md';
 import { ContentTitle } from '../style';
+import SkeletonComponent from './SkeletonComponent';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function StudyInfo({ groupId, isHost }: { groupId: number; isHost: boolean }) {
   // 스터디 기본 정보
   const { data: studyInfo } = useSWR<IStudy>(`/info/${groupId}`, fetcher);
-  if (!studyInfo) {
-    return null;
+  if (studyInfo === undefined) {
+    return <SkeletonComponent />;
   }
   return (
     <Container>

@@ -20,15 +20,15 @@ import Schedule from 'components/Schedule';
 import CustomSwitch from 'components/CustomSwitch';
 import useRequest from 'hooks/useRequest';
 import { attendanceVoteGroup } from 'api/schedule';
-import ProfileImage from 'components/ProfileImage';
+// import ProfileImage from 'components/ProfileImage';
 import { toast } from 'react-toastify';
+import ProfileAvatar from 'components/ProfileAvatar';
 
 /**
  * 스터디 상세화면의 일정 탭 내용
  */
 function StudySchedule({ groupId }: { groupId: number }) {
   // 임시
-  const userId = 1;
   const [selectDate, setSelectDate] = useState(dayjs());
   const [schedule, setSchedules] = useState<IStudySchedule[]>([]);
   // 스터디 스케줄 로드
@@ -39,9 +39,9 @@ function StudySchedule({ groupId }: { groupId: number }) {
   // 선택한 날짜의 스터디 참석 여부 조회
   const { data: attendanceInfo, mutate: mutateAttendance } =
     useSWR<IAttendance>(
-      `/schedules/attendances/${groupId}/${userId}?date=${dayjs(
-        selectDate,
-      ).format('YYYY-MM-DD')}`,
+      `/schedules/attendances/${groupId}?date=${dayjs(selectDate).format(
+        'YYYY-MM-DD',
+      )}`,
       fetcher,
     );
 
@@ -58,6 +58,7 @@ function StudySchedule({ groupId }: { groupId: number }) {
         attendance: true,
         startDate: scheduleInfo.startDate,
         color: getScheduleColor(groupId),
+        studyIdx: groupId,
       }),
     );
     setStudySchedules(scheduleList);
@@ -78,7 +79,6 @@ function StudySchedule({ groupId }: { groupId: number }) {
     }
     requestAttendanceVote(
       groupId,
-      userId,
       dayjs(selectDate).format('YYYY-MM-DD'),
       !attendanceInfo?.isAttended,
     )
@@ -88,7 +88,7 @@ function StudySchedule({ groupId }: { groupId: number }) {
       .catch((e) => {
         console.error(e);
       });
-  }, [attendanceInfo, groupId, userId]);
+  }, [attendanceInfo, groupId]);
 
   return (
     <div>
@@ -131,12 +131,13 @@ function StudySchedule({ groupId }: { groupId: number }) {
                       {attendanceInfo.attendMemberList.length > 0 ? (
                         attendanceInfo.attendMemberList.map((user, i) => (
                           <div key={i}>
-                            <ProfileImage
+                            {/* <ProfileImage
                               width="30"
                               height="30"
-                              url="https://static.solved.ac/misc/360x360/default_profile.png"
-                            />
-                            <div>{user}</div>
+                              url={user.profileImageUrl}
+                            /> */}
+                            <ProfileAvatar size={40} nickName={user.nickName} />
+                            <div>{user.nickName}</div>
                           </div>
                         ))
                       ) : (
@@ -150,12 +151,13 @@ function StudySchedule({ groupId }: { groupId: number }) {
                       {attendanceInfo.absenceMemberList.length > 0 ? (
                         attendanceInfo.absenceMemberList.map((user, i) => (
                           <div key={i}>
-                            <ProfileImage
+                            {/* <ProfileImage
                               width="30"
                               height="30"
-                              url="https://static.solved.ac/misc/360x360/default_profile.png"
-                            />
-                            <div>{user}</div>
+                              url={user.profileImageUrl}
+                            /> */}
+                            <ProfileAvatar size={40} nickName={user.nickName} />
+                            <div>{user.nickName}</div>
                           </div>
                         ))
                       ) : (

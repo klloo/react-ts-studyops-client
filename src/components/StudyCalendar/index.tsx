@@ -17,7 +17,6 @@ import ScheduleDot from 'components/ScheduleDot';
 import { MdArrowBackIos } from 'react-icons/md';
 import { MdArrowForwardIos } from 'react-icons/md';
 import { IStudyCalendarProps, IStudySchedule } from 'types/calendar';
-import { JSX } from 'react/jsx-runtime';
 
 /**
  * 스터디 달력 컴포넌트
@@ -48,13 +47,14 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
     curSchedule = curSchedule?.filter((schedule) => {
       if (!schedule.finishDate) {
         return (
-          dayjs(schedule.finishDate).isAfter(dayjs()) ||
-          dayjs(schedule.finishDate).isSame(dayjs())
+          dayjs(schedule.startDate).isBefore(dayjs()) ||
+          dayjs(schedule.startDate).isSame(dayjs())
         );
       }
       return (
-        dayjs(schedule.startDate).isBefore(dayjs()) &&
-        (dayjs(schedule.finishDate).isAfter(dayjs()) ||
+        (dayjs(schedule.startDate).isBefore(dayjs()) ||
+          dayjs(schedule.startDate).isSame(dayjs())) &&
+        (dayjs(schedule.finishDate).isAfter(dayjs(dayjs())) ||
           dayjs(schedule.finishDate).isSame(dayjs()))
       );
     });
@@ -74,120 +74,10 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
     [],
   );
   // 보여질 날짜
-  const [viewDate, setViewDate] = useState(dayjs());
-
-  const createCalendar = () => {
-    const startWeek = viewDate.startOf('month').week();
-    const endWeek =
-      viewDate.endOf('month').week() === 1
-        ? 53
-        : viewDate.endOf('month').week();
-    const calender: JSX.Element[] = [];
-
-    Array.from(
-      { length: endWeek - startWeek + 1 },
-      (_, index) => startWeek + index,
-    ).forEach((week) => {
-      calender.push(
-        <WeekDiv key={week}>
-          {Array(7)
-            .fill(0)
-            .map((n, i) => {
-              const current = viewDate
-                .week(week)
-                .startOf('week')
-                .add(n + i, 'day');
-              // 현재 날짜
-              const isSelected =
-                selectDate.format('YYYYMMDD') === current.format('YYYYMMDD')
-                  ? 'selected'
-                  : '';
-              const isToday =
-                dayjs().format('YYYYMMDD') === current.format('YYYYMMDD')
-                  ? 'today'
-                  : '';
-              const isNone =
-                current.format('MM') === viewDate.format('MM') ? '' : 'none';
-              const currentDay = current.format('d');
-              return (
-                <div key={`${week}_${i}`}>
-                  <DayNumberDiv sun={currentDay == '0'} num>
-                    <div
-                      className={`${isSelected} ${isToday} ${isNone}`}
-                      onClick={() => {
-                        setSelectDate(current);
-                        if (setSelectSchedules) {
-                          let curSchedule = schedulesInfo[currentDay];
-                          curSchedule = curSchedule?.filter((schedule) => {
-                            if (!schedule.finishDate) {
-                              return (
-                                dayjs(schedule.startDate).isBefore(
-                                  selectDate,
-                                ) ||
-                                dayjs(schedule.startDate).isSame(selectDate)
-                              );
-                            }
-                            return (
-                              (dayjs(schedule.startDate).isBefore(selectDate) ||
-                                dayjs(schedule.startDate).isSame(selectDate)) &&
-                              (dayjs(schedule.finishDate).isAfter(
-                                dayjs(selectDate),
-                              ) ||
-                                dayjs(schedule.finishDate).isSame(dayjs()))
-                            );
-                          });
-                          setSelectSchedules(curSchedule);
-                        }
-                      }}
-                    >
-                      <DateBoxDiv>
-                        {current.format('D')}
-                        <ScheduleWrapper>
-                          {!isEmpty(schedulesInfo[currentDay]) &&
-                            schedulesInfo[currentDay].map(
-                              (
-                                item: IStudySchedule,
-                                i: React.Key | null | undefined,
-                              ) => {
-                                // 시작일 이후의 일정만 표시
-                                if (
-                                  dayjs(item.startDate).isBefore(current) ||
-                                  dayjs(item.startDate).isSame(current)
-                                ) {
-                                  // 종료일이 있다면 종료일 이전의 일정만 표시
-                                  if (item.finishDate) {
-                                    if (
-                                      dayjs(current).isBefore(
-                                        item.finishDate,
-                                      ) ||
-                                      dayjs(item.finishDate).isSame(current)
-                                    )
-                                      return (
-                                        <ScheduleDot
-                                          key={i}
-                                          color={item.color}
-                                        />
-                                      );
-                                  } else {
-                                    return (
-                                      <ScheduleDot key={i} color={item.color} />
-                                    );
-                                  }
-                                }
-                              },
-                            )}
-                        </ScheduleWrapper>
-                      </DateBoxDiv>
-                    </div>
-                  </DayNumberDiv>
-                </div>
-              );
-            })}
-        </WeekDiv>,
-      );
-    });
-    return calender;
-  };
+  const [viewDate, setViewDate] = useState(dayjs().startOf('month'));
+  const startWeek = viewDate.startOf('month').week();
+  const endWeek =
+    viewDate.endOf('month').week() === 1 ? 53 : viewDate.endOf('month').week();
 
   const changeMonth = (date: unknown, changeString: string) => {
     switch (changeString) {
@@ -196,7 +86,7 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
       case 'subtract':
         return setViewDate(viewDate.subtract(1, 'month'));
       case 'today':
-        return setViewDate(dayjs());
+        return setViewDate(dayjs().startOf('month'));
       default:
         return date;
     }
@@ -223,7 +113,117 @@ export const StudyCalendar: FC<IStudyCalendarProps> = ({
             </div>
           ))}
         </WeekDiv>
-        <CalendarContentDiv>{createCalendar()}</CalendarContentDiv>
+        <CalendarContentDiv>
+          {Array.from(
+            { length: endWeek - startWeek + 1 },
+            (_, index) => startWeek + index,
+          ).map((week) => (
+            <WeekDiv key={week}>
+              {Array(7)
+                .fill(0)
+                .map((n, i) => {
+                  const current = viewDate
+                    .week(week)
+                    .startOf('week')
+                    .add(n + i, 'day');
+                  // 현재 날짜
+                  const isSelected =
+                    selectDate.format('YYYYMMDD') === current.format('YYYYMMDD')
+                      ? 'selected'
+                      : '';
+                  const isToday =
+                    dayjs().format('YYYYMMDD') === current.format('YYYYMMDD')
+                      ? 'today'
+                      : '';
+                  const isNone =
+                    current.format('MM') === viewDate.format('MM')
+                      ? ''
+                      : 'none';
+                  const currentDay = current.format('d');
+                  return (
+                    <div key={`${week}_${i}`}>
+                      <DayNumberDiv sun={currentDay == '0'} num>
+                        <div
+                          className={`${isSelected} ${isToday} ${isNone}`}
+                          onClick={() => {
+                            setSelectDate(current);
+                            if (setSelectSchedules) {
+                              let curSchedule = schedulesInfo[currentDay];
+                              curSchedule = curSchedule?.filter((schedule) => {
+                                if (!schedule.finishDate) {
+                                  return (
+                                    dayjs(schedule.startDate).isBefore(
+                                      current,
+                                    ) ||
+                                    dayjs(schedule.startDate).isSame(current)
+                                  );
+                                }
+                                return (
+                                  (dayjs(schedule.startDate).isBefore(
+                                    current,
+                                  ) ||
+                                    dayjs(schedule.startDate).isSame(
+                                      current,
+                                    )) &&
+                                  (dayjs(schedule.finishDate).isAfter(
+                                    dayjs(current),
+                                  ) ||
+                                    dayjs(schedule.finishDate).isSame(dayjs()))
+                                );
+                              });
+                              setSelectSchedules(curSchedule);
+                            }
+                          }}
+                        >
+                          <DateBoxDiv>
+                            {current.format('D')}
+                            <ScheduleWrapper>
+                              {!isEmpty(schedulesInfo[currentDay]) &&
+                                schedulesInfo[currentDay].map(
+                                  (
+                                    item: IStudySchedule,
+                                    i: React.Key | null | undefined,
+                                  ) => {
+                                    // 시작일 이후의 일정만 표시
+                                    if (
+                                      dayjs(item.startDate).isBefore(current) ||
+                                      dayjs(item.startDate).isSame(current)
+                                    ) {
+                                      // 종료일이 있다면 종료일 이전의 일정만 표시
+                                      if (item.finishDate) {
+                                        if (
+                                          dayjs(current).isBefore(
+                                            item.finishDate,
+                                          ) ||
+                                          dayjs(item.finishDate).isSame(current)
+                                        )
+                                          return (
+                                            <ScheduleDot
+                                              key={i}
+                                              color={item.color}
+                                            />
+                                          );
+                                      } else {
+                                        return (
+                                          <ScheduleDot
+                                            key={i}
+                                            color={item.color}
+                                          />
+                                        );
+                                      }
+                                    }
+                                  },
+                                )}
+                            </ScheduleWrapper>
+                          </DateBoxDiv>
+                        </div>
+                      </DayNumberDiv>
+                    </div>
+                  );
+                })}
+            </WeekDiv>
+          ))}
+        </CalendarContentDiv>
       </CalendarContentDiv>
     </Container>
   );

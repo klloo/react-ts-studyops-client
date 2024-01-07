@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './config';
 import { ResponseType } from 'types/common';
 import { IStudy } from 'types/db';
 
@@ -7,34 +7,28 @@ const PREFIX_URL = '/asks';
 /**
  * 초대받은 스터디 목록을 조회한다.
  */
-export function getAskGroupList(id: number): Promise<{
+export function getAskGroupList(): Promise<{
   data: ResponseType<IStudy[]>;
 }> {
-  return axios.get(`${PREFIX_URL}/${id}`);
+  return axios.get(`${PREFIX_URL}`);
 }
 
 /**
  * 초대받은 스터디를 수락한다.
  */
-export function acceptAsk(
-  groupId: number,
-  userId: number,
-): Promise<{
+export function acceptAsk(groupId: number): Promise<{
   data: ResponseType<never>;
 }> {
-  return axios.post(`${PREFIX_URL}/responses/${groupId}/${userId}`);
+  return axios.post(`${PREFIX_URL}/responses/${groupId}`);
 }
 
 /**
  * 초대받은 스터디를 거절한다.
  */
-export function rejectAsk(
-  groupId: number,
-  userId: number,
-): Promise<{
+export function rejectAsk(groupId: number): Promise<{
   data: ResponseType<never>;
 }> {
-  return axios.patch(`${PREFIX_URL}/responses/${groupId}/${userId}`);
+  return axios.patch(`${PREFIX_URL}/responses/${groupId}`);
 }
 
 /**

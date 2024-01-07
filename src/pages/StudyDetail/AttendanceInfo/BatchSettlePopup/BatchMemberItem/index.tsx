@@ -1,25 +1,23 @@
 import React from 'react';
 import { ProfileWrapper, CostWrapper, Container, SettleButton } from './style';
-import ProfileImage from 'components/ProfileImage';
+// import ProfileImage from 'components/ProfileImage';
 import { costFormatter } from 'utils/formatter';
+import ProfileAvatar from 'components/ProfileAvatar';
 
 function BatchMemberItem({
   penaltyMember,
   cost,
   settle,
 }: {
-  penaltyMember: { name: string; url?: string };
+  penaltyMember: { name: string; url: string | null };
   cost: number;
   settle: () => void;
 }) {
   return (
     <Container>
       <ProfileWrapper>
-        <ProfileImage
-          url="https://static.solved.ac/misc/360x360/default_profile.png"
-          width="35"
-          height="35"
-        />
+        {/* <ProfileImage width="35" height="35" /> */}
+        <ProfileAvatar size={40} nickName={penaltyMember.name} />
         <div>{penaltyMember.name}</div>
       </ProfileWrapper>
       <CostWrapper>
