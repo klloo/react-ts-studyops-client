@@ -89,3 +89,24 @@ export interface IAttendanceInfo {
   absentCount: number;
   lateCount: number;
 }
+
+export interface IPagingPostData<T> {
+  studyPostDtoList: T[];
+  total: number;
+}
+
+export interface IPost {
+  postId: number;
+  title: string;
+  writer: string;
+  contents: string;
+  email: string;
+  date: string;
+  urls?: string[];
+}
+
+export interface ILoginUser {
+  email: string;
+  nickName: string;
+  profileImageUrl: string | null;
+}

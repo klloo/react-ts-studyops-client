@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import ProfileImage from 'components/ProfileImage';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
@@ -24,7 +23,7 @@ import { Button } from 'components/Button';
 import useRequest from 'hooks/useRequest';
 import { updateUserInfo } from 'api/user';
 import { IUserInfo } from 'types/user';
-import ProfileAvatar from 'components/ProfileAvatar';
+import ProfileImage from 'components/ProfileImage';
 import SkeletonComponent from './SkeletonComponent';
 
 function MyPage() {
@@ -164,7 +163,7 @@ function MyPage() {
               }}
               cursor={editMode ? 'pointer' : 'default'}
             /> */}
-            <ProfileAvatar size={65} nickName={userInfo?.nickName || ''} />
+            {/* <ProfileImage size={65} nickName={userInfo?.nickName} /> */}
             {editMode && (
               <>
                 {/* <ProfileInputButton onClick={clickUploadButton}>

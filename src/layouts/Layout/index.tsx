@@ -9,12 +9,12 @@ import {
   UserInfoBox,
 } from './style';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-// import ProfileImage from 'components/ProfileImage';
 import { Button } from 'components/Button';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
 import StudyDeletePopup from './StudyDeletePopup';
-import ProfileAvatar from 'components/ProfileAvatar';
+import ProfileImage from 'components/ProfileImage';
+import { ILoginUser } from 'types/db';
 
 interface LayoutProps {
   children: ReactNode;
@@ -29,11 +29,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [showUserInfoBox, setShowUserInfoBox] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
 
-  const { data: loginUser } = useSWR<{
-    email: string;
-    nickName: string;
-    profileImageUrl: string | null;
-  }>('/users/me', fetcher);
+  const { data: loginUser } = useSWR<ILoginUser>('/users/me', fetcher);
 
   const logout = useCallback(() => {
     localStorage.removeItem('accessToken');
@@ -67,22 +63,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 스터디 생성
               </Button>
             )}
-            {/* <ProfileImage
-              onClick={() => {
-                setShowUserInfoBox(true);
-              }}
-              width="35"
-              height="35"
-              cursor="pointer"
-              url={loginUser?.profileImageUrl}
-            /> */}
-            <ProfileAvatar
+            <ProfileImage
               onClick={() => {
                 setShowUserInfoBox(true);
               }}
               size={40}
               cursor="pointer"
-              nickName={loginUser?.nickName || ''}
+              nickName={loginUser?.nickName}
+              url={loginUser?.profileImageUrl}
             />
           </HeaderSide>
           {showUserInfoBox && (

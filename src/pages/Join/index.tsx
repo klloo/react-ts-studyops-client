@@ -1,20 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Container,
   TitleDiv,
   FormDiv,
   JoinButton,
   FormItemDescDiv,
-  ProfileInputWrapper,
-  ProfileInputButton,
   ErrorMsg,
 } from './style';
 import FormItem from 'components/FormItem';
 import useInput from 'hooks/useInput';
-import ProfileImage from 'components/ProfileImage';
 import { toast } from 'react-toastify';
-import { CiCamera } from 'react-icons/ci';
 import useRequest from 'hooks/useRequest';
 import { signup } from 'api/auth';
 import { useNavigate } from 'react-router-dom';
@@ -25,34 +20,11 @@ function Join() {
   const [nickName, onChangeNickName] = useInput('');
   const [password, onChangePassword] = useInput('');
   const [passwordRe, onChangePasswordRe] = useInput('');
-  const [profileImage, setProfileImage] = useState<File | null>(null);
   const [idErrorMsg, setIdErrorMsg] = useState<string | null>(null);
   const [nickNameErrorMsg, setNickNameErrorMsg] = useState<string | null>(null);
   const [passwordErrorMsg, setPasswordErrorMsg] = useState<string | null>(null);
 
   const navigate = useNavigate();
-
-  const [imageSrc, setImageSrc] = useState('');
-  const encodeFileToBase64 = (fileBlob: File) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(fileBlob);
-    setProfileImage(fileBlob);
-
-    return new Promise<void>((resolve) => {
-      reader.onload = () => {
-        if (typeof reader.result === 'string') {
-          setImageSrc(reader.result);
-        }
-        resolve();
-      };
-    });
-  };
-
-  // 파일 업로드 버튼 클릭 핸들러
-  const fileInput = useRef<HTMLInputElement | null>(null);
-  const clickUploadButton = useCallback(() => {
-    fileInput.current?.click();
-  }, []);
 
   const validate = useCallback(() => {
     let valid = true;
@@ -108,7 +80,6 @@ function Join() {
       email: id,
       password,
       nickName,
-      // profileImage,
     };
     requestJoin(userInfo)
       .then(() => {
@@ -126,45 +97,13 @@ function Join() {
           toast.error('회원가입에 실패하였습니다.');
         }
       });
-  }, [id, password, passwordRe, nickName, profileImage]);
+  }, [id, password, passwordRe, nickName]);
 
   return (
     <Container>
       <BackIcon />
       <TitleDiv>회원가입</TitleDiv>
       <FormDiv>
-        {/*
-        <ProfileInputWrapper>
-          <ProfileImage
-            width="100"
-            height="100"
-            url={imageSrc ? imageSrc : null}
-            onClick={clickUploadButton}
-            cursor="pointer"
-          />
-          <ProfileInputButton onClick={clickUploadButton}>
-            <CiCamera />
-          </ProfileInputButton>
-          <input
-            type="file"
-            id="image"
-            accept="image/*"
-            ref={fileInput}
-            onChange={(e) => {
-              const selectedFile = e.target.files && e.target.files[0];
-              if (
-                selectedFile?.type == 'image/png' ||
-                selectedFile?.type == 'image/jpeg' ||
-                selectedFile?.type == 'image/jpg'
-              ) {
-                encodeFileToBase64(selectedFile);
-              } else {
-                toast.error('png, jpg, jpeg 파일만 업로드할 수 있습니다.');
-              }
-            }}
-          />
-        </ProfileInputWrapper>
-      */}
         <FormItem flexDirection="column" error={idErrorMsg !== null}>
           <label>이메일</label>
           <input

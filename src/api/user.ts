@@ -24,3 +24,12 @@ export function updatePassword(password: {
 }> {
   return axios.patch(`${PREFIX_URL}/me`, password);
 }
+
+/**
+ * 사용자 프로필 이미지를 수정한다.
+ */
+export function updateProfileImage(formData: FormData): Promise<{
+  data: ResponseType<boolean>;
+}> {
+  return axios.patch(`${PREFIX_URL}/me/images`, formData);
+}
