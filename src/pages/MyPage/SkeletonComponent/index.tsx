@@ -9,6 +9,7 @@ import {
   RowWrapper,
   Layout,
 } from './style';
+import gravatar from 'gravatar';
 
 function SkeletonComponent() {
   return (
@@ -16,7 +17,13 @@ function SkeletonComponent() {
       <Container>
         <TitleDiv>내 정보</TitleDiv>
         <UserProfileInfo>
-          <ProfileImage size={65} />
+          <ProfileImage
+            size={65}
+            url={gravatar.url('default-profile', {
+              s: `65px`,
+              d: 'mm',
+            })}
+          />
           <RowWrapper />
         </UserProfileInfo>
         <ContentDiv>
