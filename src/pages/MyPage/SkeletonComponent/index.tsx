@@ -16,7 +16,7 @@ function SkeletonComponent() {
       <Container>
         <TitleDiv>내 정보</TitleDiv>
         <UserProfileInfo>
-          <ProfileImage width="65" height="65" />
+          <ProfileImage size={65} />
           <RowWrapper />
         </UserProfileInfo>
         <ContentDiv>

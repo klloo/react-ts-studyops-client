@@ -19,7 +19,7 @@ function SkeletonComponent() {
         <DdayTag />
         <StudyTitle />
         <MemberInfoDiv>
-          <ProfileImage width="40" height="40" />
+          <ProfileImage size={40} />
         </MemberInfoDiv>
       </StudyOutlineDiv>
       <DescriptionDiv />
