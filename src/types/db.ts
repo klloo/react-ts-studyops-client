@@ -49,8 +49,8 @@ export interface IStudyScheduleInfo {
 }
 
 export interface IAttendance {
-  attendMemberList: { nickName: string; profileImageUrl: string | null }[];
-  absenceMemberList: { nickName: string; profileImageUrl: string | null }[];
+  attendMemberList: { nickName: string; profileImage: string | null }[];
+  absenceMemberList: { nickName: string; profileImage: string | null }[];
   isAttended: boolean;
 }
 

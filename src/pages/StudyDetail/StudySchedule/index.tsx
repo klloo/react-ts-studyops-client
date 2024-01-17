@@ -144,7 +144,7 @@ function StudySchedule({ groupId }: { groupId: number }) {
                             <ProfileImage
                               size={40}
                               nickName={user.nickName}
-                              url={user.profileImageUrl}
+                              url={user.profileImage}
                             />
                             <div>{user.nickName}</div>
                           </div>
@@ -163,7 +163,7 @@ function StudySchedule({ groupId }: { groupId: number }) {
                             <ProfileImage
                               size={40}
                               nickName={user.nickName}
-                              url={user.profileImageUrl}
+                              url={user.profileImage}
                             />
                             <div>{user.nickName}</div>
                           </div>
