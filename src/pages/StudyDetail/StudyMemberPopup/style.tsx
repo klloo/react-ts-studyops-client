@@ -65,12 +65,11 @@ export const InputWrapper = styled.div`
   gap: 0.5rem;
   align-items: center;
   > input {
-    flex-grow: 1;
+    width: 100%;
     background-color: #fff;
     border: solid 1px var(--color-gray3);
     border-radius: 0.2rem;
     padding: 0.81rem 0.94rem;
-    flex-grow: 1;
     &::placeholder {
       color: var(--color-gray2);
       font-size: 0.875rem;
