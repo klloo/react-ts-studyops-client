@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   ProfileWrapper,
@@ -30,6 +30,11 @@ function MemberItem({
   settle: () => void;
   exempt?: () => void;
 }) {
+  const [checked, setChecked] = useState(penaltyMember.isSettled);
+  useEffect(() => {
+    setChecked(penaltyMember.isSettled);
+  }, [penaltyMember]);
+
   return (
     <Container>
       <ProfileWrapper>
@@ -47,8 +52,11 @@ function MemberItem({
           {isHost ? (
             <>
               <CustomSwitch
-                checked={penaltyMember.isSettled}
-                onChange={settle}
+                checked={checked}
+                onChange={() => {
+                  settle();
+                  setChecked((prev) => !prev);
+                }}
               />
               {exempt && <ExemptButton onClick={exempt}>면제</ExemptButton>}
             </>
