@@ -35,6 +35,8 @@ function MyPage() {
     Omit<IUserInfo, 'password'>
   >(loginUser ? `/users/me/${loginUser.email}` : null, fetcher);
 
+  const [uploading, setUploading] = useState(false);
+
   const [socialLogin, setSocialLogin] = useState<string | null>(null);
   const [email, setEmail] = useState('');
 
@@ -95,6 +97,7 @@ function MyPage() {
     }
     if (userInfo?.nickName === nickName) {
       if (profileImageFile) {
+        setUploading(true);
         const formData = new FormData();
         formData.append('profileImage', profileImageFile);
         await requestImageUpload(formData).catch(() => {
@@ -103,6 +106,7 @@ function MyPage() {
         mutateLoginUser();
         mutateUserInfo();
         setProfileImageFile(null);
+        setUploading(false);
       }
       setEditMode((prev) => !prev);
       return;
@@ -112,6 +116,7 @@ function MyPage() {
       toast.error('사용할 수 없는 닉네임입니다.');
       return;
     }
+    setUploading(true);
     await requestUpdate(newUserInfo).catch((e) => {
       if (e.status === 409) {
         toast.error(e.message);
@@ -129,6 +134,7 @@ function MyPage() {
     }
     mutateUserInfo();
     mutateLoginUser();
+    setUploading(false);
     setEditMode((prev) => !prev);
   }, [
     mutateLoginUser,
@@ -158,6 +164,7 @@ function MyPage() {
                   setProfileImage(userInfo.profileImageUrl || null);
                   setNickName(userInfo.nickName);
                 }}
+                disabled={uploading}
               >
                 취소
               </Button>
@@ -166,8 +173,9 @@ function MyPage() {
                   updateUserInfoProc();
                 }}
                 yesButton
+                disabled={uploading}
               >
-                완료
+                {uploading ? '수정 중...' : '완료'}
               </Button>
             </RowWrapper>
           )}

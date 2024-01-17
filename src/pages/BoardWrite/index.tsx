@@ -41,6 +41,8 @@ function BoardWrite() {
   const [content, onChangeContent] = useInput(''); // 스터디 내용
   const [fileList, setFileList] = useState<File[]>([]); // 파일 목록
 
+  const [uploading, setUploading] = useState(false);
+
   // 유효성 결과 변수들
   const [titleErr, setTitleErr] = useState(false);
   const [contentErr, setContentErr] = useState(false);
@@ -83,6 +85,7 @@ function BoardWrite() {
     fileList.forEach((file) => {
       formData.append('files', file);
     });
+    setUploading(true);
     requestCreate(groupId, formData)
       .then(() => {
         navigate(`/group/${groupId}`);
@@ -90,6 +93,9 @@ function BoardWrite() {
       })
       .catch(() => {
         toast.error('게시글을 작성하지 못하였습니다.');
+      })
+      .finally(() => {
+        setUploading(false);
       });
   };
 
@@ -180,11 +186,12 @@ function BoardWrite() {
           onClick={() => {
             navigate(-1);
           }}
+          disabled={uploading}
         >
           취소
         </Button>
-        <Button onClick={onClickCreateButton} yesButton>
-          작성
+        <Button onClick={onClickCreateButton} yesButton disabled={uploading}>
+          {uploading ? '작성 중...' : '작성'}
         </Button>
       </ButtonWrapper>
     </Container>

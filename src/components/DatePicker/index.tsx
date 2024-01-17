@@ -40,10 +40,12 @@ const DatePicker = ({
         placeholderText="YYYY / MM / DD"
         dayClassName={(d) => {
           if (selectedDate) {
-            return dayjs(d).format('YYYYMMDD') ==
+            if (
+              dayjs(d).format('YYYYMMDD') ==
               dayjs(selectedDate).format('YYYYMMDD')
-              ? 'selectedDay'
-              : dayjs(d).format('YYYYMMDD') == dayjs().format('YYYYMMDD')
+            )
+              return 'selectedDay';
+            return dayjs(d).format('YYYYMMDD') == dayjs().format('YYYYMMDD')
               ? 'today'
               : 'unselectedDay';
           }
