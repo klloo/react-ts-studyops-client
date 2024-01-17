@@ -11,11 +11,10 @@ import {
 import useSWR from 'swr';
 import { IStudy } from 'types/db';
 import fetcher from 'utils/fetcher';
-// import ProfileImage from 'components/ProfileImage';
+import ProfileImage from 'components/ProfileImage';
 import useRequest from 'hooks/useRequest';
 import { inviteMembers } from 'api/ask';
 import useInput from 'hooks/useInput';
-import ProfileAvatar from 'components/ProfileAvatar';
 
 const status: { [key: string]: string } = {
   ACCEPT: '스터디원',
@@ -66,12 +65,11 @@ function StudyMemberPopup({
         <MemberList>
           <div>
             <ProfileWarpper>
-              {/* <ProfileImage
-                width="35"
-                height="35"
+              <ProfileImage
+                size={40}
+                nickName={studyInfo?.hostName}
                 url={studyInfo?.hostProfileImageUrl}
-              /> */}
-              <ProfileAvatar size={40} nickName={studyInfo?.hostName || ''} />
+              />
               <div>{studyInfo?.hostName}</div>
               <img src={`${process.env.PUBLIC_URL}/crown.svg`} alt="icon" />
             </ProfileWarpper>
@@ -81,12 +79,11 @@ function StudyMemberPopup({
             mem.status === 'REJECT' ? null : (
               <div key={mem.nickName}>
                 <ProfileWarpper>
-                  {/* <ProfileImage
-                    width="35"
-                    height="35"
+                  <ProfileImage
+                    size={40}
+                    nickName={mem.nickName}
                     url={mem.profileImageUrl}
-                  /> */}
-                  <ProfileAvatar size={40} nickName={mem.nickName} />
+                  />
                   <div>{mem.nickName}</div>
                 </ProfileWarpper>
                 <StatusDiv>{status[mem.status]}</StatusDiv>

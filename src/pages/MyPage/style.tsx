@@ -140,3 +140,26 @@ export const EditIcon = styled(FaPen)`
   color: var(--color-gray2);
   cursor: pointer;
 `;
+
+export const ProfileInputWrapper = styled.div`
+  position: relative;
+  > input {
+    display: none;
+  }
+`;
+
+export const ProfileInputButton = styled.div`
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border: 1px solid #c6c6c6;
+  bottom: 1px;
+  right: 1px;
+  cursor: pointer;
+`;

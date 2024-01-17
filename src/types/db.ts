@@ -49,8 +49,8 @@ export interface IStudyScheduleInfo {
 }
 
 export interface IAttendance {
-  attendMemberList: { nickName: string; profileImageUrl: string | null }[];
-  absenceMemberList: { nickName: string; profileImageUrl: string | null }[];
+  attendMemberList: { nickName: string; profileImage: string | null }[];
+  absenceMemberList: { nickName: string; profileImage: string | null }[];
   isAttended: boolean;
 }
 
@@ -88,4 +88,25 @@ export interface IAttendanceInfo {
   nickName: string;
   absentCount: number;
   lateCount: number;
+}
+
+export interface IPagingPostData<T> {
+  studyPostDtoList: T[];
+  total: number;
+}
+
+export interface IPost {
+  postId: number;
+  title: string;
+  writer: string;
+  contents: string;
+  email: string;
+  date: string;
+  urls?: string[];
+}
+
+export interface ILoginUser {
+  email: string;
+  nickName: string;
+  profileImageUrl: string | null;
 }

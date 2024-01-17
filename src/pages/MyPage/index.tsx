@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import ProfileImage from 'components/ProfileImage';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
@@ -13,18 +11,20 @@ import {
   RowWrapper,
   ChangePasswordButton,
   Layout,
+  ProfileInputButton,
+  ProfileInputWrapper,
 } from './style';
 import { CiCamera } from 'react-icons/ci';
 import useInput from 'hooks/useInput';
 import { toast } from 'react-toastify';
-import { ProfileInputButton, ProfileInputWrapper } from 'pages/Join/style';
 import ChangePasswordPopup from './ChangePasswordPopup';
 import EditIcon from 'components/EditIcon';
 import { Button } from 'components/Button';
 import useRequest from 'hooks/useRequest';
-import { updateUserInfo } from 'api/user';
+import { updateProfileImage, updateUserInfo } from 'api/user';
 import { IUserInfo } from 'types/user';
-import ProfileAvatar from 'components/ProfileAvatar';
+import ProfileImage from 'components/ProfileImage';
+import SkeletonComponent from './SkeletonComponent';
 
 function MyPage() {
   const { data: loginUser, mutate: mutateLoginUser } = useSWR(
@@ -35,6 +35,8 @@ function MyPage() {
     Omit<IUserInfo, 'password'>
   >(loginUser ? `/users/me/${loginUser.email}` : null, fetcher);
 
+  const [uploading, setUploading] = useState(false);
+
   const [socialLogin, setSocialLogin] = useState<string | null>(null);
   const [email, setEmail] = useState('');
 
@@ -44,31 +46,34 @@ function MyPage() {
   const [showPasswordPopup, setShowPasswordPopup] = useState(false);
 
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  // const requestUpload = useRequest(imageUpload);
-  const imageFileUpload = (fileBlob: File | null) => {
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+
+  const setImageFile = (fileBlob: File | null) => {
     // 이미지 업로드
     if (!fileBlob) return;
-    const formData = new FormData();
-    formData.append('file', fileBlob);
-    // requestUpload(formData)
-    //   .then((data) => {
-    //     setProfileImage(data);
-    //   })
-    //   .catch(() => {
-    //     toast.error('이미지를 업로드하지 못하였습니다.');
-    //   });
+    setProfileImageFile(fileBlob);
+    const reader = new FileReader();
+    reader.readAsDataURL(fileBlob);
+    return new Promise<void>((resolve) => {
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          setProfileImage(reader.result);
+        }
+        resolve();
+      };
+    });
   };
 
   // 파일 업로드 버튼 클릭 핸들러
-  const fileInput = useRef(null);
+  const fileInput = useRef<HTMLInputElement>(null);
   const clickUploadButton = useCallback(() => {
-    // fileInput.current?.click();
+    fileInput.current?.click();
   }, []);
 
   useEffect(() => {
     if (!userInfo) return;
     setNickName(userInfo.nickName || '');
-    setProfileImage(userInfo.image);
+    setProfileImage(userInfo.profileImageUrl);
     const emailDomain = userInfo.email.split('@')[1];
     const splitList = emailDomain.split('.');
     if (splitList.length === 3) {
@@ -80,10 +85,10 @@ function MyPage() {
   }, [userInfo]);
 
   const requestUpdate = useRequest(updateUserInfo);
-  const updateUserInfoProc = useCallback(() => {
+  const requestImageUpload = useRequest(updateProfileImage);
+  const updateUserInfoProc = useCallback(async () => {
     const newUserInfo = {
       nickName: nickName,
-      // photoUrl: profileImage,
     };
     if (!nickName || !nickName.trim()) {
       setNickName(userInfo?.nickName);
@@ -91,27 +96,46 @@ function MyPage() {
       return;
     }
     if (userInfo?.nickName === nickName) {
+      if (profileImageFile) {
+        setUploading(true);
+        const formData = new FormData();
+        formData.append('profileImage', profileImageFile);
+        await requestImageUpload(formData).catch(() => {
+          toast.error('사용자 정보를 수정하지 못하였습니다.');
+        });
+        mutateLoginUser();
+        mutateUserInfo();
+        setProfileImageFile(null);
+        setUploading(false);
+      }
       setEditMode((prev) => !prev);
       return;
     }
-    const nicknamePw = /^user/;
-    if (nicknamePw.test(nickName.trim())) {
+    const nicknameReg = /^user/;
+    if (nicknameReg.test(nickName.trim())) {
       toast.error('사용할 수 없는 닉네임입니다.');
       return;
     }
-    requestUpdate(newUserInfo)
-      .then(() => {
-        mutateUserInfo();
-        mutateLoginUser();
-        setEditMode((prev) => !prev);
-      })
-      .catch((e) => {
-        if (e.status === 409) {
-          toast.error(e.message);
-        } else {
-          toast.error('사용자 정보를 수정하지 못하였습니다.');
-        }
+    setUploading(true);
+    await requestUpdate(newUserInfo).catch((e) => {
+      if (e.status === 409) {
+        toast.error(e.message);
+      } else {
+        toast.error('사용자 정보를 수정하지 못하였습니다.');
+      }
+    });
+    if (profileImageFile) {
+      const formData = new FormData();
+      formData.append('profileImage', profileImageFile);
+      await requestImageUpload(formData).catch(() => {
+        toast.error('사용자 정보를 수정하지 못하였습니다.');
       });
+      setProfileImageFile(null);
+    }
+    mutateUserInfo();
+    mutateLoginUser();
+    setUploading(false);
+    setEditMode((prev) => !prev);
   }, [
     mutateLoginUser,
     mutateUserInfo,
@@ -120,7 +144,12 @@ function MyPage() {
     requestUpdate,
     userInfo?.email,
     userInfo?.nickName,
+    profileImageFile,
   ]);
+
+  if (!userInfo) {
+    return <SkeletonComponent />;
+  }
 
   return (
     <Layout>
@@ -132,9 +161,10 @@ function MyPage() {
               <Button
                 onClick={() => {
                   setEditMode((prev) => !prev);
-                  setProfileImage(userInfo?.image || null);
-                  setNickName(userInfo?.nickName || '');
+                  setProfileImage(userInfo.profileImageUrl || null);
+                  setNickName(userInfo.nickName);
                 }}
+                disabled={uploading}
               >
                 취소
               </Button>
@@ -143,26 +173,27 @@ function MyPage() {
                   updateUserInfoProc();
                 }}
                 yesButton
+                disabled={uploading}
               >
-                완료
+                {uploading ? '수정 중...' : '완료'}
               </Button>
             </RowWrapper>
           )}
         </TitleDiv>
         <UserProfileInfo>
           <ProfileInputWrapper>
-            {/* <ProfileImage
-              width="65"
-              height="65"
+            <ProfileImage
+              size={65}
+              nickName={userInfo?.nickName}
+              url={profileImage}
               onClick={() => {
                 if (editMode) clickUploadButton();
               }}
               cursor={editMode ? 'pointer' : 'default'}
-            /> */}
-            <ProfileAvatar size={65} nickName={userInfo?.nickName || ''} />
+            />
             {editMode && (
               <>
-                {/* <ProfileInputButton onClick={clickUploadButton}>
+                <ProfileInputButton onClick={clickUploadButton}>
                   <CiCamera />
                 </ProfileInputButton>
                 <input
@@ -177,14 +208,14 @@ function MyPage() {
                       selectedFile?.type === 'image/jpeg' ||
                       selectedFile?.type === 'image/jpg'
                     ) {
-                      imageFileUpload(selectedFile);
+                      setImageFile(selectedFile);
                     } else {
                       toast.error(
                         'png, jpg, jpeg 파일만 업로드할 수 있습니다.',
                       );
                     }
                   }}
-                /> */}
+                />
               </>
             )}
           </ProfileInputWrapper>
@@ -198,7 +229,7 @@ function MyPage() {
             </FormItem>
           ) : (
             <RowWrapper>
-              {userInfo && userInfo.nickName}
+              {userInfo.nickName}
               <EditIcon
                 size="11"
                 onClick={() => {
@@ -211,30 +242,31 @@ function MyPage() {
         <ContentDiv>
           <UserDetailInfo>
             <div>
-              <div>닉네임</div> <span>{userInfo && userInfo.nickName}</span>
+              <div>닉네임</div> <span>{userInfo.nickName}</span>
             </div>
             <div>
               <div>이메일</div> <span>{email}</span>
             </div>
-            {socialLogin && (
+            {socialLogin ? (
               <div>
                 <div>소셜 로그인</div>
                 <span>{socialLogin}</span>
               </div>
+            ) : (
+              <div>
+                <div>비밀번호</div>
+                <span>
+                  ••••••••
+                  <ChangePasswordButton
+                    onClick={() => {
+                      setShowPasswordPopup(true);
+                    }}
+                  >
+                    변경하기
+                  </ChangePasswordButton>
+                </span>
+              </div>
             )}
-            <div>
-              <div>비밀번호</div>
-              <span>
-                ••••••••
-                <ChangePasswordButton
-                  onClick={() => {
-                    setShowPasswordPopup(true);
-                  }}
-                >
-                  변경하기
-                </ChangePasswordButton>
-              </span>
-            </div>
           </UserDetailInfo>
         </ContentDiv>
         <ChangePasswordPopup

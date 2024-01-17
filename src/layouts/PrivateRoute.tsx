@@ -1,6 +1,5 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import Layout from './Layout';
 import { isEmpty } from 'lodash';
 
@@ -17,7 +16,6 @@ export default function PrivateRoute({
     // 사용자 인증이 반드시 필요한 페이지
     // 인증을 안했을 경우 메인 페이지로, 했을 경우 해당 페이지로
     if (!isLogin) {
-      toast.error('로그인이 필요한 페이지 입니다.');
       return <Navigate to="/login" />;
     }
     // 인증을 안했을 경우 메인 페이지로, 했을 경우 해당 페이지로

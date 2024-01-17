@@ -12,6 +12,7 @@ import MyPage from 'pages/MyPage';
 import PrivateRoute from 'layouts/PrivateRoute';
 import UpdateStudy from 'pages/UpdateStudy';
 import KakaoAuth from 'pages/Login/KakaoAuth';
+import BoardWrite from 'pages/BoardWrite';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/create" element={<CreateStudy />} />
             <Route path="/update/:groupId" element={<UpdateStudy />} />
             <Route path="/group/:groupId" element={<StudyDetail />} />
+            <Route path="/write/:groupId" element={<BoardWrite />} />
           </Route>
           <Route element={<PrivateRoute userAuthentication={false} />}>
             <Route path="/join" element={<Join />} />

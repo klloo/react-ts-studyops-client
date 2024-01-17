@@ -31,6 +31,8 @@ function TodaySchedule({ groupId }: { groupId: number }) {
   const [overtime, setOvertime] = useState(0);
   const [absent, setAbsent] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   // 스터디 시간을 문자열로 받아서 dayjs형식으로 반환한다.
   const getStudyStart = useCallback((studyStartTime: string) => {
     const [sh, sm] = studyStartTime.split(':');
@@ -119,6 +121,7 @@ function TodaySchedule({ groupId }: { groupId: number }) {
 
   const requestAttendance = useRequest<boolean>(attendanceGroup);
   const onClickAttendance = useCallback(() => {
+    setLoading(true);
     requestAttendance(groupId)
       .then(() => {
         toast.success('출석을 완료하였습니다.');
@@ -126,6 +129,9 @@ function TodaySchedule({ groupId }: { groupId: number }) {
       })
       .catch((e) => {
         console.error(e);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -175,7 +181,9 @@ function TodaySchedule({ groupId }: { groupId: number }) {
                 )}
               </AttendacneInfo>
             ) : (
-              <button onClick={onClickAttendance}>출석</button>
+              <button onClick={onClickAttendance} disabled={loading}>
+                {loading ? '출석 중...' : '출석'}
+              </button>
             ))}
         </TodayStudy>
       )}

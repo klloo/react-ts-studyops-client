@@ -20,9 +20,9 @@ import Schedule from 'components/Schedule';
 import CustomSwitch from 'components/CustomSwitch';
 import useRequest from 'hooks/useRequest';
 import { attendanceVoteGroup } from 'api/schedule';
-// import ProfileImage from 'components/ProfileImage';
+import ProfileImage from 'components/ProfileImage';
 import { toast } from 'react-toastify';
-import ProfileAvatar from 'components/ProfileAvatar';
+import SkeletonComponent from './SkeletonComponent';
 
 /**
  * 스터디 상세화면의 일정 탭 내용
@@ -77,6 +77,15 @@ function StudySchedule({ groupId }: { groupId: number }) {
       toast.error('지난 일정은 변경할 수 없습니다.');
       return;
     }
+    if (attendanceInfo) {
+      mutateAttendance(
+        {
+          ...attendanceInfo,
+          isAttended: !attendanceInfo.isAttended,
+        },
+        false,
+      );
+    }
     requestAttendanceVote(
       groupId,
       dayjs(selectDate).format('YYYY-MM-DD'),
@@ -116,7 +125,8 @@ function StudySchedule({ groupId }: { groupId: number }) {
                 studyId={groupId}
                 title={schedule[0].title}
               />
-              {attendanceInfo && (
+              {attendanceInfo === undefined && <SkeletonComponent />}
+              {attendanceInfo !== undefined && attendanceInfo !== null && (
                 <>
                   <VoteWrapper>
                     나의 참석 여부
@@ -131,12 +141,11 @@ function StudySchedule({ groupId }: { groupId: number }) {
                       {attendanceInfo.attendMemberList.length > 0 ? (
                         attendanceInfo.attendMemberList.map((user, i) => (
                           <div key={i}>
-                            {/* <ProfileImage
-                              width="30"
-                              height="30"
-                              url={user.profileImageUrl}
-                            /> */}
-                            <ProfileAvatar size={40} nickName={user.nickName} />
+                            <ProfileImage
+                              size={40}
+                              nickName={user.nickName}
+                              url={user.profileImage}
+                            />
                             <div>{user.nickName}</div>
                           </div>
                         ))
@@ -151,12 +160,11 @@ function StudySchedule({ groupId }: { groupId: number }) {
                       {attendanceInfo.absenceMemberList.length > 0 ? (
                         attendanceInfo.absenceMemberList.map((user, i) => (
                           <div key={i}>
-                            {/* <ProfileImage
-                              width="30"
-                              height="30"
-                              url={user.profileImageUrl}
-                            /> */}
-                            <ProfileAvatar size={40} nickName={user.nickName} />
+                            <ProfileImage
+                              size={40}
+                              nickName={user.nickName}
+                              url={user.profileImage}
+                            />
                             <div>{user.nickName}</div>
                           </div>
                         ))

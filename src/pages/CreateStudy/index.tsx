@@ -82,6 +82,8 @@ function CreateStudy() {
   const [scheduleErr, setScheduleErr] = useState(false);
   const [scheduleErrMsg, setScheduleErrMsg] = useState('');
 
+  const [creating, setCreating] = useState(false);
+
   const navigate = useNavigate();
 
   // 지각 벌금 선택 핸들러
@@ -297,6 +299,7 @@ function CreateStudy() {
       allowedTime: costFlag ? allowedTime : 0,
       schedules,
     };
+    setCreating(true);
     requestCreateStudy(newStudy)
       .then((data) => {
         const { groupId } = data;
@@ -311,6 +314,9 @@ function CreateStudy() {
           setInviteesErr(false);
           toast.error('스터디를 생성하지 못하였습니다.');
         }
+      })
+      .finally(() => {
+        setCreating(false);
       });
   };
 
@@ -529,7 +535,9 @@ function CreateStudy() {
           </FormItem>
         )}
       </CreateForm>
-      <Button onClick={onClickCreateButton}>생성하기</Button>
+      <Button onClick={onClickCreateButton} disabled={creating}>
+        {creating ? '생성 중...' : '생성하기'}
+      </Button>
     </Container>
   );
 }
