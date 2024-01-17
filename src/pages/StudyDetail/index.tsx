@@ -44,7 +44,10 @@ function StudyDetail() {
   if (!groupId) {
     return <Navigate to="/" />;
   }
-  const { data: studyInfo } = useSWR<IStudy>(`/info/${groupId}`, fetcher);
+  const { data: studyInfo, error } = useSWR<IStudy>(
+    `/info/${groupId}`,
+    fetcher,
+  );
 
   const [showMemberPopup, setShowMemberPopup] = useState(false);
 
@@ -75,6 +78,10 @@ function StudyDetail() {
   const [curTab, setCurTab] = useState<Tab>(tabs.schedule);
 
   const navigate = useNavigate();
+
+  if (error && error.response.status === 401) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <>
