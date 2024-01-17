@@ -10,7 +10,7 @@ export const ProfileImageDiv = styled.div<{
   width: ${(props) => props.width}px;
   border-radius: 50px;
   background-image: url(${(props) => props.url});
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   ${(props) => props.cursor && `cursor:${props.cursor}`}
