@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { refresh } from './auth';
-import mem from 'mem';
+import { memoize } from 'lodash';
 
 const REFRESH_URL = '/auth/reissue';
 
 const instance = axios.create({
-  // baseURL: 'https://studyops.site/api',
-  baseURL: '',
+  baseURL: 'https://studyops.site/api',
+  // baseURL: '',
 });
 
 const logout = () => {
@@ -15,19 +15,16 @@ const logout = () => {
 };
 
 // access token 재발급
-const getRefreshToken = mem(
-  async (): Promise<string | void> => {
-    try {
-      const res = await refresh();
-      const accessToken = res.data.data?.accessToken;
-      return accessToken;
-    } catch (e) {
-      // 로그아웃 처리
-      logout();
-    }
-  },
-  { maxAge: 1000 },
-);
+const getRefreshToken = memoize(async (): Promise<string | void> => {
+  try {
+    const res = await refresh();
+    const accessToken = res.data.data?.accessToken;
+    return accessToken;
+  } catch (e) {
+    // 로그아웃 처리
+    logout();
+  }
+});
 
 // 요청 인터셉터
 instance.interceptors.request.use(
