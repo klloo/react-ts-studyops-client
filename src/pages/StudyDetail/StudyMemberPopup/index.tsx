@@ -1,5 +1,5 @@
 import Modal from 'layouts/Modal';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Container,
   InputWrapper,
@@ -15,6 +15,7 @@ import ProfileImage from 'components/ProfileImage';
 import useRequest from 'hooks/useRequest';
 import { inviteMembers } from 'api/ask';
 import useInput from 'hooks/useInput';
+import { toast } from 'react-toastify';
 
 const status: { [key: string]: string } = {
   ACCEPT: '스터디원',
@@ -40,18 +41,28 @@ function StudyMemberPopup({
     { nickName: string; status: string; profileImageUrl: string | null }[]
   >(`/asks/responses/${groupId}`, fetcher);
 
+  const [loading, setLoading] = useState(false);
+
   const [nickName, onChangeNickName, setNickName] = useInput('');
 
   // 스터디원 초대
   const requestInvite = useRequest<boolean>(inviteMembers);
   const onClickInviteButton = useCallback(() => {
+    setLoading(true);
     requestInvite(groupId, [nickName])
       .then(() => {
         mutateMemberInfo();
         setNickName('');
       })
       .catch((e) => {
-        console.error(e);
+        if (e.status === 400) {
+          toast.error(e.message);
+        } else {
+          toast.error('스터디원을 초대하지 못하였습니다.');
+        }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [nickName]);
 
@@ -98,7 +109,9 @@ function StudyMemberPopup({
               value={nickName}
               onChange={onChangeNickName}
             />
-            <button onClick={onClickInviteButton}>초대</button>
+            <button onClick={onClickInviteButton} disabled={loading}>
+              {loading ? '...' : '초대'}
+            </button>
           </InputWrapper>
         )}
       </Container>

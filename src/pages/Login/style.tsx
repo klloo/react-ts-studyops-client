@@ -21,7 +21,7 @@ export const Logo = styled.img`
   height: 2.8rem;
 `;
 
-export const FormDiv = styled.div`
+export const FormDiv = styled.form`
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
@@ -30,8 +30,9 @@ export const FormDiv = styled.div`
   position: relative;
 `;
 
-export const LoginButton = styled.div`
+export const LoginButton = styled.button`
   width: 100%;
+  border: none;
   height: 3.375rem;
   color: #fff;
   text-align: center;
@@ -61,6 +62,7 @@ export const ButtonWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  margin-top: 1.5rem;
 `;
 
 export const HrSection = styled.div`
