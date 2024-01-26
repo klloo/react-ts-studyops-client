@@ -1,29 +1,35 @@
 import styled from '@emotion/styled';
+import theme from 'styles/theme';
 
 export const Container = styled.div`
   display: flex;
-  gap: 10px;
-  flex-wrap: nowrap;
+  gap: 1.5rem;
+  flex-wrap: wrap;
   width: 100%;
+  justify-content: space-between;
 `;
 
 export const CalendarWrapper = styled.div`
-  width: calc(45% - 10px);
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.08);
-  background-color: white;
+  width: calc(50% - 1rem);
+  padding: 1.8rem 0.8rem;
+  border-radius: 0.1875rem;
+  box-sizing: border-box;
+  border: 1px solid var(--color-gray2);
+  @media ${theme.device.phone}, ${theme.device.tablet} {
+    width: 100%;
+  }
 `;
 
 export const Card = styled.div`
-  width: calc(55%);
-  padding: 30px;
-  border-radius: 8px;
+  width: calc(50% - 1rem);
+  padding: 1.8rem;
   display: flex;
   flex-direction: column;
-  gap: 30px;
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.08);
-  background-color: white;
-  transition: all 0.3s cubic-bezier(0, 0, 0.5, 1);
+  gap: 2rem;
   box-sizing: border-box;
+  border-radius: 0.1875rem;
+  border: 1px solid var(--color-gray2);
+  @media ${theme.device.phone}, ${theme.device.tablet} {
+    width: 100%;
+  }
 `;

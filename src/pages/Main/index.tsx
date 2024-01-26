@@ -1,51 +1,157 @@
-import React, { useState } from 'react';
-import Layout from 'components/Layout';
-import { Title, CardWrapper, ScheduleWrapper } from './style';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  Container,
+  Title,
+  CardWrapper,
+  ContentItem,
+  PlusButton,
+} from './style';
 import StudyCard from './StudyCard';
-import InviteCard from './InviteCard';
+import EmptyCard from './EmptyCard';
 import dayjs from 'dayjs';
 import ScheduleInfo from './ScheduleInfo';
-import { StudySchedule } from 'types/study';
+import { IStudySchedule } from 'types/calendar';
 import CalendarBlock from 'components/CalendarBlock';
+import { IStudy } from 'types/db';
+import { getDayNum, getScheduleColor } from 'utils/schedule';
+import { isEmpty } from 'lodash';
+import { useNavigate } from 'react-router-dom';
+import SkeletonCard from './SkeletonCard';
+import useSWR from 'swr';
+import fetcher from 'utils/fetcher';
 
 /**
  * 메인 페이지
  */
 const Main = () => {
   const [selectDate, setSelectDate] = useState(dayjs());
-  const [schedules, setSchedules] = useState<StudySchedule[]>([]);
-  const tmpSchedules = [
-    { day: '0', time: '14:00', title: '알고리즘 스터디', studyId: 3 },
-    { day: '3', time: '14:00', title: '알고리즘 스터디', studyId: 3 },
-    { day: '3', time: '15:00', title: '리액트 스터디', studyId: 4 },
-  ];
+  // 선택한 스터디 일정
+  const [schedules, setSchedules] = useState<IStudySchedule[]>([]);
+
+  // 참여중인 스터디 목록
+  const { data: studyList, mutate: mutateStudyList } = useSWR<IStudy[]>(
+    '/groups',
+    fetcher,
+  );
+
+  // 초대받은 스터디 목록
+  const { data: askStudyList, mutate: mutateAskStudyList } = useSWR<IStudy[]>(
+    '/asks',
+    fetcher,
+  );
+
+  // 데이터 로드 (참여중인 스터디 목록, 초대받은 스터디 목록)
+  const loadData = useCallback(async () => {
+    // 참여중인 스터디 목록 로드
+    mutateStudyList();
+    // 초대받은 스터디 목록 로드
+    mutateAskStudyList();
+  }, []);
+
+  // 참여중인 스터디 일정 설정 (스터디 스케줄로 가공)
+  const [studySchedules, setStudySchedules] = useState<IStudySchedule[]>([]);
+  useEffect(() => {
+    if (!studyList) return;
+    const totalSchedules: IStudySchedule[] = [];
+    studyList.forEach((study, studyIdx) => {
+      const scheduleList: IStudySchedule[] = study.schedules.map(
+        (schedule) => ({
+          day: getDayNum(schedule.dayWeek).toString(),
+          time: schedule.startTime,
+          title: study.name,
+          studyId: study.groupId,
+          attendance: true,
+          startDate: study.startDate,
+          color: getScheduleColor(studyIdx),
+          studyIdx,
+        }),
+      );
+      scheduleList.forEach((schedule) => {
+        totalSchedules.push(schedule);
+      });
+    });
+    setStudySchedules(totalSchedules);
+  }, [studyList]);
+
+  const navigate = useNavigate();
 
   return (
-    <Layout>
-      <ScheduleWrapper>
-        <CalendarBlock
-          selectDate={selectDate}
-          setSelectDate={setSelectDate}
-          setSelectSchedules={setSchedules}
-          schedules={tmpSchedules}
-        >
-          <ScheduleInfo sheduleDate={selectDate} schedules={schedules} />
-        </CalendarBlock>
-      </ScheduleWrapper>
-      <Title>참여중인 스터디</Title>
-      <CardWrapper>
-        <StudyCard />
-        <StudyCard />
-        <InviteCard />
-      </CardWrapper>
-      <Title>
-        <div>초대받은 스터디가 있어요!</div>
-      </Title>
-      <CardWrapper>
-        <StudyCard isInvite={true} />
-        <StudyCard isInvite={true} />
-      </CardWrapper>
-    </Layout>
+    <Container>
+      <ContentItem>
+        <Title>스터디 일정이에요 🗓️</Title>
+        <div>
+          <CalendarBlock
+            selectDate={selectDate}
+            setSelectDate={setSelectDate}
+            setSelectSchedules={setSchedules}
+            schedules={studySchedules}
+          >
+            <ScheduleInfo sheduleDate={selectDate} schedules={schedules} />
+          </CalendarBlock>
+        </div>
+      </ContentItem>
+      <ContentItem>
+        <Title>참여 중인 스터디에요 ✨</Title>
+        <CardWrapper>
+          {studyList === undefined ? (
+            <>
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+            </>
+          ) : (
+            <>
+              {studyList.map((study) => (
+                <StudyCard key={study.groupId} study={study} />
+              ))}
+              {isEmpty(studyList) && (
+                <EmptyCard>
+                  새로운 스터디를
+                  <br />
+                  추가해보세요!
+                  <PlusButton
+                    onClick={() => {
+                      navigate('/create');
+                    }}
+                    size="60"
+                  />
+                </EmptyCard>
+              )}
+            </>
+          )}
+        </CardWrapper>
+      </ContentItem>
+      <ContentItem>
+        <Title>초대받은 스터디 목록이에요 💜</Title>
+        <CardWrapper>
+          {askStudyList === undefined ? (
+            <>
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
+            </>
+          ) : (
+            <>
+              {askStudyList?.map((study) => (
+                <StudyCard
+                  key={study.groupId}
+                  study={study}
+                  isInvite
+                  loadData={loadData}
+                />
+              ))}
+              {isEmpty(askStudyList) && (
+                <EmptyCard>
+                  아직 초대받은
+                  <br />
+                  스터디가 없어요 😭
+                </EmptyCard>
+              )}
+            </>
+          )}
+        </CardWrapper>
+      </ContentItem>
+    </Container>
   );
 };
 

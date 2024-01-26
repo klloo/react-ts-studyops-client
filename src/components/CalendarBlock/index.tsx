@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 import { Card, Container, CalendarWrapper } from './style';
-import MiniCalendar from 'components/MiniCalendar';
-import { MiniCalendarProps } from 'types/calendar';
+import StudyCalendar from 'components/StudyCalendar';
+import { IStudyCalendarProps } from 'types/calendar';
 
-interface CalendarBlockProps extends MiniCalendarProps {
+interface CalendarBlockProps extends IStudyCalendarProps {
   children: ReactNode;
 }
 
@@ -17,7 +17,7 @@ function CalendarBlock({
   return (
     <Container>
       <CalendarWrapper>
-        <MiniCalendar
+        <StudyCalendar
           selectDate={selectDate}
           setSelectDate={setSelectDate}
           setSelectSchedules={setSelectSchedules}
