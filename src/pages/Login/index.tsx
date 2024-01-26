@@ -76,8 +76,8 @@ function Login() {
               value={password}
               onChange={onChangePassword}
             />
+            {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
           </FormItem>
-          {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
           <ButtonWrapper>
             <LoginButton onClick={onClickLoginButton}>로그인</LoginButton>
             <JoinButton>
