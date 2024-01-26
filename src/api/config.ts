@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { refresh } from './auth';
-import { memoize } from 'lodash';
+import pMemoize from 'p-memoize';
+import ExpiryMap from 'expiry-map';
 
 const REFRESH_URL = '/auth/reissue';
 
@@ -14,16 +15,20 @@ const logout = () => {
 };
 
 // access token 재발급
-const getRefreshToken = memoize(async (): Promise<string | void> => {
-  try {
-    const res = await refresh();
-    const accessToken = res.data.data?.accessToken;
-    return accessToken;
-  } catch (e) {
-    // 로그아웃 처리
-    logout();
-  }
-});
+const cache = new ExpiryMap(2000);
+const getRefreshToken = pMemoize(
+  async (): Promise<string | void> => {
+    try {
+      const res = await refresh();
+      const accessToken = res.data.data?.accessToken;
+      return accessToken;
+    } catch (e) {
+      // 로그아웃 처리
+      logout();
+    }
+  },
+  { cache },
+);
 
 // 요청 인터셉터
 instance.interceptors.request.use(
