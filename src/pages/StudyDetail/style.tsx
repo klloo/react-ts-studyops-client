@@ -91,30 +91,33 @@ export const StartDateDiv = styled.div`
 
 export const TabWrapper = styled.div`
   display: flex;
-  > div {
+  /* > div {
     border-right: none;
   }
   > :last-child {
     border-right: 0.5px solid #8c8c8c;
-  }
+  } */
   position: sticky;
+  /* border: 0.5px solid #8c8c8c; */
   top: 4.2rem;
   z-index: 1;
   @media ${theme.device.phone} {
     margin: 0 -1rem;
-    > :last-child {
+    /* > :last-child {
       border-right: none;
     }
     > :first-of-type {
       border-left: none;
-    }
+    } */
   }
 `;
 
 export const TabDiv = styled.div<{ selected?: boolean }>`
   width: 25%;
-  border: 0.5px solid #8c8c8c;
-  background-color: var(--color-gray4);
+  /* border: 0.5px solid #8c8c8c; */
+  /* background-color: var(--color-gray4); */
+  background-color: #fff;
+  border-bottom: 0.5px solid #8c8c8c;
   display: inline-flex;
   padding: 1.1875rem 0;
   justify-content: center;
@@ -122,13 +125,14 @@ export const TabDiv = styled.div<{ selected?: boolean }>`
   color: var(--color-gray2);
   font-weight: 500;
   cursor: pointer;
-  ${(props) => props.selected && 'border-bottom: none;'}
-  ${(props) => props.selected && 'background: #fff;'}
-  ${(props) => props.selected && 'color: var(--color-gray1);'}
+  ${(props) =>
+    props.selected && 'border-bottom: 2.5px solid var(--color-primary);'}
+  ${(props) => props.selected && 'margin-bottom: -1px;'}
+  /* ${(props) => props.selected && 'border-bottom: none;'} */
+  /* ${(props) => props.selected && 'background: #fff;'} */
+  ${(props) => props.selected && 'color: var(--color-primary);'}
   ${(props) => props.selected && 'font-weight: 700;'}
 `;
-
-export const TabContentWrapper = styled.div``;
 
 export const ContentTitle = styled.div`
   > span {

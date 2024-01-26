@@ -9,7 +9,6 @@ import {
   StartDateDiv,
   TabWrapper,
   TabDiv,
-  TabContentWrapper,
   EditButton,
 } from './style';
 import dayjs from 'dayjs';
@@ -140,7 +139,7 @@ function StudyDetail() {
             </TabDiv>
           ))}
         </TabWrapper>
-        <TabContentWrapper>{curTab.component}</TabContentWrapper>
+        <div>{curTab.component}</div>
       </Container>
       <StudyMemberPopup
         show={showMemberPopup}
