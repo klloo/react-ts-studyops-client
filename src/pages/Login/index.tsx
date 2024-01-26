@@ -60,7 +60,12 @@ function Login() {
     <Container>
       <div>
         <Logo src="/logo.svg" alt="logo" />
-        <FormDiv>
+        <FormDiv
+          onSubmit={(e) => {
+            e.preventDefault();
+            onClickLoginButton();
+          }}
+        >
           <FormItem>
             <input placeholder="아이디" value={id} onChange={onChangeId} />
           </FormItem>
@@ -73,20 +78,20 @@ function Login() {
             />
           </FormItem>
           {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
+          <ButtonWrapper>
+            <LoginButton onClick={onClickLoginButton}>로그인</LoginButton>
+            <JoinButton>
+              <div>아직 회원이 아니신가요?</div>{' '}
+              <span
+                onClick={() => {
+                  navigate('/join');
+                }}
+              >
+                회원가입
+              </span>
+            </JoinButton>
+          </ButtonWrapper>
         </FormDiv>
-        <ButtonWrapper>
-          <LoginButton onClick={onClickLoginButton}>로그인</LoginButton>
-          <JoinButton>
-            <div>아직 회원이 아니신가요?</div>{' '}
-            <span
-              onClick={() => {
-                navigate('/join');
-              }}
-            >
-              회원가입
-            </span>
-          </JoinButton>
-        </ButtonWrapper>
         <HrSection>또는</HrSection>
         <SnsButtonWrapper>
           <div>SNS계정으로 간편하게 시작하기</div>
