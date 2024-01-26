@@ -62,7 +62,7 @@ export const ButtonWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
 `;
 
 export const HrSection = styled.div`
