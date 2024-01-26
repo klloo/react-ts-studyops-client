@@ -5,8 +5,7 @@ import { memoize } from 'lodash';
 const REFRESH_URL = '/auth/reissue';
 
 const instance = axios.create({
-  baseURL: 'https://studyops.site/api',
-  // baseURL: '',
+  baseURL: '',
 });
 
 const logout = () => {
